@@ -2,7 +2,7 @@
 
 
 
-## IFPB Campus Monteiro - DAC - 2022.1
+## IFPB Campus Monteiro - DAC - 2022.2
 
 Sistema de sugestões, críticas e elogios Fala Campus, voltado para a comunidade acadêmica do Instituto Federal da Paraíba, Campus Monteiro - PB.
 
