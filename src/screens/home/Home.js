@@ -59,8 +59,7 @@ class Home extends React.Component {
                     </div> */}
                     <div className="section-two">
                         <center><p className="post">
-                            Projeto desenvolvido por Nataly Lucena,
-                            Patrícia dos Santos e Rosenato Barreto para a Disciplina de Desenvolvimento
+                            Projeto desenvolvido por Tarcizo Monteiro e Thallyta Medeiros para a Disciplina de Desenvolvimento
                             de Aplicações Corporativas com o Professor Elenilson Vieira, no 5° Período
                             do Curso de Análise e Desenvolvimento de Sistemas do IFPB, Campus Monteiro.</p></center>
 

@@ -24,20 +24,16 @@ class Login extends React.Component {
         ).then(user => 
             {
                 if (user) {
-                    console.log("If",user.name);
                     showSuccessMessage(`${user.name}, você está logado!`);
                     this.props.history.push('/viewUsers');
         
                 } else {
-                    console.log("Else");
                     showErrorMessage("Dados incorretos! Login inválido");
                 }
 
             }
         ).catch(error => 
             {
-                console.log("Catch");
-                console.log(error);
                 showErrorMessage('Erro! processando autenticação:', error);
             }
         );
