@@ -200,11 +200,11 @@ class ViewUsers extends React.Component {
                         <div className="row">
 
 
-                            <div className="col-md-12">
+                            {/* <div className="col-md-12">
                                 <button onClick={this.createUser} type="button" id="idNovoUser" className="btn btn-success btn-cadastrar">
                                     <i className="pi pi-plus"></i> Cadastrar Novo Usuário
                                 </button>
-                            </div>
+                            </div> */}
                         </div>
                         <br />
                         <div className='row'>

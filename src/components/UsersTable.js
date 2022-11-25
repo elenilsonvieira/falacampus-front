@@ -10,7 +10,7 @@ export default props => {
                 <td>{user.name}</td>
                 <td>{user.email}</td>
                 <td>{user.username}</td>
-                <td>{user.role}</td>
+                <td>{user['roles']['0']['name']}</td>
                 {/* <td className="col-md-2">{user.departament.id}</td> */}
                 <td className="col-md-2">
                     <button type="button" title="Editar"
@@ -18,11 +18,11 @@ export default props => {
                         onClick={e => props.edit(user.id)}>
                         <i className="pi pi-pencil"></i>
                     </button>
-                    <button type="button" title="Excluir"
+                    {/* <button type="button" title="Excluir"
                         className="btn btn-primary btn-delete"
                         onClick={e => props.delete(user.id)}>
                         <i className="pi pi-trash"></i>
-                    </button>
+                    </button> */}
                 </td>
             </tr>
         )
