@@ -19,7 +19,11 @@ export default class DepartamentApiService extends ApiService{
         return this.get(`/${params}`);
     }
     findAll(){
-        return this.getAll('');
+        return this.getAll('/all');
+    }
+
+    findSuapApi(){
+        return this.get('/getDepartmentsApi')
     }
     
 }

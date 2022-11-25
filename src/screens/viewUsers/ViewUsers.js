@@ -28,13 +28,15 @@ class ViewUsers extends React.Component {
         super();
         this.service = new UserApiService();
     }
-    componentDidMount() {
+    componentDidMount() {        
         this.find();
+        
     }
 
     // componentWillUnmount() {
     //     this.clear();
     // }
+
 
     delete = (userId) => {
         //axios.delete(`http://localhost:8080/api/user/${userId}`,
@@ -196,6 +198,8 @@ class ViewUsers extends React.Component {
                         </div>
                         <br />
                         <div className="row">
+
+
                             <div className="col-md-12">
                                 <button onClick={this.createUser} type="button" id="idNovoUser" className="btn btn-success btn-cadastrar">
                                     <i className="pi pi-plus"></i> Cadastrar Novo Usuário

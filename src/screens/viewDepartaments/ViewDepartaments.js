@@ -13,7 +13,7 @@ class ViewDepartaments extends React.Component {
 
     state = {
         name: '',
-        id: 0,
+        id: '',
         departaments: []
     }
     constructor() {
@@ -23,7 +23,22 @@ class ViewDepartaments extends React.Component {
 
     componentDidMount() {
         this.find();
+        this.mostrarBotaoDeListar();
 
+    }
+
+    mostrarBotaoDeListar = () =>{
+        var value =  localStorage.getItem("usuario");
+        var user = JSON.parse(value)
+        var role = user['roles']['0']['name']
+        console.log("AA", role)
+
+        if(role === 'ADMIN'){
+            let a = document.getElementById("idListar")
+            a.classList.add('mostrar')
+            console.log(a)
+        }
+       
     }
 
     delete = (departamentId) => {
@@ -47,11 +62,10 @@ class ViewDepartaments extends React.Component {
         this.props.history.push(`/createDepartament`);
     }
 
-    find = () => {
-        this.service.find(this.state.id)
+    find = () => {        
         var params = '?';
 
-        if (this.state.id !== '') {
+        if (this.state.id !== 0) {
             if (params !== '?') {
                 params = `${params}&`;
             }
@@ -68,7 +82,7 @@ class ViewDepartaments extends React.Component {
         }
 
         //axios.get(`http://localhost:8080/api/departament/${params}`)
-        this.service.get(this.state.id)
+        this.service.find(params)
             .then(response => {
                 const departaments = response.data;
                 this.setState({ departaments });
@@ -82,7 +96,7 @@ class ViewDepartaments extends React.Component {
 
     findAll = () => {
 
-        this.service.get('/all')
+        this.service.findAll()
             .then(response => {
                 const departaments = response.data;
                 this.setState({ departaments });
@@ -92,6 +106,20 @@ class ViewDepartaments extends React.Component {
                 console.log(error.response);
             }
             );
+    }
+    findApi = () => {
+        this.service.get('/getDepartmentsApi')
+        .then(response => {
+            const departaments = response.data;
+            this.setState({ departaments });
+            console.log(departaments);
+        }
+        ).catch(error => {
+            console.log(error.response);
+        }
+        );
+        this.props.history.push("/viewDepartaments");
+
     }
 
     render() {
@@ -121,6 +149,7 @@ class ViewDepartaments extends React.Component {
                         </div>
                         <br />
                         <div className="row">
+                            
                             <div className="col-md-12">
                                 <button onClick={this.createDepartament} type="button" id="btn-cadastrar" className="btn btn-success btn-cadastrar">
                                     <i className="pi pi-plus"></i> Cadastrar Novo Departamento
@@ -129,6 +158,11 @@ class ViewDepartaments extends React.Component {
                         </div>
                         <br />
                         <div className='row'>
+                            <div className="col-md-12">
+                                <button onClick={this.findApi} type="button" id="idListar" className="btn btn-success btn-listar">
+                                    <i className="pi pi-plus"></i> Listar
+                                </button>
+                            </div>
                             <div className='col-lg-12' >
                                 <div className='bs-component'>
                                     <DepartamentsTable departaments={this.state.departaments}

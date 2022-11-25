@@ -18,11 +18,13 @@ export class AuthenticationApiService extends ApiService {
             const response = await this.post('/login', loginDTO);
 
            const user = response.data.user;
-          
+           
             const token = response.data.token;
           
+            this.storageService.setItem("usuario", user)
 
             this.storageService.setItem(LOGGED_USER, user);
+           
             this.storageService.setItem(TOKEN, token);
 
             this.registerToken(token);

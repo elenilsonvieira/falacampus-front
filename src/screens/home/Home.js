@@ -54,12 +54,12 @@ class Home extends React.Component {
                             </div>
                             </div>
                         </div>
-
                         
                     </div> */}
                     <div className="section-two">
                         <center><p className="post">
-                            Projeto desenvolvido por Tarcizo Monteiro e Thallyta Medeiros para a Disciplina de Desenvolvimento
+                            Projeto desenvolvido por Nataly Lucena,
+                            Patrícia dos Santos e Rosenato Barreto para a Disciplina de Desenvolvimento
                             de Aplicações Corporativas com o Professor Elenilson Vieira, no 5° Período
                             do Curso de Análise e Desenvolvimento de Sistemas do IFPB, Campus Monteiro.</p></center>
 
@@ -75,7 +75,6 @@ class Home extends React.Component {
             //     <div className='row'>
             //         <div className='col-md-12' style={this.styles.colMd12}>
             //             <div className="bs-docs-section">
-
             //                 <div className="card border-success mb-3" style={this.styles.cardBg}>
             //                     <h1 className="card-header text-center">Bem Vindo(a) ao "Fala Campus"</h1>
             //                     <h3 className="card-header text-center">Este espaço é destinado a toda a comunidade acadêmica, onde todos poderão propor sugestões, realizar críticas e elogios, relacionados ao Instituto Federal da Paraíba, Campus Monteiro - PB</h3>
