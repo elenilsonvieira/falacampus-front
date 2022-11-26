@@ -28,13 +28,13 @@ class UpdateDepartament extends React.Component {
 
     findById = (id) => {
         // axios.get(`http://localhost:8080/api/departament?id=${departamentId}`)
-        this.service.find(id)
+        this.service.find(`?id=${id}`)
             .then(response => {
                 const departament = response.data;
-                const id = departament.id;
-                const name = departament.name;
+                const id = departament[0]['id'];
+                const name = departament[0]['name'];
 
-
+                console.log('Dados', departament[0])
                 this.setState({ id, name });
             }
             ).catch(error => {
@@ -115,10 +115,16 @@ class UpdateDepartament extends React.Component {
                                                         </small>
                                                     </p>
                                                     <FormGroup label='Nome: *'>
-                                                        <input type="text" className="form-control" id="inputDepartamentName"
-                                                            placeholder="Digite o Nome do Departamento"
+                                                        <input disabled type="text" className="form-control" id="inputDepartamentName"
+                                                            
                                                             value={this.state.name} onChange={(e) => { this.setState({ name: e.target.value }) }} />
                                                         <div className="valid-feedback">Departamento atualizado!</div>
+                                                    </FormGroup>
+                                                    <br />
+                                                    <FormGroup label="Matrícula:" htmlFor="inputRegistration">
+                                                        <input type="number" id="inputRegistration" className="form-control"
+                                                            value={this.state.username} name="registration" onChange={(e) => { this.setState({ registration: e.target.value }) }} />
+                                                        
                                                     </FormGroup>
                                                     <br />
                                                     <button onClick={this.update} type="button" id="button-update" className="btn btn-success">

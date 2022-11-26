@@ -43,6 +43,7 @@ class UpdateUser extends React.Component {
         const params = this.props.match.params;
         const id = params.id;
         this.findById(id);
+        this.showEditRole();
        
        
     }
@@ -222,7 +223,7 @@ class UpdateUser extends React.Component {
                                                             if(selectRole === 'ADMIN'){
                                                                 <option selected="true" value="ADMINISTRATOR">ADMINISTRADOR</option>
                                                             }else if(selectRole === 'STUDENTS'){
-                                                                <option value="STUDENT" >ESTUDANTE</option>
+                                                                <option selected="true" value="STUDENT" >ESTUDANTE</option>
                                                             }
                                                             
                                                             <option value="TECHNICIAN">TÉCNICO</option>
