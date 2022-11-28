@@ -14,11 +14,11 @@ export default props => {
                         onClick={e => props.edit(departament.id)}>
                         <i className="pi pi-pencil"></i>
                     </button>
-                    <button type="button" title="Excluir" id="button_excluir"
+                    {/* <button type="button" title="Excluir" id="button_excluir"
                         className="btn btn-primary btn-delete"
                         onClick={e => props.delete(departament.id)}>
                         <i className="pi pi-trash"></i>
-                    </button>
+                    </button> */}
                 </td>
             </tr>
         )
@@ -31,7 +31,7 @@ export default props => {
                 <tr className="table-active">
                     {/* <th scope="col">Id</th> */}
                     <th scope="col">Nome</th>
-                    <th scope="col">Ações</th>
+                    <th scope="col">Ação</th>
                 </tr>
             </thead>
             <tbody>

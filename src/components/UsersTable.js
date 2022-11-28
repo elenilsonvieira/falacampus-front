@@ -18,11 +18,11 @@ export default props => {
                         onClick={e => props.edit(user.id)}>
                         <i className="pi pi-pencil"></i>
                     </button>
-                    <button type="button" title="Excluir"
+                    {/* <button type="button" title="Excluir"
                         className="btn btn-primary btn-delete"
                         onClick={e => props.delete(user.id)}>
                         <i className="pi pi-trash"></i>
-                    </button>
+                    </button> */}
                 </td>
             </tr>
         )

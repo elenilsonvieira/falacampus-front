@@ -9,6 +9,7 @@ import FormGroup from '../../components/FormGroup';
 
 import DepartamentsTable from '../../components/DepartamentsTable'
 import DepartamentApiService from '../../services/DepartamentApiService';
+
 class ViewDepartaments extends React.Component {
 
     state = {
@@ -23,15 +24,16 @@ class ViewDepartaments extends React.Component {
 
     componentDidMount() {
         this.find();
-        this.mostrarBotaoDeListar();
+       this.viewListButton();
+ //       this.findAllDepartaments();
 
     }
 
-    mostrarBotaoDeListar = () =>{
+    viewListButton = () =>{
         var value =  localStorage.getItem("usuario");
         var user = JSON.parse(value)
         var role = user['roles']['0']['name']
-        console.log("AA", role)
+        console.log("AA", user)
 
         if(role === 'ADMIN'){
             let a = document.getElementById("idListar")
@@ -73,16 +75,16 @@ class ViewDepartaments extends React.Component {
             params = `${params}id=${this.state.id}`;
         }
 
-        if (this.state.id !== '') {
-            if (params !== '?') {
-                params = `${params}&`;
-            }
+        // if (this.state.id !== '') {
+        //     if (params !== '?') {
+        //         params = `${params}&`;
+        //     }
 
-            params = `${params}name=${this.state.name}`;
-        }
+        //     params = `${params}name=${this.state.name}`;
+        // }
 
         //axios.get(`http://localhost:8080/api/departament/${params}`)
-        this.service.find(params)
+        this.service.get(this.state.id)
             .then(response => {
                 const departaments = response.data;
                 this.setState({ departaments });
@@ -96,7 +98,7 @@ class ViewDepartaments extends React.Component {
 
     findAll = () => {
 
-        this.service.findAll()
+        this.service.get('/all')
             .then(response => {
                 const departaments = response.data;
                 this.setState({ departaments });
@@ -113,12 +115,13 @@ class ViewDepartaments extends React.Component {
             const departaments = response.data;
             this.setState({ departaments });
             console.log(departaments);
+            this.props.history.push("/viewDepartaments");
         }
         ).catch(error => {
             console.log(error.response);
         }
         );
-        this.props.history.push("/viewDepartaments");
+        
 
     }
 
@@ -149,20 +152,19 @@ class ViewDepartaments extends React.Component {
                         </div>
                         <br />
                         <div className="row">
-                            
-                            <div className="col-md-12">
-                                <button onClick={this.createDepartament} type="button" id="btn-cadastrar" className="btn btn-success btn-cadastrar">
-                                    <i className="pi pi-plus"></i> Cadastrar Novo Departamento
-                                </button>
-                            </div>
-                        </div>
-                        <br />
-                        <div className='row'>
-                            <div className="col-md-12">
+                        <div className="col-md-12">
                                 <button onClick={this.findApi} type="button" id="idListar" className="btn btn-success btn-listar">
                                     <i className="pi pi-plus"></i> Listar
                                 </button>
                             </div>
+                            {/* <div className="col-md-12">
+                                <button onClick={this.createDepartament} type="button" id="btn-cadastrar" className="btn btn-success btn-cadastrar">
+                                    <i className="pi pi-plus"></i> Cadastrar Novo Departamento
+                                </button>
+                            </div> */}
+                        </div>
+                        <br />
+                        <div className='row'>                            
                             <div className='col-lg-12' >
                                 <div className='bs-component'>
                                     <DepartamentsTable departaments={this.state.departaments}
