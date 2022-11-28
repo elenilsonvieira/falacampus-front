@@ -7,8 +7,10 @@ import { withRouter } from 'react-router-dom';
 import Card from '../../components/Card';
 import FormGroup from '../../components/FormGroup';
 
+import { showSuccessMessage, showErrorMessage } from '../../components/Toastr';
 import DepartamentsTable from '../../components/DepartamentsTable'
 import DepartamentApiService from '../../services/DepartamentApiService';
+
 
 class ViewDepartaments extends React.Component {
 
@@ -115,10 +117,13 @@ class ViewDepartaments extends React.Component {
             const departaments = response.data;
             this.setState({ departaments });
             console.log(departaments);
+            showSuccessMessage('Departamentos atualizados com sucesso!');           
             this.props.history.push("/viewDepartaments");
         }
         ).catch(error => {
             console.log(error.response);
+            showErrorMessage('Erro ao atualizar departamentos.');
+
         }
         );
         
@@ -171,6 +176,8 @@ class ViewDepartaments extends React.Component {
                                         delete={this.delete}
                                         edit={this.edit} />
                                 </div>
+
+                                
                             </div>
                         </div>
                     </div >

@@ -23,7 +23,7 @@ class UpdateUser extends React.Component {
         username: '',
         rolesName:'',
         // role: '',
-        // password: '',
+        password: ''
         // username: '',
         // departament: {
         //     departamentId: 0,
@@ -42,7 +42,7 @@ class UpdateUser extends React.Component {
         const params = this.props.match.params;
         const id = params.id;
         this.findById(id);
-   //     this.showEditRole();   
+        this.showEditRole();   
     }
    
     // componentWillUnmount(){select
@@ -57,22 +57,13 @@ class UpdateUser extends React.Component {
         if(role === 'ADMIN'){
             a = document.getElementById(role)
             a.classList.add('show')
-           
+            console.log("Foi", role)
         }
-        console.log('depois do if',a)
     }
 
     findById = (id) => {
-        var params = '?';
 
-        if (this.state.id !== 0) {
-            if (params !== '?') {
-                params = `${params}&`;
-            }
-
-            params = `${params}id=${this.state.id}`;
-        }
-        this.service.find(params)
+        this.service.find(`?id=${id}`)
             .then(response => {
                 console.log(response);
                 const user = response.data; 
@@ -86,13 +77,14 @@ class UpdateUser extends React.Component {
                 // const departament = user.departament;
                 const rolesName = user[0]['roles'][0]['name'];
                 const username = user[0].username;
+                const password = user[0].password;
 
                 console.log("Dados up", user)
                 console.log("Dados up nome", user[0]['roles'][0]['name'])
                 // this.setState({ id:id, name:name, email:email, registration:registration, role:role, password:password, departament:departament });
 
-                this.setState({ id:id, name:name, email:email, username:username, rolesName:rolesName});
-
+                this.setState({ id:id, name:name, email:email, username:username, rolesName:rolesName, password:password});
+                this.showPapel(rolesName);
             }
 
             ).catch(error => {
@@ -100,6 +92,18 @@ class UpdateUser extends React.Component {
                 console.log(error.message);
             }
             );
+    }
+    showPapel(role){
+        if(role === 'ADMIN'){         
+
+           const seletor = document.getElementById('ADMIN')
+            seletor.selected = true;
+
+           
+        }else if (role === 'STUDENTS'){
+            const seletor = document.getElementById('STUDENTS')
+            seletor.selected = true;
+        }
     }
 
     // validate = () => {
@@ -156,7 +160,12 @@ class UpdateUser extends React.Component {
         // await axios.put(`http://localhost:8080/api/user/${this.state.id}`,
         this.service.update(this.state.id,
             {
-                email: this.state.email,
+                "name":this.state.name,
+                "email":this.state.email,
+                "password":this.state.password,
+                "username": this.state.username,
+                "departamentId": 1,
+                "roles":[{"name":this.state.rolesName}]
                
             }
         ).then(response => {
@@ -221,12 +230,22 @@ class UpdateUser extends React.Component {
                                                             value={this.state.username} name="registration" onChange={(e) => { this.setState({ registration: e.target.value }) }} />
                                                         
                                                     </FormGroup>
+                                                    
                                                     <div className="form-group roles">
                                                         <label htmlFor="selectRole" className="form-label mt-4">Papel: *</label>
                                                         <select className="form-select" id="selectRole"                            name="role" onChange={(e) => { this.setState({ role: e.target.value }) }}>
 
                                                             <option>Selecione uma opção</option>
-                                                            if(selectRole === 'ADMIN'){
+                                                            <option id='ADMIN'
+                                                            value="ADMIN">ADMINISTRADOR</option>
+
+                                                            
+                                                            <option id='STUDENTS'  value="STUDENTS" >ESTUDANTE</option>
+                                                            
+                                                            
+                                                            <option value="TECHNICIAN">TÉCNICO</option>
+                                                            <option value="TEACHER">PROFESSOR</option>
+                                                            {/* if(selectRole === 'ADMIN'){
                                                                 <option selected="true" value="ADMINISTRATOR">ADMINISTRADOR</option>
                                                             }else if(selectRole === 'STUDENTS'){
                                                                 <option selected="true" value="STUDENT" >ESTUDANTE</option>
@@ -234,7 +253,7 @@ class UpdateUser extends React.Component {
                                                             
                                                             <option value="TECHNICIAN">TÉCNICO</option>
                                                             <option value="TEACHER">PROFESSOR</option>
-                                                            
+                                                             */}
                                                         </select>
                                                     </div>
                                                     <br />
