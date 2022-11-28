@@ -15,6 +15,7 @@ class UpdateDepartament extends React.Component {
     state = {
         id: 0,
         name: '',
+        id_responsavel: ''
     }
     constructor() {
         super();
@@ -48,8 +49,8 @@ class UpdateDepartament extends React.Component {
 
         if (!this.state.name) {
             errors.push('Campo Nome é obrigatório!');
-        } else if(!this.state.name.match(/[A-z ]{2,100}$/)) {
-            errors.push('O Nome do Departamento deve ter no mínimo 2 e no máximo 100 caracteres!');
+        // } else if(!this.state.name.match(/[A-z ]{2,1000}$/)) {
+        //     errors.push('O Nome do Departamento deve ter no mínimo 2 e no máximo 100 caracteres!');
         }
 
         return errors;
@@ -70,6 +71,7 @@ class UpdateDepartament extends React.Component {
         this.service.update(this.state.id,
             {
                 name: this.state.name,
+                "responsibleUsers": [{"id":this.state.id_responsavel}]
             }
         ).then(response => {
             console.log(response);
@@ -123,7 +125,7 @@ class UpdateDepartament extends React.Component {
                                                     <br />
                                                     <FormGroup label="Matrícula:" htmlFor="inputRegistration">
                                                         <input type="number" id="inputRegistration" className="form-control"
-                                                            value={this.state.username} name="registration" onChange={(e) => { this.setState({ registration: e.target.value }) }} />
+                                                            value={this.state.username} name="registration" onChange={(e) => { this.setState({ id_responsavel: e.target.value }) }} />
                                                         
                                                     </FormGroup>
                                                     <br />
