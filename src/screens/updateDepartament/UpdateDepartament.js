@@ -10,12 +10,15 @@ import { showSuccessMessage, showErrorMessage } from '../../components/Toastr';
 
 import DepartamentApiService from '../../services/DepartamentApiService';
 
+import ResponsavelTable from '../../components/ResponsavelTable';
+
 class UpdateDepartament extends React.Component {
 
     state = {
         id: 0,
         name: '',
-        id_responsavel: ''
+        id_responsavel: '',
+        responsibleUsers: ''
     }
     constructor() {
         super();
@@ -34,9 +37,10 @@ class UpdateDepartament extends React.Component {
                 const departament = response.data;
                 const id = departament[0]['id'];
                 const name = departament[0]['name'];
+                const responsibleUsers = departament[0]['responsibleUsers']
 
-                console.log('Dados', departament[0])
-                this.setState({ id, name });
+                console.log('Dados', departament[0]['responsibleUsers'])
+                this.setState({ id, name, responsibleUsers });
             }
             ).catch(error => {
                 console.log(error.response);
@@ -71,7 +75,7 @@ class UpdateDepartament extends React.Component {
         this.service.update(this.state.id,
             {
                 name: this.state.name,
-                "responsibleUsers": [{"id":this.state.id_responsavel}]
+                "responsibleUsers": [this.state.id_responsavel]
             }
         ).then(response => {
             console.log(response);
@@ -137,6 +141,13 @@ class UpdateDepartament extends React.Component {
                                                     </button>
 
                                                 </fieldset>
+                                                <div>
+                                                    {/* if(this.state.responsibleUsers != null){
+                                                        <ResponsavelTable responsavel = {this.state.responsibleUsers}/>
+                                                    } */}
+                                                    <p>{this.state.responsibleUsers}</p>
+                                                    
+                                                </div>
                                             </form>
                                         </div>
                                     </div>

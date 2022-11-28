@@ -10,6 +10,7 @@ import FormGroup from '../../components/FormGroup';
 import DepartamentsTable from '../../components/DepartamentsTable'
 import DepartamentApiService from '../../services/DepartamentApiService';
 
+
 class ViewDepartaments extends React.Component {
 
     state = {
@@ -171,6 +172,8 @@ class ViewDepartaments extends React.Component {
                                         delete={this.delete}
                                         edit={this.edit} />
                                 </div>
+
+                                
                             </div>
                         </div>
                     </div >
