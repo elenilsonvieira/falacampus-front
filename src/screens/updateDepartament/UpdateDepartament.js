@@ -78,7 +78,7 @@ class UpdateDepartament extends React.Component {
             }
         ).then(response => {
             console.log(response);
-            showSuccessMessage('Departamento atualizado com sucesso!');           
+            showSuccessMessage('Departamento atualizado com sucesso!');
             this.props.history.push("/viewDepartaments");
 
         }
@@ -134,7 +134,7 @@ class UpdateDepartament extends React.Component {
                                                     <br />
                                                     <FormGroup label="Adicionar responsável:" htmlFor="inputRegistration">
                                                         <input type="number" id="inputRegistration" className="form-control" placeholder = "Digite o ID do responsável"                    
-                                                            value={this.state.username} name="registration" onChange={(e) => { this.setState({ registration: e.target.value }) }} />
+                                                            value={this.state.username} name="registration" onChange={(e) => { this.setState({ id_responsavel: e.target.value }) }} />
                                                         
                                                     </FormGroup>
                                                     <br />
