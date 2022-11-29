@@ -242,6 +242,7 @@ class UpdateUser extends React.Component {
                                                     </FormGroup>
                                                     <div id='papel' className="form-group roles">
                                                         <label htmlFor="selectRole" className="form-label mt-4">Papel: *</label>
+                                                        
                                                         <select className="form-select" id="selectRole"                            name="role" onChange={(e) =>{this.setState({rolesName: e.target.value})}}>
 
                                                             <option>Selecione uma opção</option>

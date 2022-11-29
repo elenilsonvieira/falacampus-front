@@ -26,6 +26,22 @@ class UpdateDepartament extends React.Component {
         const params = this.props.match.params;
         const id = params.id;
         this.findById(id);
+        this.showEditRole();
+    }
+
+    showEditRole = () =>{
+        var value =  localStorage.getItem("usuario");
+        var user = JSON.parse(value)
+        var role = user['roles']['0']['name']
+
+        console.log("AA", user)
+        let a
+        if(role === 'ADMIN'){
+            a = document.getElementById("responsible")
+            a.classList.add('show')
+           console.log("Foi", role)
+        }       
+       
     }
 
     findById = (id) => {
@@ -119,7 +135,7 @@ class UpdateDepartament extends React.Component {
                                                             * O campo é obrigatório.
                                                         </small>
                                                     </p>
-                                                    <FormGroup label='Nome: *'>
+                                                    <FormGroup label='Nome:'>
                                                         <input disabled type="text" className="form-control" id="inputDepartamentName"
                                                             
                                                             value={this.state.name} onChange={(e) => { this.setState({ name: e.target.value }) }} />
@@ -131,10 +147,16 @@ class UpdateDepartament extends React.Component {
                                                             value={this.state.responsibleUsers} name="responsibleUsers" onChange={(e) => { this.setState({ responsibleUsers: e.target.value }) }} />
                                                         
                                                     </FormGroup>
-                                                    <br />
-                                                    <FormGroup label="Adicionar responsável:" htmlFor="inputRegistration">
-                                                        <input type="number" id="inputRegistration" className="form-control" placeholder = "Digite o ID do responsável"                    
+
+                                                    <FormGroup>
+                                                        <div id='responsible' className='inputRegistration'>
+                                                            <label htmlFor="inputRegistration">Adicionar responsavel:*</label>
+
+                                                            <input type="number" id="inputRegistration" className="form-control" placeholder = "Digite o ID do responsável"                    
                                                             value={this.state.username} name="registration" onChange={(e) => { this.setState({ id_responsavel: e.target.value }) }} />
+                                                            
+                                                        </div>
+                                                        
                                                         
                                                     </FormGroup>
                                                     <br />

@@ -1,0 +1,7 @@
+.inputRegistration{
+    display: none;
+}
+
+.inputRegistration.show{
+    display: block;
+}
