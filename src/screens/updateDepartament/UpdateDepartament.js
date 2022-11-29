@@ -10,8 +10,6 @@ import { showSuccessMessage, showErrorMessage } from '../../components/Toastr';
 
 import DepartamentApiService from '../../services/DepartamentApiService';
 
-import ResponsavelTable from '../../components/ResponsavelTable';
-
 class UpdateDepartament extends React.Component {
 
     state = {
@@ -31,6 +29,7 @@ class UpdateDepartament extends React.Component {
     }
 
     findById = (id) => {
+
         // axios.get(`http://localhost:8080/api/departament?id=${departamentId}`)
         this.service.find(`?id=${id}`)
             .then(response => {
@@ -53,7 +52,7 @@ class UpdateDepartament extends React.Component {
 
         if (!this.state.name) {
             errors.push('Campo Nome é obrigatório!');
-        // } else if(!this.state.name.match(/[A-z ]{2,1000}$/)) {
+        // } else if(!this.state.name.match(/[A-z ]{2,100}$/)) {
         //     errors.push('O Nome do Departamento deve ter no mínimo 2 e no máximo 100 caracteres!');
         }
 
@@ -79,7 +78,7 @@ class UpdateDepartament extends React.Component {
             }
         ).then(response => {
             console.log(response);
-            showSuccessMessage('Departamento atualizado com sucesso!');
+            showSuccessMessage('Departamento atualizado com sucesso!');           
             this.props.history.push("/viewDepartaments");
 
         }
@@ -126,10 +125,16 @@ class UpdateDepartament extends React.Component {
                                                             value={this.state.name} onChange={(e) => { this.setState({ name: e.target.value }) }} />
                                                         <div className="valid-feedback">Departamento atualizado!</div>
                                                     </FormGroup>
+                                                    <br/>
+                                                    <FormGroup label="Responsáveis:" htmlFor="inputResponsable">
+                                                        <input disabled type="text" id="inputResponsable" className="form-control"
+                                                            value={this.state.responsibleUsers} name="responsibleUsers" onChange={(e) => { this.setState({ responsibleUsers: e.target.value }) }} />
+                                                        
+                                                    </FormGroup>
                                                     <br />
-                                                    <FormGroup label="Matrícula:" htmlFor="inputRegistration">
-                                                        <input type="number" id="inputRegistration" className="form-control"
-                                                            value={this.state.username} name="registration" onChange={(e) => { this.setState({ id_responsavel: e.target.value }) }} />
+                                                    <FormGroup label="Adicionar responsável:" htmlFor="inputRegistration">
+                                                        <input type="number" id="inputRegistration" className="form-control" placeholder = "Digite o ID do responsável"                    
+                                                            value={this.state.username} name="registration" onChange={(e) => { this.setState({ registration: e.target.value }) }} />
                                                         
                                                     </FormGroup>
                                                     <br />
@@ -145,7 +150,7 @@ class UpdateDepartament extends React.Component {
                                                     {/* if(this.state.responsibleUsers != null){
                                                         <ResponsavelTable responsavel = {this.state.responsibleUsers}/>
                                                     } */}
-                                                    <p>{this.state.responsibleUsers}</p>
+                                                    {/* <p>{this.state.responsibleUsers}</p> */}
                                                     
                                                 </div>
                                             </form>
