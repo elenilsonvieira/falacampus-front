@@ -15,10 +15,11 @@ import { showSuccessMessage, showErrorMessage } from '../../components/Toastr';
 class CreateComment extends React.Component {
 
     state = {
+        user: JSON.parse(localStorage.getItem("usuario")),
         title: '',
         message: '',
         commentType: '',
-        creationDate: Date,
+        creationDate: `${new Date().getDate()}/${new Date().getMonth()+1}/${new Date().getFullYear()}`,
         authorId: 0,
         departamentId: 0
     }
@@ -27,57 +28,58 @@ class CreateComment extends React.Component {
         this.service = new CommentApiService();
     }
 
-    componentWillUnmount() {
-        this.clear();
+    componentDidMount() {
+      //  this.clear();
+        console.log("user",this.state.user['id'])
     }
 
-    validate = () => {
-        const errors = [];
+    // validate = () => {
+    //     const errors = [];
     
-        if(!this.state.title){
-            errors.push('Campo Título é obrigatório!');
-        } else if(!this.state.title.match(/[A-z 0-9]{5,50}$/)) {
-            errors.push('O Título do Comentário deve ter no mínimo 5 e no máximo 50 caracteres!');
-        }
+    //     if(!this.state.title){
+    //         errors.push('Campo Título é obrigatório!');
+    //     } else if(!this.state.title.match(/[A-z 0-9]{5,50}$/)) {
+    //         errors.push('O Título do Comentário deve ter no mínimo 5 e no máximo 50 caracteres!');
+    //     }
 
-        if(!this.state.message){
-            errors.push('Campo Mensagem é obrigatório!');
-        } else if(!this.state.message.match(/[A-z 0-9]{10,255}$/)) {
-            errors.push('A mensagem do Comentário deve ter no mínimo 10 e no máximo 255 caracteres!');
-        }
+    //     if(!this.state.message){
+    //         errors.push('Campo Mensagem é obrigatório!');
+    //     } else if(!this.state.message.match(/[A-z 0-9]{10,255}$/)) {
+    //         errors.push('A mensagem do Comentário deve ter no mínimo 10 e no máximo 255 caracteres!');
+    //     }
 
-        if(!this.state.commentType){
-            errors.push('É obrigatório informar o Tipo de Comentário!');
-        }
+    //     if(!this.state.commentType){
+    //         errors.push('É obrigatório informar o Tipo de Comentário!');
+    //     }
 
-        if(!this.state.authorId){
-            errors.push('É obrigatório informar o Autor do Comentário!');
-        }
+    //     if(!this.state.authorId){
+    //         errors.push('É obrigatório informar o Autor do Comentário!');
+    //     }
 
-        if(!this.state.departamentId){
-            errors.push('É obrigatório informar o Departamento para o qual será direcionada a crítica, sugestão ou elogio!');
-        }
+    //     if(!this.state.departamentId){
+    //         errors.push('É obrigatório informar o Departamento para o qual será direcionada a crítica, sugestão ou elogio!');
+    //     }
         
-        return errors;
-    };
+    //     return errors;
+    // };
 
     create = async () => {
 
-        const errors = this.validate();
+        //  const errors = this.validate();
 
-        if(errors.length > 0) {
-            errors.forEach((message, index) => {
-                showErrorMessage(message);
-            });
-            return false
-        }
+        // if(errors.length > 0) {
+        //     errors.forEach((message, index) => {
+        //         showErrorMessage(message);
+        //     });
+        //     return false
+        // }
         
         this.service.create(
             {
                 title: this.state.title,
                 message: this.state.message,
                 commentType: this.state.commentType,
-                authorId: this.state.authorId,
+                authorId: this.state.user["id"],
                 departamentId: this.state.departamentId,
                 creationDate: this.state.creationDate
             }
@@ -143,6 +145,14 @@ class CreateComment extends React.Component {
                                                         <small id="messageHelp" className="form-text text-muted">Seja cordial ao escrever sua crítica, sugestão ou elogio.</small>
                                                     </FormGroup>
                                                     <br />
+
+                                                    <FormGroup label="Data: " htmlFor="inputCommentDate">
+                                                        <input disabled type="text" className="form-control" id="inputCommentDate"  minLength="5" maxlength="50"
+                                                        placeholder="Digite o título do comentário" 
+                                                        value={this.state.creationDate} 
+                                                        onChange={(e) => { this.setState({ title: e.target.value }) }} />
+                                                    </FormGroup>
+                                                    <br/>
                                                     <FormGroup label="Tipo de Comentário: *" htmlFor="selectCommentType" input>
                                                     <select className="form-select" id="selectCommentType" 
                                                     value={this.state.commentType} 
@@ -160,9 +170,10 @@ class CreateComment extends React.Component {
                                                         value={this.state.authorId} 
                                                         onChange={(e) => { this.setState({ authorId: e.target.value }) }} />
                                                     </FormGroup>                                                     */}
-                                                    <FormGroup label="Autor do Comentário: *" htmlFor="inputUserAuthor">
-                                                        <br />
-                                                        <SelectUser onChange={this.handleInputSelectUser} id="inputUserAuthor"/>
+                                                    <FormGroup label="Autor do Comentario:" htmlFor="inputCommentTitle">
+                                                        <input disabled type="text" className="form-control" id="autoComment"  
+                                                        
+                                                        value={this.state.user['name']}  />
                                                     </FormGroup>
                                                     <br />
                                                     {/* <FormGroup label="Id do Departamento: *" htmlFor="inputDepartamentId">

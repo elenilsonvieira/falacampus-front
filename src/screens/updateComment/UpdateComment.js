@@ -48,21 +48,21 @@ class UpdateComment extends React.Component {
     //     this.clear();
     // }
 
-    findById = (commentId) => {
+    findById = (id) => {
         //axios.get(`http://localhost:8080/api/comment?id=${commentId}`)
-        this.service.find(commentId)
+        this.service.find(`?id=${id}`)
 
             .then(response => {
                 const comment = response.data;
-                const id = comment.id;
-                const title = comment.title;
-                const message = comment.message;
-                const commentType = comment.commentType;
-                const user = comment.user;
-                const departament = comment.departament;
+                const id = comment[0].id;
+                const title = comment[0].title;
+                const message = comment[0].message;
+                const commentType = comment[0].commentType;
+                const user = comment[0].user;
+                const departament = comment[0].departament;
 
                 this.setState({ id:id, title:title, message:message, commentType:commentType, user:user, departament:departament});
-                console.log(this.state.id,this.state.departament);
+                
             }
 
             ).catch(error => {
@@ -71,38 +71,38 @@ class UpdateComment extends React.Component {
             );
     }
 
-    validate = () => {
-        const errors = [];
+    // validate = () => {
+    //     const errors = [];
 
-        if (!this.state.title) {
-            errors.push('Campo Título é obrigatório!');
-        } else if(!this.state.title.match(/[A-z 0-9]{5,50}$/)) {
-            errors.push('O Título do Comentário deve ter no mínimo 5 e no máximo 50 caracteres!');
-        }
+    //     if (!this.state.title) {
+    //         errors.push('Campo Título é obrigatório!');
+    //     } else if(!this.state.title.match(/[A-z 0-9]{5,50}$/)) {
+    //         errors.push('O Título do Comentário deve ter no mínimo 5 e no máximo 50 caracteres!');
+    //     }
 
-        if (!this.state.message) {
-            errors.push('Campo Mensagem é obrigatório!');
-        } else if(!this.state.message .match(/[A-z 0-9]{10,255}$/)) {
-            errors.push('A mensagem do Comentário deve ter no mínimo 10 e no máximo 255 caracteres!');
-        }
+    //     if (!this.state.message) {
+    //         errors.push('Campo Mensagem é obrigatório!');
+    //     } else if(!this.state.message .match(/[A-z 0-9]{10,255}$/)) {
+    //         errors.push('A mensagem do Comentário deve ter no mínimo 10 e no máximo 255 caracteres!');
+    //     }
 
-        if (!this.state.commentType) {
-            errors.push('É obrigatório informar o Tipo de Comentário!');
-        }
+    //     if (!this.state.commentType) {
+    //         errors.push('É obrigatório informar o Tipo de Comentário!');
+    //     }
 
-        return errors;
-    };
+    //     return errors;
+    // };
 
     update = () => {
 
-        const errors = this.validate();
+        // const errors = this.validate();
 
-        if (errors.length > 0) {
-            errors.forEach((message, index) => {
-                showErrorMessage(message);
-            });
-            return false
-        }
+        // if (errors.length > 0) {
+        //     errors.forEach((message, index) => {
+        //         showErrorMessage(message);
+        //     });
+        //     return false
+        // }
 
         //await axios.put(`http://localhost:8080/api/comment/${this.state.id}`,
         this.service.update(this.state.id,
@@ -110,8 +110,10 @@ class UpdateComment extends React.Component {
                 title: this.state.title,
                 message: this.state.message,
                 commentType: this.state.commentType,
-                 user: this.state.user.id,
-                 departamentId: this.state.departament.id
+                //  user: this.state.user.id,
+                //  departamentId: this.state.departament.id
+                "authorId": 1,
+	            "departamentId":2
             }
         ).then(response => {
             console.log(response);
