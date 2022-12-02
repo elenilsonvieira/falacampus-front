@@ -122,7 +122,6 @@ class ViewDepartaments extends React.Component {
         }
         ).catch(error => {
             console.log(error.response);
-            showErrorMessage('Erro ao atualizar departamentos.');
 
         }
         );

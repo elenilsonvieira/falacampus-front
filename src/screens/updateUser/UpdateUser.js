@@ -56,7 +56,7 @@ class UpdateUser extends React.Component {
         let a
         if(role === 'ADMIN'){
             a = document.getElementById(role)
-            a.classList.add('show')
+            a.classList.add('mostrar')
             console.log("Foi", role)
         }
     }
