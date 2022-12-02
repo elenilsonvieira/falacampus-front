@@ -23,7 +23,7 @@ class UpdateUser extends React.Component {
         username: '',
         rolesName:'',
         // role: '',
-        password: ''
+        password: '',
         // username: '',
         // departament: {
         //     departamentId: 0,
@@ -39,10 +39,13 @@ class UpdateUser extends React.Component {
     }
 
     componentDidMount() {
+       
         const params = this.props.match.params;
         const id = params.id;
         this.findById(id);
-        this.showEditRole();   
+        this.showEditRole();
+       
+       
     }
    
     // componentWillUnmount(){select
@@ -52,17 +55,18 @@ class UpdateUser extends React.Component {
         var value =  localStorage.getItem("usuario");
         var user = JSON.parse(value)
         var role = user['roles']['0']['name']
+
         console.log("AA", user)
         let a
         if(role === 'ADMIN'){
-            a = document.getElementById(role)
-            a.classList.add('mostrar')
-            console.log("Foi", role)
-        }
+            a = document.getElementById("papel")
+            a.classList.add('show')
+           console.log("Foi", role)
+        }       
+       
     }
 
     findById = (id) => {
-
         this.service.find(`?id=${id}`)
             .then(response => {
                 console.log(response);
@@ -80,19 +84,24 @@ class UpdateUser extends React.Component {
                 const password = user[0].password;
 
                 console.log("Dados up", user)
-                console.log("Dados up nome", user[0]['roles'][0]['name'])
+                console.log("Papel  nome", user[0]['roles'][0]['name'])
                 // this.setState({ id:id, name:name, email:email, registration:registration, role:role, password:password, departament:departament });
 
-                this.setState({ id:id, name:name, email:email, username:username, rolesName:rolesName, password:password});
-                this.showPapel(rolesName);
-            }
+                this.setState({ id:id, name:name, email:email, username:username, rolesName:rolesName, password:password}); 
+
+
+                this.showPapel(rolesName);               
+
+            }            
 
             ).catch(error => {
                 console.log(error.response);
                 console.log(error.message);
             }
             );
+            
     }
+
     showPapel(role){
         if(role === 'ADMIN'){         
 
@@ -105,6 +114,7 @@ class UpdateUser extends React.Component {
             seletor.selected = true;
         }
     }
+
 
     // validate = () => {
     //     const errors = [];
@@ -230,12 +240,14 @@ class UpdateUser extends React.Component {
                                                             value={this.state.username} name="registration" onChange={(e) => { this.setState({ registration: e.target.value }) }} />
                                                         
                                                     </FormGroup>
-                                                    
-                                                    <div className="form-group roles">
+                                                    <div id='papel' className="form-group roles">
                                                         <label htmlFor="selectRole" className="form-label mt-4">Papel: *</label>
-                                                        <select className="form-select" id="selectRole"                            name="role" onChange={(e) => { this.setState({ role: e.target.value }) }}>
+                                                        
+                                                        <select className="form-select" id="selectRole"                            name="role" onChange={(e) =>{this.setState({rolesName: e.target.value})}}>
 
                                                             <option>Selecione uma opção</option>
+
+                                                           
                                                             <option id='ADMIN'
                                                             value="ADMIN">ADMINISTRADOR</option>
 
@@ -245,15 +257,7 @@ class UpdateUser extends React.Component {
                                                             
                                                             <option value="TECHNICIAN">TÉCNICO</option>
                                                             <option value="TEACHER">PROFESSOR</option>
-                                                            {/* if(selectRole === 'ADMIN'){
-                                                                <option selected="true" value="ADMINISTRATOR">ADMINISTRADOR</option>
-                                                            }else if(selectRole === 'STUDENTS'){
-                                                                <option selected="true" value="STUDENT" >ESTUDANTE</option>
-                                                            }
                                                             
-                                                            <option value="TECHNICIAN">TÉCNICO</option>
-                                                            <option value="TEACHER">PROFESSOR</option>
-                                                             */}
                                                         </select>
                                                     </div>
                                                     <br />
