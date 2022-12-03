@@ -15,7 +15,7 @@ class ViewComments extends React.Component {
 
     state = {
         title: '',
-        id: 0,
+        id: "",
         message: '',
         creationDate: Date,
         commentType: '',
@@ -46,7 +46,8 @@ class ViewComments extends React.Component {
         this.service = new CommentApiService();
     }
     componentDidMount() {
-        this.findAll();
+        this.find();
+        
     }
 //   componentWillUnmount() {
 //        this.clear();
@@ -134,20 +135,19 @@ class ViewComments extends React.Component {
             );
     }
 
-    findAll = () => {
-
-        //axios.get(`http://localhost:8080/api/comment/all`)
-        this.service.findAll('/all')
-            .then(response => {
-                const comments = response.data;
-                this.setState({ comments });
-                console.log(comments);
-            }
-            ).catch(error => {
-                console.log(error.response);
-            }
-            );
-    }
+    // findAll = () => {
+    //     //axios.get(`http://localhost:8080/api/comment/all`)
+    //     this.service.find()
+    //         .then(response => {
+    //             const comments = response;
+    //             this.setState({ comments });
+    //             console.log(comments);
+    //         }
+    //         ).catch(error => {
+    //             console.log(error.response);
+    //         }
+    //         );
+    // }
 
     render() {
         return (
