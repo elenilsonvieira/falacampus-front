@@ -33,6 +33,7 @@ class UpdateComment extends React.Component {
     componentDidMount() {
         const params = this.props.match.params;
         const id = params.id;
+        console.log(params)
         this.findById(id);
 
          //this.service.findById(this.props.match.params.id)

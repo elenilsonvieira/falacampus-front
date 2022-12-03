@@ -19,6 +19,8 @@ class DeleteComment extends React.Component {
   }
 
     componentWillUnmount(){
+      const params = this.props.match.params;
+      console.log("id comentario",params)
       this.clear();
     }
   

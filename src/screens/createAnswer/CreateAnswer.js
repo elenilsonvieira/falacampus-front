@@ -20,19 +20,23 @@ class CreateAnswer extends React.Component {
         authorId: 0,
     }
 
+    constructor() {
+        super();
+        this.service = new AnswerApiService();
+    }
+
+
     componentDidMount() {
         const params = this.props.match.params;
         const id = params.id;
-        this.findCommentById(id);
+        console.log("id comentario",params)
+       // this.findCommentById(id);
     }
 
     // componentWillUnmount() {
     //     this.clear();
     // }
-    constructor() {
-        super();
-        this.service = new AnswerApiService();
-    }
+
 
     findCommentById = (commentId) => {
         //axios.get(`http://localhost:8080/api/comment?id=${commentId}`)
