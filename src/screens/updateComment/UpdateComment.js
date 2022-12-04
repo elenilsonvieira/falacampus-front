@@ -33,6 +33,7 @@ class UpdateComment extends React.Component {
     componentDidMount() {
         const params = this.props.match.params;
         const id = params.id;
+        console.log(id)
         this.findById(id);
 
          //this.service.findById(this.props.match.params.id)
@@ -60,6 +61,8 @@ class UpdateComment extends React.Component {
                 const commentType = comment[0].commentType;
                 const user = comment[0].user;
                 const departament = comment[0].departament;
+
+                console.log("comment",comment)
 
                 this.setState({ id:id, title:title, message:message, commentType:commentType, user:user, departament:departament});
                 

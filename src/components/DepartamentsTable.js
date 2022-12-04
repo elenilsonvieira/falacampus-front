@@ -6,10 +6,10 @@ export default props => {
     const rows = props.departaments.map(departament => {
         return (
             <tr key={departament.id}>
-                {/* <td>{departament.id}</td> */}
+                <td>{departament.id}</td>
                 <td>{departament.name}</td>
                 <td className="col-md-2">
-                    <button type="button" title="Editar" id="button_editar" 
+                    <button type="button" title="Editar" id="button_editar"
                         className="btn btn-warning"
                         onClick={e => props.edit(departament.id)}>
                         <i className="pi pi-pencil"></i>
@@ -29,7 +29,7 @@ export default props => {
         <table className="table table-hover">
             <thead>
                 <tr className="table-active">
-                    {/* <th scope="col">Id</th> */}
+                    <th scope="col">Id</th>
                     <th scope="col">Nome</th>
                     <th scope="col">Ação</th>
                 </tr>

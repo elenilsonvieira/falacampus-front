@@ -19,9 +19,9 @@ class CreateComment extends React.Component {
         title: '',
         message: '',
         commentType: '',
-        creationDate: `${new Date().getDate()}/${new Date().getMonth()+1}/${new Date().getFullYear()}`,
-        authorId: 0,
-        departamentId: 0
+        creationDate: `${new Date().getDate()}/${new Date().getMonth()+1}/${new Date().getFullYear()} ${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getMilliseconds()}`,
+        authorId: "",
+        departamentId: ""
     }
      constructor(){
         super();
@@ -80,8 +80,8 @@ class CreateComment extends React.Component {
                 message: this.state.message,
                 commentType: this.state.commentType,
                 authorId: this.state.user["id"],
-                departamentId: this.state.departamentId,
-                creationDate: this.state.creationDate
+                departamentId: this.state.departamentId
+               
             }
         ).then(response => {
             console.log(response);
@@ -176,17 +176,17 @@ class CreateComment extends React.Component {
                                                         value={this.state.user['name']}  />
                                                     </FormGroup>
                                                     <br />
-                                                    {/* <FormGroup label="Id do Departamento: *" htmlFor="inputDepartamentId">
+                                                    <FormGroup label="Id do Departamento: *" htmlFor="inputDepartamentId">
                                                         <input type="number" className="form-control" id="inputDepartamentId" 
                                                         placeholder="Digite o id do departamento" 
                                                         value={this.state.departamentId} 
                                                         onChange={(e) => { this.setState({ departamentId: e.target.value }) }} />
-                                                    </FormGroup> */}
+                                                    </FormGroup>
                                                     
-                                                    <FormGroup label="Selecione o Departamento para o envio da crítica, sugestão ou elogio: *" htmlFor="inputDepartamentDestination">
+                                                    {/* <FormGroup label="Selecione o Departamento para o envio da crítica, sugestão ou elogio: *" htmlFor="inputDepartamentDestination">
                                                         <br />
                                                         <SelectDepartament onChange={this.handleInputSelectDepartament} id="inputDepartamentDestination"/>
-                                                    </FormGroup>
+                                                    </FormGroup> */}
                                                     <br />
                                                     <br />
                                                     <button onClick={this.create} type="button" className="btn btn-success" id="button_salvar">

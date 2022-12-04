@@ -15,24 +15,29 @@ import AnswerApiService from '../../services/AnswerApiService';
 class CreateAnswer extends React.Component {
 
     state = {
+    //    user: JSON.parse(localStorage.getItem("usuario")),
         message: '',
         commentId: 0,
-        authorId: 0,
+        authorId: '',
     }
+
+    constructor() {
+        super();
+        this.service = new AnswerApiService();
+    }
+
 
     componentDidMount() {
         const params = this.props.match.params;
         const id = params.id;
-        this.findCommentById(id);
+        console.log("id comentario",params)
+       // this.findCommentById(id);
     }
 
     // componentWillUnmount() {
     //     this.clear();
     // }
-    constructor() {
-        super();
-        this.service = new AnswerApiService();
-    }
+
 
     findCommentById = (commentId) => {
         //axios.get(`http://localhost:8080/api/comment?id=${commentId}`)
@@ -111,17 +116,6 @@ class CreateAnswer extends React.Component {
         this.props.history.push('/');
     }
 
-    handleInputSelectComment = (e) => {
-        this.setState({ commentId: e.target.value }, () => {
-            console.log("Id do Comentário: ", this.state.commentId);
-        });
-    }
-
-    handleInputSelectUser = (e) => {
-        this.setState({ authorId: e.target.value }, () => {
-            console.log("Id do Autor(Usuário): ", this.state.authorId);
-        });
-    }
 
     render() {
         return (
@@ -141,36 +135,27 @@ class CreateAnswer extends React.Component {
                                                             * Todos os campos são obrigatórios.
                                                         </small>
                                                     </p>
-                                                    <FormGroup label="Selecione o Comentário para o envio da resposta: *" htmlFor="inputDepartamentDestination">
-                                                        <br />
-                                                        <SelectComment id="select-comment" onChange={this.handleInputSelectComment} />
-                                                    </FormGroup>
+                                                    
                                                     <br />
-                                                    {/* <FormGroup label="Id do Comentário: *" htmlFor="inputCommentId">
+                                                    <FormGroup label="Id do Comentário: *" htmlFor="inputCommentId">
                                                         <input type="number" className="form-control" id="inputCommentId" 
                                                         placeholder="Digite o id do comentário" 
                                                         value={this.state.commentId} 
                                                         onChange={(e) => { this.setState({ commentId: e.target.value }) }} />
                                                     </FormGroup>
-                                                    <br /> */}
-                                                    <FormGroup label="Mensagem: *" htmlFor="MessageTextarea">
+                                                    <br />
+                                                    <FormGroup label="Resposta: *" htmlFor="MessageTextarea">
                                                         <textarea type="text" className="form-control" id="MessageTextarea" rows="3" minLength="10" maxlength="255"
                                                             placeholder="Incluir resposta"
                                                             value={this.state.message}
                                                             onChange={(e) => { this.setState({ message: e.target.value }) }} />
                                                     </FormGroup>
                                                     <br />
-                                                    {/* <FormGroup label="Id do Autor da Mensagem: *" htmlFor="inputAuthorId">
-                                                        <input type="number" className="form-control" id="inputAuthorId" 
-                                                        placeholder="Digite o id do autor" 
-                                                        value={this.state.authorId} 
-                                                        onChange={(e) => { this.setState({ authorId: e.target.value }) }} />
-                                                    </FormGroup>   */}
-                                                    <FormGroup label="Autor do Comentário: *" htmlFor="inputUserAuthor">
-                                                        <br />
-                                                        <SelectUser id="select-author" onChange={this.handleInputSelectUser} />
-                                                    </FormGroup>
-                                                    <br />
+                                                    <FormGroup label="Autor da Resposta:" htmlFor="inputCommentTitle">
+                                                        <input disabled type="text" className="form-control" id="autoComment"  
+                                                         />
+                                                    </FormGroup>  
+                                                    
                                                     <br />
                                                     <button onClick={this.create} type="button" id="button-answer" className="btn btn-success">
                                                         <i className="pi pi-save"></i> Responder

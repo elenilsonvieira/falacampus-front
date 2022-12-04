@@ -68,7 +68,7 @@ function AppRoutes(props) {
                 <RestrictedRoute show={props.isAuthenticated} component={UpdateComment} path="/updateComment/:id" />
                 <RestrictedRoute show={props.isAuthenticated} component={DeleteComment} path="/deleteComment" />
 
-                <RestrictedRoute show={props.isAuthenticated} component={CreateAnswer} path="/createAnswer" />
+                <RestrictedRoute show={!props.isAuthenticated} component={CreateAnswer} path="/createAnswer" />
                 <RestrictedRoute show={props.isAuthenticated} component={ViewAnswers} path="/viewAnswer" />
                 
             </Switch>

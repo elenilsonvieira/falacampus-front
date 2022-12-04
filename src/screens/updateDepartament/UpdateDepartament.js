@@ -23,7 +23,7 @@ class UpdateDepartament extends React.Component {
         this.service = new DepartamentApiService();
     }
     componentDidMount() {
-        const params = this.props.match.params;
+        const params = this.props.match.params;       
         const id = params.id;
         this.findById(id);
         this.showEditRole();

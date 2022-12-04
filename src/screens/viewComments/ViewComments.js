@@ -72,10 +72,18 @@ class ViewComments extends React.Component {
     
     }
 
-
     edit = (commentId) => {
-        this.props.history.push(`/updateComment/${commentId}`);
-        this.service.edit(commentId);
+        this.service.find(`?id=${commentId}`)
+        .then(response =>{
+            if(response.data["length"]===0){
+                showErrorMessage('Esse comentario não pode ser atualizado!');
+            }else{
+                this.props.history.push(`/updateComment/${commentId}`)        
+                this.service.edit(commentId);
+            }
+           
+        })
+        
     }
 
     answer = (commentId) => {
@@ -87,7 +95,7 @@ class ViewComments extends React.Component {
     }
 
     find = () => {
-        this.service.find('')
+        this.service.findAll('')
         var params = '?';
 
         if (this.state.id !== 0) {
@@ -123,11 +131,11 @@ class ViewComments extends React.Component {
         }
 
         //axios.get(`http://localhost:8080/api/comment/${params}`)
-        this.service.find(this.state.id)
+        this.service.findAll(this.state.id)
             .then(response => {
                 const comments = response.data;
                 this.setState({ comments });
-                console.log(comments);
+                console.log("dados",comments);
             }
             ).catch(error => {
                 console.log(error.response);
