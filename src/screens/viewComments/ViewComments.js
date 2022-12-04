@@ -79,7 +79,7 @@ class ViewComments extends React.Component {
                 showErrorMessage('Esse comentario não pode ser atualizado!');
             }else{
                 this.props.history.push(`/updateComment/${commentId}`)        
-                this.service.edit(commentId);
+               
             }
            
         })
@@ -88,6 +88,7 @@ class ViewComments extends React.Component {
 
     answer = (commentId) => {
         this.props.history.push(`/createAnswer/${commentId}`);
+        
     }
 
     createComment = () => {
