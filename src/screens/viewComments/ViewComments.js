@@ -2,7 +2,6 @@ import React from 'react';
 import './ViewComments.css';
 import '../../components/Style.css';
 import { withRouter } from 'react-router-dom';
-//import CommentsCard from '../../components/CommentsCard';
 
 import Card from '../../components/Card';
 import FormGroup from '../../components/FormGroup';

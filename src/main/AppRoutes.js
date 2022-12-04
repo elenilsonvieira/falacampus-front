@@ -27,6 +27,7 @@ import CreateAnswer from "../screens/createAnswer/CreateAnswer";
 import ViewAnswers from "../screens/viewAnswer/ViewAnswers";
 import UpdateAnswer from "../screens/updateAnswer/UpdateAnswer";
 import { AuthConsumer } from '../main/SessionProvider';
+import ViewCommentsHome from "../screens/home/viewCommentsHome/ViewCommentsHome";
 
 function RestrictedRoute({ component: Component, show, ...props }) {
     return (
@@ -67,8 +68,10 @@ function AppRoutes(props) {
                 <RestrictedRoute show={props.isAuthenticated} component={ViewComments} path="/viewComments" />
                 <RestrictedRoute show={props.isAuthenticated} component={UpdateComment} path="/updateComment/:id" />
                 <RestrictedRoute show={props.isAuthenticated} component={DeleteComment} path="/deleteComment" />
+                <RestrictedRoute show={props.isAuthenticated} component={ViewCommentsHome} path="/viewCommentsHome" />
 
-                <RestrictedRoute show={!props.isAuthenticated} component={CreateAnswer} path="/createAnswer" />
+
+                <RestrictedRoute show={props.isAuthenticated} component={CreateAnswer} path="/createAnswer/:id" />
                 <RestrictedRoute show={props.isAuthenticated} component={ViewAnswers} path="/viewAnswer" />
                 
             </Switch>

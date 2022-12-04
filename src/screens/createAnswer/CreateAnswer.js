@@ -12,26 +12,31 @@ import SelectUser from '../../components/SelectUser';
 
 import { showSuccessMessage, showErrorMessage } from '../../components/Toastr';
 import AnswerApiService from '../../services/AnswerApiService';
+import CommentApiService from '../../services/CommentApiService';
 class CreateAnswer extends React.Component {
 
     state = {
-    //    user: JSON.parse(localStorage.getItem("usuario")),
+        user: JSON.parse(localStorage.getItem("usuario")),
         message: '',
-        commentId: 0,
+        commentId: '',
         authorId: '',
     }
 
     constructor() {
         super();
         this.service = new AnswerApiService();
+        this.serviceComment = new CommentApiService();
+
     }
 
 
     componentDidMount() {
         const params = this.props.match.params;
         const id = params.id;
-        console.log("id comentario",params)
-       // this.findCommentById(id);
+        this.state.commentId = id;
+        console.log("id comentario",this.state.commentId)
+   //    this.findCommentById(id);
+
     }
 
     // componentWillUnmount() {
