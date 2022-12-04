@@ -2,6 +2,7 @@ import React from 'react';
 import './ViewComments.css';
 import '../../components/Style.css';
 import { withRouter } from 'react-router-dom';
+//import CommentsCard from '../../components/CommentsCard';
 
 import Card from '../../components/Card';
 import FormGroup from '../../components/FormGroup';
@@ -78,7 +79,7 @@ class ViewComments extends React.Component {
                 showErrorMessage('Esse comentario não pode ser atualizado!');
             }else{
                 this.props.history.push(`/updateComment/${commentId}`)        
-                this.service.edit(commentId);
+               
             }
            
         })
@@ -87,6 +88,7 @@ class ViewComments extends React.Component {
 
     answer = (commentId) => {
         this.props.history.push(`/createAnswer/${commentId}`);
+        
     }
 
     createComment = () => {

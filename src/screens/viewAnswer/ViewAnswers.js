@@ -22,7 +22,7 @@ class ViewAnswers extends React.Component {
         user: {
             authorId: 0
         },
-        answers: []
+        answers:[]
     }
     constructor() {
         super();
@@ -30,6 +30,7 @@ class ViewAnswers extends React.Component {
     }
     componentDidMount() {
         this.findAll();
+        console.log("AAAAA",this.state.answers)
     }
 
     // async componentDidMount() {
@@ -132,7 +133,7 @@ class ViewAnswers extends React.Component {
             .then(response => {
                 const answers = response.data;
                 this.setState({ answers });
-                console.log(answers);
+                console.log("BBBb",answers);
             }
             ).catch(error => {
                 console.log(error.response);
