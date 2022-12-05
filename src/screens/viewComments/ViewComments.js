@@ -47,11 +47,24 @@ class ViewComments extends React.Component {
     }
     componentDidMount() {
         this.find();
+        this.viewListButton();
         
     }
-//   componentWillUnmount() {
-//        this.clear();
-//      }
+
+    viewListButton = () =>{
+        var value =  localStorage.getItem("user");
+        var user = JSON.parse(value)
+        var role = user['roles']['0']['name']
+        console.log("AA", role)
+
+        if(role === 'ADMIN'){
+            let a = document.getElementsByClassName("btn-danger")
+            console.log(a)
+            
+          
+        }
+       
+    }
 
     delete = (commentId) => {
 

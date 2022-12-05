@@ -17,6 +17,6 @@ export default class AnsweApiService extends ApiService{
         return this.get(`/${params}`);
     }
     findAll(){
-        return this.getAll('');
+        return this.get('/all');
     }
 }

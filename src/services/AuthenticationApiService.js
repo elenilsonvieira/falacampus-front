@@ -21,7 +21,7 @@ export class AuthenticationApiService extends ApiService {
            
             const token = response.data.token;
           
-            this.storageService.setItem("usuario", user)
+            this.storageService.setItem("user", user)
 
             this.storageService.setItem(LOGGED_USER, user);
            

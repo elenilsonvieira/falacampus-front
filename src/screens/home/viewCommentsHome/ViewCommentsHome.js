@@ -66,9 +66,9 @@ class ViewCommentsHome extends React.Component {
          await this.findAnswerById(dados[i].answerId);
            
            respostas += `<div class="card text-white bg-success mb-3"; >`;
-           respostas += `<div class="card-header">Titulo Comentario: ${dados[i].title}</div>`
+           respostas += `<div class="card-header">Titulo: ${dados[i].title}</div>`
            respostas += `<div class="card-body">`;          
-           respostas += ` <p class="card-text">Comentario: ${dados[i].message}</p>`
+           respostas += ` <p class="card-text">Comentário: ${dados[i].message}</p>`
            respostas += `<h4 class="card-title">Resposta: ${this.state.answer}</h4>`
            respostas += `</div>`
            respostas += `</div>`
@@ -83,7 +83,7 @@ class ViewCommentsHome extends React.Component {
 
     findAnswerById = async (id) => {
         //axios.get(`http://localhost:8080/api/comment?id=${commentId}`)
-       await this.service.find(`?id=${id}`)
+       await this.service.find(`all`)
 
             .then(response => {
                  const comment = response.data;
@@ -96,13 +96,13 @@ class ViewCommentsHome extends React.Component {
 
                 console.log("comment",comment)
 
-                // this.setState({ id:id, title:title, message:message, commentType:commentType, user:user, departament:departament});
-                
-                // this.setState({title:"bbb"})
-                 this.state.answer = answer
-                // this.state.message = message
-
-               return comment[0].title;
+                for (let i = 0; i < comment.length; i++) {
+                    console.log("aa",comment[i].message)
+                    if(comment[i].id === id){
+                        this.state.answer = comment[i].message
+                    }
+                    
+                }
             }
 
             ).catch(error => {
@@ -120,11 +120,10 @@ class ViewCommentsHome extends React.Component {
                 <div className='row'>
                     <div className='col-md-12' style={this.styles.colMd12}>
                         <div className="bs-docs-section">
-                            <Card title='Comentários'>
+                            <Card title=''>
                                 <form>
                                     <fieldset>
-                                        <CommentsCard title = {this.state.comment.title}/>
-
+                                        
                                         <div id='teste' className='teste'></div>
 
                                         {/* <div className="card text-white bg-primary mb-3" >

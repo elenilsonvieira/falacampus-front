@@ -31,7 +31,7 @@ export default props => {
                 <td>{comment.departamentId.id}</td> */}
                 {/* <td>{comment.answerId.id}</td> */}
                 <td className="col-md-2">
-                    <button type="button" title="Responder"
+                    <button id='butonAnswer' type="button" title="Responder"
                         className="btn btn-danger btn-space"
                         onClick={e => props.answer(comment.id)}>
                         <i className="pi pi-comment"></i>

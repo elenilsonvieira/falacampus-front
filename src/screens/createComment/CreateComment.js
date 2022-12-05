@@ -86,6 +86,8 @@ class CreateComment extends React.Component {
         ).then(response => {
             console.log(response);
             showSuccessMessage('Comentário criado com sucesso!');
+            this.props.history.push("/viewComments");
+            
         }
         ).catch(error => {
             console.log(error.response);
