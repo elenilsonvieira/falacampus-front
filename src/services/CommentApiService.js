@@ -19,4 +19,8 @@ export default class CommentApiService extends ApiService{
     findAll(){
         return this.get('/all');
     }
+
+    findCommentSolved(){
+        return this.get('/commentSolved');
+    }
 }

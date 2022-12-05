@@ -17,8 +17,8 @@ import CommentsCard  from '../../../components/CommentsCard';
 class ViewCommentsHome extends React.Component {
 
     state = {  
-        title:'',
-        message:'',
+       
+        answer:'',
         comment:{
             id:'',
             title:'aaa',
@@ -45,7 +45,7 @@ class ViewCommentsHome extends React.Component {
 
     find = () => {
 
-        this.service.get('/all')
+        this.service2.get('/commentSolved')
             .then(response => {
                 const answers = response.data;
                 this.setState({answers})
@@ -63,13 +63,13 @@ class ViewCommentsHome extends React.Component {
         var respostas = ""
         for (let i = 0; i < dados.length; i++) {
            
-          await this.findCommnetsById(2);
+         await this.findAnswerById(dados[i].answerId);
            
            respostas += `<div class="card text-white bg-success mb-3"; >`;
-           respostas += `<div class="card-header">Titulo Comentario: ${this.state.title}</div>`
+           respostas += `<div class="card-header">Titulo Comentario: ${dados[i].title}</div>`
            respostas += `<div class="card-body">`;          
-           respostas += ` <p class="card-text">Comentario: ${this.state.message}</p>`
-           respostas += `<h4 class="card-title">Resposta: ${dados[i].message}</h4>`
+           respostas += ` <p class="card-text">Comentario: ${dados[i].message}</p>`
+           respostas += `<h4 class="card-title">Resposta: ${this.state.answer}</h4>`
            respostas += `</div>`
            respostas += `</div>`
    
@@ -81,26 +81,26 @@ class ViewCommentsHome extends React.Component {
            a.innerHTML = respostas;
     }
 
-    findCommnetsById = async (id) => {
+    findAnswerById = async (id) => {
         //axios.get(`http://localhost:8080/api/comment?id=${commentId}`)
-       await this.service2.find(`?id=${id}`)
+       await this.service.find(`?id=${id}`)
 
             .then(response => {
                  const comment = response.data;
                 // const id = comment[0].id;
-                 const title = comment[0].title;
-                 const message = comment[0].message;
+                 const answer = comment[0].answer;
+                // const message = comment[0].message;
                 // const commentType = comment[0].commentType;
                 // const user = comment[0].user;
                 // const departament = comment[0].departament;
 
-                console.log("comment",message)
+                console.log("comment",comment)
 
                 // this.setState({ id:id, title:title, message:message, commentType:commentType, user:user, departament:departament});
                 
-                this.setState({title:"bbb"})
-                this.state.title = title
-                this.state.message = message
+                // this.setState({title:"bbb"})
+                 this.state.answer = answer
+                // this.state.message = message
 
                return comment[0].title;
             }
