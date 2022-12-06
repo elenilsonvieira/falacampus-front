@@ -61,7 +61,7 @@ class ViewCommentsHome extends React.Component {
 
    teste = async (dados) => {
         var respostas = ""
-        for (let i = 0; i < dados.length; i++) {
+        for (let i =  dados.length-1; i >= 0; i--) {
            
          await this.findAnswerById(dados[i].answerId);
            
@@ -96,7 +96,7 @@ class ViewCommentsHome extends React.Component {
 
                 console.log("comment",comment)
 
-                for (let i = 0; i < comment.length; i++) {
+                for (let i = comment.length-1; i >= 0; i--) {
                     console.log("aa",comment[i].message)
                     if(comment[i].id === id){
                         this.state.answer = comment[i].message

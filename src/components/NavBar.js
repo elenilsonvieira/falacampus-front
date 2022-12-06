@@ -27,6 +27,9 @@ function NavBar(props) {
                         <NavBarItem render={props.isAuthenticated} href="/login" onClick={props.logout} label="Sair" />
 
 
+
+
+
                     </ul>
                 </div>
             </div>

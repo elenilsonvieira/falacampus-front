@@ -30,6 +30,7 @@ import { AuthConsumer } from '../main/SessionProvider';
 
 import ViewCommentsHome from "../screens/home/viewCommentsHome/ViewCommentsHome";
 
+
 function RestrictedRoute({ component: Component, show, ...props }) {
     return (
         <Route exact {...props} render={(componentProps) => {
@@ -74,7 +75,8 @@ function AppRoutes(props) {
                 <RestrictedRoute show={props.isAuthenticated} component={ViewAnswers} path="/viewAnswer" />
 
                 <RestrictedRoute show={props.isAuthenticated} component={ViewCommentsHome} path="/viewCommentsHome" />
-                
+
+
             </Switch>
         </BrowserRouter>
     );

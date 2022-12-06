@@ -14,13 +14,18 @@ import { showSuccessMessage, showErrorMessage } from '../../components/Toastr';
 
 class CreateComment extends React.Component {
 
+    getLoggedUser = () =>{
+        var value = localStorage.getItem("loggedUser");
+        var user = JSON.parse(value);
+        return user;
+    }
     state = {
-        user: JSON.parse(localStorage.getItem("usuario")),
+        user: this.getLoggedUser(),
         title: '',
         message: '',
         commentType: '',
         creationDate: `${new Date().getDate()}/${new Date().getMonth()+1}/${new Date().getFullYear()} ${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getMilliseconds()}`,
-        authorId: "",
+        authorId: this.getLoggedUser().id,
         departamentId: ""
     }
      constructor(){
@@ -30,7 +35,7 @@ class CreateComment extends React.Component {
 
     componentDidMount() {
       //  this.clear();
-        console.log("user",this.state.user['id'])
+        console.log("user",this.state.user["id"])
     }
 
     // validate = () => {
@@ -175,7 +180,7 @@ class CreateComment extends React.Component {
                                                     <FormGroup label="Autor do Comentario:" htmlFor="inputCommentTitle">
                                                         <input disabled type="text" className="form-control" id="autoComment"  
                                                         
-                                                        value={this.state.user['name']}  />
+                                                        value={this.state.user["name"]}  />
                                                     </FormGroup>
                                                     <br />
                                                     <FormGroup label="Id do Departamento: *" htmlFor="inputDepartamentId">

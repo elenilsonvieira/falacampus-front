@@ -31,11 +31,18 @@ export default props => {
                 <td>{comment.departamentId.id}</td> */}
                 {/* <td>{comment.answerId.id}</td> */}
                 <td className="col-md-2">
-                    <button id='butonAnswer' type="button" title="Responder"
+                    {props.admin &&(
+                        <button id='butonAnswer' type="button" title="Responder"
                         className="btn btn-danger btn-space"
                         onClick={e => props.answer(comment.id)}>
                         <i className="pi pi-comment"></i>
                     </button>
+                    )}
+                    {/* <button id='butonAnswer' type="button" title="Responder"
+                        className="btn btn-danger btn-space"
+                        onClick={e => props.answer(comment.id)}>
+                        <i className="pi pi-comment"></i>
+                    </button> */}
                     <button id="button_editar" type="button" title="Editar"
                         className="btn btn-warning btn-space"
                         onClick={e => props.edit(comment.id)}>
