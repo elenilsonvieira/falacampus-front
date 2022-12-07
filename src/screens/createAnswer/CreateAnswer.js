@@ -158,15 +158,8 @@ class CreateAnswer extends React.Component {
                                                         </small>
                                                     </p>
                                                     
-                                                    <br />
-                                                    <FormGroup label="Id do Comentário: *" htmlFor="inputCommentId">
-                                                        <input type="number" 
-                                                        disabled
-                                                        className="form-control" id="inputCommentId" 
-                                                        placeholder="Digite o id do comentário" 
-                                                        value={this.state.commentId} 
-                                                        onChange={(e) => { this.setState({ commentId: e.target.value }) }} />
-                                                    </FormGroup>
+                                                   
+                                                    
                                                     <br />
                                                     <FormGroup label="Comentario: *" htmlFor="MessageTextarea">
                                                         <textarea type="text" 

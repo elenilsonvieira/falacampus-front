@@ -12,8 +12,8 @@ import SelectUser from '../../components/SelectUser';
 import CommentApiService from '../../services/CommentApiService';
 import { showSuccessMessage, showErrorMessage } from '../../components/Toastr';
 
+import Global from './Global';
 
-import Global from './Globais';
 import DepartamentApiService from '../../services/DepartamentApiService';
 
 class CreateComment extends React.Component {
@@ -67,7 +67,7 @@ class CreateComment extends React.Component {
       
         function autoComplete(inputValue) {
 
-            const departaments = Global.d
+            const departaments = Global.departaments
   
             const p = departaments.filter((d) => d.name.toLowerCase().includes(inputValue.toLowerCase()));
     
@@ -148,7 +148,7 @@ class CreateComment extends React.Component {
         .then(response => {
             const departaments = response.data;
             this.setState({ departaments });
-            Global.d = this.state.departaments
+            Global.departaments = this.state.departaments
            
 
         }
