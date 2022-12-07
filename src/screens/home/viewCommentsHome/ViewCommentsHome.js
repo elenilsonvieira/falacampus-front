@@ -1,142 +1,57 @@
 import React from 'react';
-import './ViewCommentsHome.css';
-import '../../../components/Style.css';
 import { withRouter } from 'react-router-dom';
-import CommentsCard from '../../../components/CommentsCard';
+import '../viewCommentsHome/ViewCommentsHome.css'
 
-import Card from '../../../components/Card';
-import FormGroup from '../../../components/FormGroup';
 
-import CommentsTable from '../../../components/CommentsTable'
+import AnswerApiService from '../../../services/AnswerApiService';
+
 import CommentApiService from '../../../services/CommentApiService';
-import { showSuccessMessage, showErrorMessage } from '../../../components/Toastr';
 
-class ViewComments extends React.Component {
+import CommentsTableHome from '../../../components/CommentsTableHome';
+
+import Card  from '../../../components/Card';
+
+import CommentsCard  from '../../../components/CommentsCard';
 
 
-    state = {
-        title: '',
-        id: "",
-        message: '',
-        creationDate: Date,
-        commentType: '',
-        statusComment: '',
-        user: {
-            authotId: 0,
-            name: '',
-            email: '',
-            registration: 0,
-            role: '',
-            departamentId: 0
-        },
-        departament: {
-            departamentId: 0,
-            name: ''
-        },
-        answer: {
-            answerId: 0,
-            message: '',
-            commentId: '',
-            creationDate: Date,
-            authorId: 0
-        },
-        comments: []
+class ViewCommentsHome extends React.Component {
+
+    state = {  
+       
+        answer:'',
+        comment:{
+            id:'',
+            title:'aaa',
+            message:''
+        },   
+        answers: []
+
     }
+
     constructor() {
         super();
-        this.service = new CommentApiService();
+        this.service = new AnswerApiService();
+
+        this.service2 = new CommentApiService();
+        
     }
+
     componentDidMount() {
-        this.find();
+        this.find();   
         
-    }
-//   componentWillUnmount() {
-//        this.clear();
-//      }
-
-    delete = (commentId) => {
-
-        this.service.delete(commentId)
-            .then(response => {
-                this.find();
-                showSuccessMessage('Comentário excluído com sucesso!');
-            }
-            ).catch(error => {
-                console.log(error.response);
-                showErrorMessage('Comentário não pode ser excluído!');
-            }
-            );
-    }
-
-    card= (commentId) => {
-       
-    
-    }
-
-    edit = (commentId) => {
-        this.service.find(`?id=${commentId}`)
-        .then(response =>{
-            if(response.data["length"]===0){
-                showErrorMessage('Esse comentario não pode ser atualizado!');
-            }else{
-                this.props.history.push(`/updateComment/${commentId}`)        
-                this.service.edit(commentId);
-            }
-           
-        })
         
-    }
-
-    answer = (commentId) => {
-        this.props.history.push(`/createAnswer/${commentId}`);
-    }
-
-    createComment = () => {
-        this.props.history.push(`/createComment`);
+        
     }
 
     find = () => {
-        
-        var params = '?';
 
-        if (this.state.id !== 0) {
-            if (params !== '?') {
-                params = `${params}&`;
-            }
-
-            params = `${params}id=${this.state.id}`;
-        }
-
-        if (this.state.title !== '') {
-            if (params !== '?') {
-                params = `${params}&`;
-            }
-
-            params = `${params}title=${this.state.title}`;
-        }
-
-        if (this.state.message !== '') {
-            if (params !== '?') {
-                params = `${params}&`;
-            }
-
-            params = `${params}message=${this.state.message}`;
-        }
-
-        if (this.state.creationDate !== Date) {
-            if (params !== '?') {
-                params = `${params}&`;
-            }
-
-            params = `${params}creationDate=${this.state.creationDate}`;
-        }
-
-        //axios.get(`http://localhost:8080/api/comment/${params}`)
-        this.service.find(params)
+        this.service2.get('/commentSolved')
             .then(response => {
-                const comments = response.data;
-                this.setState({ comments });
-                console.log("dados",comments);
+                const answers = response.data;
+                this.setState({answers})
+                
+                console.log("BBBb",answers);
+                this.teste(answers);
             }
             ).catch(error => {
                 console.log(error.response);
@@ -144,19 +59,59 @@ class ViewComments extends React.Component {
             );
     }
 
-    // findAll = () => {
-    //     //axios.get(`http://localhost:8080/api/comment/all`)
-    //     this.service.find()
-    //         .then(response => {
-    //             const comments = response;
-    //             this.setState({ comments });
-    //             console.log(comments);
-    //         }
-    //         ).catch(error => {
-    //             console.log(error.response);
-    //         }
-    //         );
-    // }
+   teste = async (dados) => {
+        var respostas = ""
+        for (let i =  dados.length-1; i >= 0; i--) {
+           
+         await this.findAnswerById(dados[i].answerId);
+           
+           respostas += `<div class="card text-white bg-success mb-3"; >`;
+           respostas += `<div class="card-header">Titulo: ${dados[i].title}</div>`
+           respostas += `<div class="card-body">`;          
+           respostas += ` <p class="card-text">Comentário: ${dados[i].message}</p>`
+           respostas += `<h4 class="card-title">Resposta: ${this.state.answer}</h4>`
+           respostas += `</div>`
+           respostas += `</div>`
+   
+           
+            
+        }
+        let a = document.getElementById('teste')
+
+           a.innerHTML = respostas;
+    }
+
+    findAnswerById = async (id) => {
+        //axios.get(`http://localhost:8080/api/comment?id=${commentId}`)
+       await this.service.find(`all`)
+
+            .then(response => {
+                 const comment = response.data;
+                // const id = comment[0].id;
+                 const answer = comment[0].answer;
+                // const message = comment[0].message;
+                // const commentType = comment[0].commentType;
+                // const user = comment[0].user;
+                // const departament = comment[0].departament;
+
+                console.log("comment",comment)
+
+                for (let i = comment.length-1; i >= 0; i--) {
+                    console.log("aa",comment[i].message)
+                    if(comment[i].id === id){
+                        this.state.answer = comment[i].message
+                    }
+                    
+                }
+            }
+
+            ).catch(error => {
+                console.log(error.response);
+            }
+            );
+    }
+
+    
 
     render() {
         return (
@@ -165,11 +120,19 @@ class ViewComments extends React.Component {
                 <div className='row'>
                     <div className='col-md-12' style={this.styles.colMd12}>
                         <div className="bs-docs-section">
-                            <Card title='Comentários'>
+                            <Card title=''>
                                 <form>
                                     <fieldset>
-                                        <CommentsCard title = {this.state.title}/>
-                            
+                                        
+                                        <div id='teste' className='teste'></div>
+
+                                        {/* <div className="card text-white bg-primary mb-3" >
+                                    <div className="card-header">Header</div>
+                                    <div className="card-body">
+                                        <h4 className="card-title">Primary card title</h4>
+                                        <p className="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+                                    </div>
+                                    </div> */}
                                     </fieldset>
                                 </form>
                             </Card>
@@ -184,7 +147,7 @@ class ViewComments extends React.Component {
                         </div> */}
                     
                         <br />
-                        <div className='row'>
+                        {/* <div className='row'>
                             <div className='col-lg-12' >
                                 <div className='bs-component'>
                                     <CommentsTable comments={this.state.comments}
@@ -194,7 +157,7 @@ class ViewComments extends React.Component {
                                         card= {this.card}/>
                                 </div>
                             </div>
-                        </div>
+                        </div> */}
 
                    
                      
@@ -208,6 +171,7 @@ class ViewComments extends React.Component {
             position: 'relative'
         }
     }
+
 }
 
-export default withRouter(ViewComments);
+export default withRouter(ViewCommentsHome);

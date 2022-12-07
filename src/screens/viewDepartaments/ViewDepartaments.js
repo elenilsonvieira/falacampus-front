@@ -32,7 +32,7 @@ class ViewDepartaments extends React.Component {
     }
 
     viewListButton = () =>{
-        var value =  localStorage.getItem("usuario");
+        var value =  localStorage.getItem("user");
         var user = JSON.parse(value)
         var role = user['roles']['0']['name']
         console.log("AA", user)

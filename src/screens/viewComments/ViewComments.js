@@ -10,7 +10,7 @@ import FormGroup from '../../components/FormGroup';
 import CommentsTable from '../../components/CommentsTable'
 import CommentApiService from '../../services/CommentApiService';
 import { showSuccessMessage, showErrorMessage } from '../../components/Toastr';
-class ViewComments extends React.Component {
+class viewComments extends React.Component {
 
 
     state = {
@@ -39,19 +39,41 @@ class ViewComments extends React.Component {
             creationDate: Date,
             authorId: 0
         },
-        comments: []
+        comments: [],
+        isAdmin:'',
+        teste:[]
     }
     constructor() {
         super();
         this.service = new CommentApiService();
     }
     componentDidMount() {
-        this.find();
+        var value =  localStorage.getItem("user");
+        var user = JSON.parse(value)
+        var role = user['roles']['0']['name']
+        var id = user['id']
+
+        console.log("AA", id)
+        if(role === 'ADMIN'){
+            this.find();
+        }else{
+            
+            this.findAdmin(id);
+        }
+                   
+        this.viewListButton(role);
         
     }
-//   componentWillUnmount() {
-//        this.clear();
-//      }
+
+    viewListButton = (role) =>{    
+        
+        if(role === 'ADMIN'){
+           this.state.isAdmin = true;
+            
+          
+        }
+       
+    }
 
     delete = (commentId) => {
 
@@ -95,7 +117,7 @@ class ViewComments extends React.Component {
         this.props.history.push(`/createComment`);
     }
 
-    find = () => {
+    findAdmin = (id) => {
         this.service.findAll('')
         var params = '?';
 
@@ -136,7 +158,66 @@ class ViewComments extends React.Component {
             .then(response => {
                 const comments = response.data;
                 this.setState({ comments });
-                console.log("dados",comments);
+                var teste =[]
+                for (let i = 0; i < comments.length; i++) {
+                    if(comments[i]["authorId"] === id){
+                        teste.push(comments[i]);
+                    }
+                    
+                }
+
+                this.setState({teste})
+                
+                console.log("dados",teste);
+            }
+            ).catch(error => {
+                console.log(error.response);
+            }
+            );
+    }
+
+    find = () => {
+        this.service.findAll('')
+        var params = '?';
+
+        if (this.state.id !== 0) {
+            if (params !== '?') {
+                params = `${params}&`;
+            }
+
+            params = `${params}id=${this.state.id}`;
+        }
+
+        if (this.state.title !== '') {
+            if (params !== '?') {
+                params = `${params}&`;
+            }
+
+            params = `${params}title=${this.state.title}`;
+        }
+
+        if (this.state.message !== '') {
+            if (params !== '?') {
+                params = `${params}&`;
+            }
+
+            params = `${params}message=${this.state.message}`;
+        }
+
+        if (this.state.creationDate !== Date) {
+            if (params !== '?') {
+                params = `${params}&`;
+            }
+
+            params = `${params}creationDate=${this.state.creationDate}`;
+        }
+
+        //axios.get(`http://localhost:8080/api/comment/${params}`)
+        this.service.findAll(this.state.id)
+            .then(response => {
+                const teste = response.data;
+                this.setState({ teste });
+                console.log("dados",teste);
             }
             ).catch(error => {
                 console.log(error.response);
@@ -242,10 +323,11 @@ class ViewComments extends React.Component {
                         <div className='row'>
                             <div className='col-lg-12' >
                                 <div className='bs-component'>
-                                    <CommentsTable comments={this.state.comments}
+                                    <CommentsTable comments={this.state.teste}
                                         delete={this.delete}
                                         edit={this.edit}
                                         answer={this.answer} 
+                                        admin={this.state.isAdmin}
                                         card= {this.card}/>
                                 </div>
                             </div>
@@ -265,4 +347,4 @@ class ViewComments extends React.Component {
     }
 }
 
-export default withRouter(ViewComments);
+export default withRouter(viewComments);

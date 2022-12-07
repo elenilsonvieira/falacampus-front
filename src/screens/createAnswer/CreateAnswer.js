@@ -17,11 +17,17 @@ import { showSuccessMessage, showErrorMessage } from '../../components/Toastr';
 import AnswerApiService from '../../services/AnswerApiService';
 class CreateAnswer extends React.Component {
 
+    getLoggedUser = () =>{
+        var value = localStorage.getItem("loggedUser");
+        var user = JSON.parse(value);
+        return user;
+    }
+
     state = {
-        user: JSON.parse(localStorage.getItem("usuario"))['name'],
+        user: this.getLoggedUser().name,
         message: '',
         commentId: '',
-        authorId: JSON.parse(localStorage.getItem("usuario"))['id'],
+        authorId: this.getLoggedUser().id,
         answer: ''
     }
 
@@ -36,9 +42,10 @@ class CreateAnswer extends React.Component {
     componentDidMount() {
         const params = this.props.match.params;
         const id = params.id;
+        console.log("comentário",this.user)
         this.state.commentId = id;
-        console.log("autor",this.state.user['name'])
-        this.findById(id)
+        this.findById(id);
+        
 
     }
 
@@ -77,9 +84,9 @@ class CreateAnswer extends React.Component {
     validate = () => {
         const errors = [];
 
-        if (!this.state.message) {
+        if (!this.state.answer) {
             errors.push('Campo Mensagem é obrigatório!');
-        } else if(!this.state.message.match(/[A-z 0-9]{10,255}$/)) {
+        } else if(!this.state.answer.match(/[A-z 0-9]{10,255}$/)) {
             errors.push('A Mensagem da Resposta deve ter no mínimo 10 e no máximo 255 caracteres!');
         }
 
@@ -115,6 +122,8 @@ class CreateAnswer extends React.Component {
         ).then(response => {
             console.log(response);
             showSuccessMessage('Comentário respondido!');
+            this.props.history.push("/viewComments");
+
         }
         ).catch(error => {
             console.log(error.response);

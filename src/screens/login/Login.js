@@ -27,7 +27,7 @@ class Login extends React.Component {
 
                     console.log("If",user.roles);
                     showSuccessMessage(`${user.name}, você está logado!`);
-                    this.props.history.push('/ ');
+                    this.props.history.push('/viewCommentsHome');
         
                 } else {
                     console.log("Else");
