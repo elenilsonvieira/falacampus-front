@@ -19,6 +19,8 @@ class ViewCommentsHome extends React.Component {
     state = {  
        
         answer:'',
+        answerAuthor: '',
+        answerDate: '',
         comment:{
             id:'',
             title:'aaa',
@@ -31,7 +33,6 @@ class ViewCommentsHome extends React.Component {
     constructor() {
         super();
         this.service = new AnswerApiService();
-
         this.service2 = new CommentApiService();
         
     }
@@ -62,18 +63,31 @@ class ViewCommentsHome extends React.Component {
    teste = async (dados) => {
         var respostas = ""
         for (let i =  dados.length-1; i >= 0; i--) {
+            console.log(dados[i])
            
          await this.findAnswerById(dados[i].answerId);
            
+        //    respostas += `<div class="card text-white bg-success mb-3"; >`;
+        //    respostas += `<div class="card-header">Titulo: ${dados[i].title}</div>`
+        //    respostas += `<div class="card-body">`;          
+        //    respostas += ` <p class="card-text">Comentário: ${dados[i].message}</p>`
+        //    respostas += `<h4 class="card-title">Resposta: ${this.state.answer}</h4>`
+        //    respostas += `</div>`
+        //    respostas += `</div>`
+
            respostas += `<div class="card text-white bg-success mb-3"; >`;
-           respostas += `<div class="card-header">Titulo: ${dados[i].title}</div>`
-           respostas += `<div class="card-body">`;          
-           respostas += ` <p class="card-text">Comentário: ${dados[i].message}</p>`
-           respostas += `<h4 class="card-title">Resposta: ${this.state.answer}</h4>`
+           respostas += `<div class="card-header" >${dados[i].title}</div>`
+           respostas += `<div class="card-body" style = "font-size: 12px">ID AUTOR COMENTÁRIO ${dados[i].authorId}`;          
+           respostas += ` <h4 class="card-text">${dados[i].message}</h4>`
+           respostas +=`<p>${dados[i].creationDate}</p>`
+           respostas += `</div>`
+           respostas += `<div class="card bg-secondary mb-3"  style= "max-width: 75rem; margin-left: 2rem; color: #469408 ">`; 
+           respostas += `<div class="card-body" style = "font-size: 12px">ID AUTOR resposta ${this.state.answerAuthor}`; 
+           respostas += `<h4 class="card-title" >${this.state.answer}</h4>`
+           respostas +=`<p>${this.state.answerDate}</p>`
            respostas += `</div>`
            respostas += `</div>`
-   
-           
+           respostas += `</div>` 
             
         }
         let a = document.getElementById('teste')
@@ -97,9 +111,16 @@ class ViewCommentsHome extends React.Component {
                 console.log("comment",comment)
 
                 for (let i = comment.length-1; i >= 0; i--) {
-                    console.log("aa",comment[i].message)
+                    console.log("resposta: ",comment[i])
+                    console.log("autor resposta: ",comment[i].
+                    creationDate
+                    )
+
                     if(comment[i].id === id){
                         this.state.answer = comment[i].message
+                        this.state.answerAuthor = comment[i].authorId
+                        this.state.answerDate = comment[i].creationDate
+                    
                     }
                     
                 }
