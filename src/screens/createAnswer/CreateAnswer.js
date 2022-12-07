@@ -84,9 +84,9 @@ class CreateAnswer extends React.Component {
     validate = () => {
         const errors = [];
 
-        if (!this.state.message) {
+        if (!this.state.answer) {
             errors.push('Campo Mensagem é obrigatório!');
-        } else if(!this.state.message.match(/[A-z 0-9]{10,255}$/)) {
+        } else if(!this.state.answer.match(/[A-z 0-9]{10,255}$/)) {
             errors.push('A Mensagem da Resposta deve ter no mínimo 10 e no máximo 255 caracteres!');
         }
 
