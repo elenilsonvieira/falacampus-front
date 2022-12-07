@@ -13,32 +13,38 @@ import Card  from '../../../components/Card';
 
 import CommentsCard  from '../../../components/CommentsCard';
 
+import UserApiService from '../../../services/UserApiService';
 
 class ViewCommentsHome extends React.Component {
 
     state = {  
        
         answer:'',
+        answerAuthor: '',
+        answerDate: '',
         comment:{
             id:'',
             title:'aaa',
             message:''
         },   
-        answers: []
+        answers: [],
+        nameAutor:'',
+        nameCordenador:'',
+        users:[]
 
     }
 
     constructor() {
         super();
         this.service = new AnswerApiService();
-
         this.service2 = new CommentApiService();
+        this.UserService = new UserApiService();
         
     }
 
     componentDidMount() {
         this.find();   
-        
+       
         
         
     }
@@ -50,7 +56,7 @@ class ViewCommentsHome extends React.Component {
                 const answers = response.data;
                 this.setState({answers})
                 
-                console.log("BBBb",answers);
+              
                 this.teste(answers);
             }
             ).catch(error => {
@@ -62,18 +68,25 @@ class ViewCommentsHome extends React.Component {
    teste = async (dados) => {
         var respostas = ""
         for (let i =  dados.length-1; i >= 0; i--) {
+            
            
          await this.findAnswerById(dados[i].answerId);
-           
+           const nomeAutorComentario = await this.findAuthor(dados[i]['authorId'])       
+           const nomeAutorResposta = await this.findAuthorResposta(this.state.answerAuthor)
+
            respostas += `<div class="card text-white bg-success mb-3"; >`;
-           respostas += `<div class="card-header">Titulo: ${dados[i].title}</div>`
-           respostas += `<div class="card-body">`;          
-           respostas += ` <p class="card-text">Comentário: ${dados[i].message}</p>`
-           respostas += `<h4 class="card-title">Resposta: ${this.state.answer}</h4>`
+           respostas += `<div class="card-header" >${dados[i].title}</div>`
+           respostas += `<div class="card-body" style = "font-size: 12px"> ${this.state.nameAutor}`;          
+           respostas += ` <h4 class="card-text">${dados[i].message}</h4>`
+           respostas +=`<p>${dados[i].creationDate}</p>`
+           respostas += `</div>`
+           respostas += `<div class="card bg-secondary mb-3"  style= "max-width: 75rem; margin-left: 2rem; color: #469408 ">`; 
+           respostas += `<div class="card-body" style = "font-size: 12px"> ${this.state.nameCordenador}`; 
+           respostas += `<h4 class="card-title" >${this.state.answer}</h4>`
+           respostas +=`<p>${this.state.answerDate}</p>`
            respostas += `</div>`
            respostas += `</div>`
-   
-           
+           respostas += `</div>` 
             
         }
         let a = document.getElementById('teste')
@@ -94,12 +107,17 @@ class ViewCommentsHome extends React.Component {
                 // const user = comment[0].user;
                 // const departament = comment[0].departament;
 
-                console.log("comment",comment)
 
                 for (let i = comment.length-1; i >= 0; i--) {
-                    console.log("aa",comment[i].message)
+                    console.log("resposta: ",comment[i])
+                    console.log("autor resposta: ",comment[i]
+                    )
+
                     if(comment[i].id === id){
                         this.state.answer = comment[i].message
+                        this.state.answerAuthor = comment[i].authorId
+                        this.state.answerDate = comment[i].creationDate
+                    
                     }
                     
                 }
@@ -110,6 +128,41 @@ class ViewCommentsHome extends React.Component {
             }
             );
     }
+
+     findAuthor = async (id) => {
+        //axios.get(`http://localhost:8080/api/user/${params}`)
+        await this.UserService.find(`?id=${id}`)
+            .then(response => {
+                const users = response.data;
+                this.setState({ users });
+                
+                
+                this.state.nameAutor = users[0]['name']
+               return users[0]['name'];
+            }
+            ).catch(error => {
+                console.log(error.response);
+            }
+            );
+    }
+
+    findAuthorResposta = async (id) => {
+        //axios.get(`http://localhost:8080/api/user/${params}`)
+        await this.UserService.find(`?id=${id}`)
+            .then(response => {
+                const users = response.data;
+                this.setState({ users });
+                
+               
+                this.state.nameCordenador = users[0]['name']
+               return users[0]['name'];
+            }
+            ).catch(error => {
+                console.log(error.response);
+            }
+            );
+    }
+
 
     
 
