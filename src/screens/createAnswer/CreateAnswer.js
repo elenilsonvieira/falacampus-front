@@ -26,6 +26,7 @@ class CreateAnswer extends React.Component {
     state = {
         user: this.getLoggedUser().name,
         message: '',
+        commentId: '',
         authorId: this.getLoggedUser().id,
         answer: ''
     }
@@ -89,6 +90,14 @@ class CreateAnswer extends React.Component {
             errors.push('A Mensagem da Resposta deve ter no mínimo 10 e no máximo 255 caracteres!');
         }
 
+        if (!this.state.commentId) {
+            errors.push('É obrigatório informar o Comentário que será respondido!');
+        }
+
+        if (!this.state.authorId) {
+            errors.push('É obrigatório informar o Autor da Resposta!');
+        }
+
         return errors;
     };
 
@@ -149,18 +158,20 @@ class CreateAnswer extends React.Component {
                                                         </small>
                                                     </p>
                                                     
-                            
+                                                   
+                                                    
                                                     <br />
-                                                    <FormGroup label="Comentario:" htmlFor="MessageTextarea">
+                                                    <FormGroup label="Comentario: *" htmlFor="MessageTextarea">
                                                         <textarea type="text" 
                                                         disabled
-                                                        className="form-control" id="MessageTextarea"                                             
+                                                        className="form-control" id="MessageTextarea" rows="3" minLength="10" maxlength="255"
+                                                            placeholder="Incluir resposta"
                                                             value={this.state.message}
                                                             onChange={(e) => { this.setState({ message: e.target.value }) }} />
                                                     </FormGroup>
                                                     <br />
-                                                    <FormGroup label="Resposta: *" htmlFor="AnswerTextarea">
-                                                        <textarea type="text" className="form-control" id="AnswerTextarea" rows="3" minLength="10" maxlength="255"
+                                                    <FormGroup label="Resposta: *" htmlFor="MessageTextarea">
+                                                        <textarea type="text" className="form-control" id="MessageTextarea" rows="3" minLength="10" maxlength="255"
                                                             placeholder="Incluir resposta"
                                                             value={this.state.answer}
                                                             onChange={(e) => { this.setState({ answer: e.target.value }) }} />

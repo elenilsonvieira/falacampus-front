@@ -12,12 +12,18 @@ import SelectUser from '../../components/SelectUser';
 import CommentApiService from '../../services/CommentApiService';
 import { showSuccessMessage, showErrorMessage } from '../../components/Toastr';
 
+import Global from './Global';
+
+import DepartamentApiService from '../../services/DepartamentApiService';
+
 class CreateComment extends React.Component {
+    
 
     getLoggedUser = () =>{
         var value = localStorage.getItem("loggedUser");
         var user = JSON.parse(value);
         return user;
+        
     }
     state = {
         user: this.getLoggedUser(),
@@ -26,58 +32,75 @@ class CreateComment extends React.Component {
         commentType: '',
         creationDate: `${new Date().getDate()}/${new Date().getMonth()+1}/${new Date().getFullYear()} ${new Date().getHours()}:${new Date().getMinutes()}:${new Date().getMilliseconds()}`,
         authorId: this.getLoggedUser().id,
-        departamentId: ""
+        departamentId: "",
+        departaments:[        
+        ]
     }
      constructor(){
         super();
         this.service = new CommentApiService();
+        this.serviceDepartaments = new DepartamentApiService();
+        this.handleChange = this.handleChange.bind(this);
     }
 
     componentDidMount() {
-      //  this.clear();
-        console.log("user",this.state.user["id"])
+        this.findAllDepar();
+        
     }
 
-    // validate = () => {
-    //     const errors = [];
+    //=============================================
+    handleChange(){
     
-    //     if(!this.state.title){
-    //         errors.push('Campo Título é obrigatório!');
-    //     } else if(!this.state.title.match(/[A-z 0-9]{5,50}$/)) {
-    //         errors.push('O Título do Comentário deve ter no mínimo 5 e no máximo 50 caracteres!');
-    //     }
+        let inputField = document.getElementById('input');
+        let ulField = document.getElementById('suggestions');
+        inputField.addEventListener('input', changeAutoComplete);
+        ulField.addEventListener('click', selectItem);
+      
+        function changeAutoComplete({ target }) {
+          let data = target.value;
+          ulField.innerHTML = ``;
+          if (data.length) {
+            let autoCompleteValues = autoComplete(data);
+            autoCompleteValues.forEach(value => { addItem(value); });
+          }
+        }
+      
+        function autoComplete(inputValue) {
 
-    //     if(!this.state.message){
-    //         errors.push('Campo Mensagem é obrigatório!');
-    //     } else if(!this.state.message.match(/[A-z 0-9]{10,255}$/)) {
-    //         errors.push('A mensagem do Comentário deve ter no mínimo 10 e no máximo 255 caracteres!');
-    //     }
+            const departaments = Global.departaments
+  
+            const p = departaments.filter((d) => d.name.toLowerCase().includes(inputValue.toLowerCase()));
+    
+          return p
+        }
+      
+        function addItem(value) {
+          ulField.innerHTML = ulField.innerHTML + `<li>${value['name']}</li>`;
+        }
+      
+        function selectItem({ target }) {
+          if (target.tagName === 'LI') {
+            inputField.value = target.textContent;
+            ulField.innerHTML = ``;
+          }
+        }
+      };
 
-    //     if(!this.state.commentType){
-    //         errors.push('É obrigatório informar o Tipo de Comentário!');
-    //     }
+    //===========================
 
-    //     if(!this.state.authorId){
-    //         errors.push('É obrigatório informar o Autor do Comentário!');
-    //     }
-
-    //     if(!this.state.departamentId){
-    //         errors.push('É obrigatório informar o Departamento para o qual será direcionada a crítica, sugestão ou elogio!');
-    //     }
-        
-    //     return errors;
-    // };
+    
 
     create = async () => {
+      console.log("c",  document.getElementById('input').value)
 
-        //  const errors = this.validate();
-
-        // if(errors.length > 0) {
-        //     errors.forEach((message, index) => {
-        //         showErrorMessage(message);
-        //     });
-        //     return false
-        // }
+      for (let i = 0; i < this.state.departaments.length; i++) {
+        if(this.state.departaments[i].name === document.getElementById('input').value){
+            console.log("d", this.state.departaments[i].id)
+            this.state.departamentId = this.state.departaments[i].id
+        }
+        
+        
+      }
         
         this.service.create(
             {
@@ -117,6 +140,22 @@ class CreateComment extends React.Component {
         this.setState({authorId: e.target.value}, () => {
             console.log("Id do Autor(Usuário): ", this.state.authorId);
         });
+    }
+
+    findAllDepar = () => {
+
+        this.serviceDepartaments.get('')
+        .then(response => {
+            const departaments = response.data;
+            this.setState({ departaments });
+            Global.departaments = this.state.departaments
+           
+
+        }
+        ).catch(error => {
+            console.log(error.response);
+        }
+        );
     }
 
     render() {
@@ -183,17 +222,19 @@ class CreateComment extends React.Component {
                                                         value={this.state.user["name"]}  />
                                                     </FormGroup>
                                                     <br />
-                                                    <FormGroup label="Id do Departamento: *" htmlFor="inputDepartamentId">
-                                                        <input type="number" className="form-control" id="inputDepartamentId" 
-                                                        placeholder="Digite o id do departamento" 
-                                                        value={this.state.departamentId} 
-                                                        onChange={(e) => { this.setState({ departamentId: e.target.value }) }} />
+                                                    <FormGroup label="Nome do Departamento: *" htmlFor="input">
+                                                        <input type="text" className="form-control" id="input" 
+                                                        onChange={this.handleChange}
+                                                        autoComplete="off"
+                                                        placeholder="Digite nome do departamento" 
+                                                        // value={this.state.departamentId} 
+                                                        // onChange={(e) => { this.setState({departamentId: e.target.value }) }} 
+                                                        />
                                                     </FormGroup>
                                                     
-                                                    {/* <FormGroup label="Selecione o Departamento para o envio da crítica, sugestão ou elogio: *" htmlFor="inputDepartamentDestination">
-                                                        <br />
-                                                        <SelectDepartament onChange={this.handleInputSelectDepartament} id="inputDepartamentDestination"/>
-                                                    </FormGroup> */}
+                                                    <ul id="suggestions"></ul>
+                                                    
+                                                   
                                                     <br />
                                                     <br />
                                                     <button onClick={this.create} type="button" className="btn btn-success" id="button_salvar">
