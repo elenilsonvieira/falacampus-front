@@ -52,7 +52,7 @@ class UpdateUser extends React.Component {
     //     this.clear();
     // }
     showEditRole = () =>{
-        var value =  localStorage.getItem("usuario");
+        var value =  localStorage.getItem("user");
         var user = JSON.parse(value)
         var role = user['roles']['0']['name']
 
@@ -189,7 +189,6 @@ class UpdateUser extends React.Component {
         }
         );
 
-        console.log('request finished');
     }
 
     cancel = () => {
