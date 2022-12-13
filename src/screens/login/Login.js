@@ -20,22 +20,22 @@ class Login extends React.Component {
         this.context.login(
             this.state.username,
             this.state.password
-        
-        ).then(user => 
+
+        ).then(user =>
             {
                 if (user) {
 
                     console.log("If",user.roles);
                     showSuccessMessage(`${user.name}, você está logado!`);
                     this.props.history.push('/viewCommentsHome');
-        
+
                 } else {
                     console.log("Else");
                     showErrorMessage("Dados incorretos! Login inválido");
                 }
 
             }
-        ).catch(error => 
+        ).catch(error =>
             {
                 console.log("Catch");
                 console.log(error);
@@ -62,14 +62,14 @@ class Login extends React.Component {
                                             <form>
                                                 <fieldset>
                                                     <FormGroup label='Matrícula: *' htmlForm = "inputusername">
-                                                        <input type="number" className="form-control" 
-                                                        id="inputusername" aria-describedby="emailHelp" 
-                                                        placeholder="Digite sua matrícula de aluno ou servidor" 
+                                                        <input type="number" className="form-control"
+                                                        id="inputusername" aria-describedby="emailHelp"
+                                                        placeholder="Digite sua matrícula de aluno ou servidor"
                                                         value={this.state.username} onChange={(e) => { this.setState({ username: e.target.value }) }} />
-                                                    </FormGroup> 
-                                                    <br />   
+                                                    </FormGroup>
+                                                    <br />
                                                     <FormGroup label='Senha: *' htmlForm = "inputPassword">
-                                                        <input type="password" className="form-control" 
+                                                        <input type="password" className="form-control"
                                                         id="inputPassword" placeholder="Digite sua senha" value={this.state.password} onChange={(e) => { this.setState({ password: e.target.value }) }} />
                                                     </FormGroup>
                                                     <br />
@@ -78,7 +78,7 @@ class Login extends React.Component {
                                                     </button>
                                                     {/* <button onClick={this.create} type="button" id="button-create" className="btn btn-danger btn-space">
                                                         <i className="pi pi-times"></i> Cadastrar
-                                                    </button>                                                    */}
+                                                    </button> */}
                                                 </fieldset>
                                             </form>
                                         </div>

@@ -38,12 +38,26 @@ export default props => {
                         <i className="pi pi-comment"></i>
                     </button>
                     )}
+                    {!props.admin &&(
+                        <button id="button_editar" type="button" title="Editar"
+                         className="btn btn-warning btn-space"
+                         onClick={e => props.edit(comment.id)}>
+                         <i className="pi pi-pencil"></i>
+                       </button>
+                    )}
+                    {!props.admin &&(
+                        <button id="button_excluir" type="button" title="Excluir"
+                        className="btn btn-primary btn-space"
+                        onClick={e => props.delete(comment.id)}>
+                        <i className="pi pi-trash"></i>
+                    </button>
+                    )}
                     {/* <button id='butonAnswer' type="button" title="Responder"
                         className="btn btn-danger btn-space"
                         onClick={e => props.answer(comment.id)}>
                         <i className="pi pi-comment"></i>
                     </button> */}
-                    <button id="button_editar" type="button" title="Editar"
+                    {/* <button id="button_editar" type="button" title="Editar"
                         className="btn btn-warning btn-space"
                         onClick={e => props.edit(comment.id)}>
                         <i className="pi pi-pencil"></i>
@@ -52,7 +66,7 @@ export default props => {
                         className="btn btn-primary btn-space"
                         onClick={e => props.delete(comment.id)}>
                         <i className="pi pi-trash"></i>
-                    </button>
+                    </button> */}
 
                 </td>
             </tr>
