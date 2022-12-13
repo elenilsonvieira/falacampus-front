@@ -76,9 +76,9 @@ class Login extends React.Component {
                                                     <button onClick={this.login} type="button" id="button-login" className="btn btn-success btn-space">
                                                         <i className="pi pi-save"></i> Entrar
                                                     </button>
-                                                    <button onClick={this.create} type="button" id="button-create" className="btn btn-danger btn-space">
+                                                    {/* <button onClick={this.create} type="button" id="button-create" className="btn btn-danger btn-space">
                                                         <i className="pi pi-times"></i> Cadastrar
-                                                    </button>                                                   
+                                                    </button>                                                    */}
                                                 </fieldset>
                                             </form>
                                         </div>
