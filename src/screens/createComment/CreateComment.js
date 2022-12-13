@@ -75,7 +75,7 @@ class CreateComment extends React.Component {
         }
       
         function addItem(value) {
-          ulField.innerHTML = ulField.innerHTML + `<li>${value['name']}</li>`;
+          ulField.innerHTML = ulField.innerHTML + `<li class="departament">${value['name']}</li>`;
         }
       
         function selectItem({ target }) {

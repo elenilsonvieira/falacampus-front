@@ -30,7 +30,8 @@ class ViewCommentsHome extends React.Component {
         answers: [],
         nameAutor:'',
         nameCordenador:'',
-        users:[]
+        users:[],
+        
 
     }
 
@@ -73,6 +74,8 @@ class ViewCommentsHome extends React.Component {
          await this.findAnswerById(dados[i].answerId);
            const nomeAutorComentario = await this.findAuthor(dados[i]['authorId'])       
            const nomeAutorResposta = await this.findAuthorResposta(this.state.answerAuthor)
+           
+
 
            respostas += `<div class="card text-white bg-success mb-3"; >`;
            respostas += `<div class="card-header" >${dados[i].title}</div>`
@@ -173,7 +176,7 @@ class ViewCommentsHome extends React.Component {
                 <div className='row'>
                     <div className='col-md-12' style={this.styles.colMd12}>
                         <div className="bs-docs-section">
-                            <Card title=''>
+                            <Card title='Comentarios Respondidos'>
                                 <form>
                                     <fieldset>
                                         

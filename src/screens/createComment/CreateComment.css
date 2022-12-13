@@ -1,0 +1,15 @@
+#suggestions{
+    list-style: none;
+    margin-top: 2px;
+   
+}
+
+.departament{
+    cursor: pointer;
+    background-color: rgb(187, 197, 206);
+    padding: 5px;
+}
+
+.departament:hover{
+    background-color: rgb(230, 238, 245);
+}
