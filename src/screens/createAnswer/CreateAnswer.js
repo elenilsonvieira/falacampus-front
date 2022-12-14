@@ -134,8 +134,17 @@ class CreateAnswer extends React.Component {
         console.log('request finished');
     }
 
+    returned = () => {
+        const params = this.props.match.params;
+        const id = params.id;
+
+        this.service.returned(id);
+
+        this.props.history.push("/viewComments");
+    }
+
     cancel = () => {
-        this.props.history.push('/');
+        this.props.history.push("/viewComments");
     }
 
 
@@ -190,6 +199,9 @@ class CreateAnswer extends React.Component {
                                                     </button>
                                                     <button onClick={this.cancel} type="button" id="button-cancel" className="btn btn-danger btn-cancel">
                                                         <i className="pi pi-times"></i> Cancelar
+                                                    </button>
+                                                    <button onClick={this.returned} type="button" id="button-returned" className="btn btn-returned">
+                                                        <i className="pi pi-returned"></i> Devolver
                                                     </button>
                                                 </fieldset>
                                             </form>
