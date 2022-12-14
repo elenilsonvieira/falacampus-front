@@ -19,8 +19,8 @@ export default props => {
         // }, [currentPage]);
             
         return (
-            
-            <tr key={comment.id}>
+                        
+            <tr key={comment.id} className={comment.statusComment}>
                 {/* <td>{comment.id}</td> */}
                 <td>{comment.title}</td>
                 <td>{comment.message}</td>
@@ -90,6 +90,7 @@ export default props => {
                     {/* <th scope="col">Id da Resposta</th> */}
                     <th scope="col">Ações</th>
                 </tr>
+                
             </thead>
             <tbody>
                 {rows}

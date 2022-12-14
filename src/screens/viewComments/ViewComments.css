@@ -5,3 +5,7 @@
 .btn.btn-danger.btn-space.mostrar{
     display: block;
 }
+
+.bs-component .RETURNED{
+    background-color: rgb(223, 85, 85);
+}
