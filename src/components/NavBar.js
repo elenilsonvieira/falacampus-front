@@ -1,5 +1,5 @@
 import React from 'react';
-
+import './NavBar.css'
 import NavBarItem from './NavBarItem';
 //import './NavBar.css';
 import Logo from "./Logo";
@@ -7,9 +7,12 @@ import FalaCampus from "../assets/img/Fala_campus-logo.png";
 import { AuthConsumer } from '../main/SessionProvider';
 
 function NavBar(props) {
+    
     return (
+       
         <nav className="navbar navbar-expand-lg navbar-light bg-nav">
             <div className="container-fluid">
+               
                 <div className="col-md-4"><a href="/viewCommentsHome" className="navbar-brand"><Logo imageSrc={FalaCampus} /></a></div>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" aria-controls="navbarColor02" aria-expanded="true" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
@@ -26,11 +29,11 @@ function NavBar(props) {
                         <NavBarItem render={props.isAuthenticated} href="/ViewAnswer" label="Respostas" />
                         <NavBarItem render={props.isAuthenticated} href="/login" onClick={props.logout} label="Sair" />
 
-
-
-
-
+                       
+                        
                     </ul>
+
+                    <p className='userLogger'>{JSON.parse(localStorage.getItem("loggedUser")).name}</p>
                 </div>
             </div>
         </nav>
