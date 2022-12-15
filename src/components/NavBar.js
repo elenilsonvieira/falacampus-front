@@ -23,7 +23,7 @@ function NavBar(props) {
                         {/* <a className="nav-link" href="/login">Login</a> */}
 
                         <NavBarItem render={!props.isAuthenticated} href="/login" label="Login" id="login" />
-                        <NavBarItem  render={props.isAuthenticated} href="/viewDepartaments" label="Departamentos" id="departments" />
+                        <NavBarItem render={props.isAuthenticated} href="/viewDepartaments" label="Departamentos" id="departments" />
                         <NavBarItem render={props.isAuthenticated} href="/viewUsers" label="Usuários" id="users" />
                         <NavBarItem render={props.isAuthenticated} href="/viewComments" label="Comentários" id="comments"/>
                         <NavBarItem render={props.isAuthenticated} href="/ViewAnswer" label="Respostas" id="answers"/>
@@ -34,7 +34,7 @@ function NavBar(props) {
                         
                     </ul>
 
-                    <p className='userLogger'>{JSON.parse(localStorage.getItem("loggedUser")).name}</p>
+                    {/* <p className='userLogger'>{JSON.parse(localStorage.getItem("loggedUser")).name}</p> */}
                 </div>
             </div>
         </nav>
