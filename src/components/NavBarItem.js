@@ -5,8 +5,8 @@ function NavBarItem({render, ...props}){
 
     if(render){
         return(
-            <li id={props.id} className="nav-item">          
-                    <a className="nav-link" onClick={props.onClick} href={props.href}>{props.label}</a>           
+            <li className="nav-item">          
+                    <a id={props.id} className="nav-link" onClick={props.onClick} href={props.href}>{props.label}</a>           
             </li>
         )
         

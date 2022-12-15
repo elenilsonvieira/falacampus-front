@@ -34,7 +34,7 @@ function NavBar(props) {
                         
                     </ul>
 
-                    <p className='userLogger'>{JSON.parse(localStorage.getItem("loggedUser")).name}</p>
+                    {/* <p className='userLogger'>{JSON.parse(localStorage.getItem("loggedUser")).name}</p> */}
                 </div>
             </div>
         </nav>
