@@ -179,8 +179,8 @@ class CreateAnswer extends React.Component {
                                                             onChange={(e) => { this.setState({ message: e.target.value }) }} />
                                                     </FormGroup>
                                                     <br />
-                                                    <FormGroup label="Resposta: *" htmlFor="MessageTextarea">
-                                                        <textarea type="text" className="form-control" id="MessageTextarea" rows="3" minLength="10" maxlength="255"
+                                                    <FormGroup label="Resposta: *" htmlFor="AnswerTextarea">
+                                                        <textarea type="text" className="form-control" id="AnswerTextarea" rows="3" minLength="10" maxlength="255"
                                                             placeholder="Incluir resposta"
                                                             value={this.state.answer}
                                                             onChange={(e) => { this.setState({ answer: e.target.value }) }} />
