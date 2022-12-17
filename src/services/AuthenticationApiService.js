@@ -6,7 +6,8 @@ export class AuthenticationApiService extends ApiService {
     constructor(){
         super('');
         this.storageService = new StorageService();
-      //  this.storageService.setItem(LOGGED_USER,"");
+       
+       
     }
 
     async login(username, password){

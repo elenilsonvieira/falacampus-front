@@ -10,7 +10,7 @@ export default props => {
                 <td>{departament.name}</td>
                 <td className="col-md-2">
                     <button type="button" title="Editar" id="button_editar"
-                        className="btn btn-warning"
+                        className={"btn btn-warning button_editar" + departament.id}
                         onClick={e => props.edit(departament.id)}>
                         <i className="pi pi-pencil"></i>
                     </button>

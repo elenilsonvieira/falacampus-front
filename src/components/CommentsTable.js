@@ -33,21 +33,21 @@ export default props => {
                 <td className="col-md-2">
                     {props.admin &&(
                         <button id='butonAnswer' type="button" title="Responder"
-                        className="btn btn-danger btn-space"
+                        className={"btn btn-danger btn-space answer" + comment.id}
                         onClick={e => props.answer(comment.id)}>
                         <i className="pi pi-comment"></i>
                     </button>
                     )}
                     {!props.admin &&(
                         <button id="button_editar" type="button" title="Editar"
-                         className="btn btn-warning btn-space"
+                         className={"btn btn-warning btn-space edit" + comment.id}
                          onClick={e => props.edit(comment.id)}>
                          <i className="pi pi-pencil"></i>
                        </button>
                     )}
                     {!props.admin &&(
                         <button id="button_excluir" type="button" title="Excluir"
-                        className="btn btn-primary btn-space"
+                        className={"btn btn-primary btn-spac delit" + comment.id}
                         onClick={e => props.delete(comment.id)}>
                         <i className="pi pi-trash"></i>
                     </button>

@@ -79,13 +79,15 @@ class ViewCommentsHome extends React.Component {
 
            respostas += `<div class="card text-white bg-success mb-3"; >`;
            respostas += `<div class="card-header" >${dados[i].title}</div>`
-           respostas += `<div class="card-body" style = "font-size: 12px"> ${this.state.nameAutor}`;          
+           respostas += `<div class="card-body" style = "font-size: 12px">`;         
+           respostas += `<p class="comments-autor" >${this.state.nameAutor}</p>`;
            respostas += ` <h4 class="card-text">${dados[i].message}</h4>`
            respostas +=`<p>${dados[i].creationDate}</p>`
            respostas += `</div>`
            respostas += `<div class="card bg-secondary mb-3"  style= "max-width: 75rem; margin-left: 2rem; color: #469408 ">`; 
-           respostas += `<div class="card-body" style = "font-size: 12px"> ${this.state.nameCordenador}`; 
-           respostas += `<h4 class="card-title" >${this.state.answer}</h4>`
+           respostas += `<div class="card-body" style = "font-size: 12px">`; 
+           respostas += `<p class="answer-autor" >${this.state.nameCordenador}</p>`;
+           respostas += `<h4 class="card-title answer" >${this.state.answer}</h4>`
            respostas +=`<p>${this.state.answerDate}</p>`
            respostas += `</div>`
            respostas += `</div>`
