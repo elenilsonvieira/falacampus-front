@@ -13,8 +13,8 @@ export default props => {
                 <td>{user['roles']['0']['name']}</td>
                 {/* <td className="col-md-2">{user.departament.id}</td> */}
                 <td className="col-md-2">
-                    <button type="button" title="Editar"
-                        className="btn btn-warning"
+                    <button id = 'buttonEdit'type="button" title="Editar"
+                        className={"btn btn-warning btn-space edit" + user.id}
                         onClick={e => props.edit(user.id)}>
                         <i className="pi pi-pencil"></i>
                     </button>

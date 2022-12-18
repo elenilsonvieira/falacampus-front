@@ -10,6 +10,10 @@ import FormGroup from '../../components/FormGroup';
 import CommentsTable from '../../components/CommentsTable'
 import CommentApiService from '../../services/CommentApiService';
 import { showSuccessMessage, showErrorMessage } from '../../components/Toastr';
+
+import DepartamentApiService from '../../services/DepartamentApiService';
+import CommentsTableDepartament from '../../components/CommentsTableDepartament';
+
 class viewComments extends React.Component {
 
 
@@ -41,11 +45,15 @@ class viewComments extends React.Component {
         },
         comments: [],
         isAdmin:'',
-        teste:[]
+        teste:[],
+        commentsDepartament:[],
+        responsabledDepartament: 'aaa'
     }
     constructor() {
         super();
         this.service = new CommentApiService();
+        this.service2 = new DepartamentApiService();
+       
     }
     componentDidMount() {
         var value =  localStorage.getItem("user");
@@ -62,6 +70,10 @@ class viewComments extends React.Component {
         }
                    
         this.viewListButton(role);
+
+        this.findCommentDepartament(id);
+
+        console.log('id uder', this.state.user.id)
         
     }
 
@@ -239,6 +251,34 @@ class viewComments extends React.Component {
     //         );
     // }
 
+    findCommentDepartament = (id) => {
+        this.service2.find(`responsables/${id}`)        
+        .then(response => {
+            const responsabled = response.data;
+         
+           
+            if(responsabled.length !== 0){
+                document.getElementById('commentDepartament').classList.add('view')
+
+            }
+            responsabled.forEach(element => {
+                console.log("responsabledComent",element.name)
+                this.state.responsabledDepartament = element.name
+                this.service.find(`comentDepartament/${element.id}`)
+                .then(r =>{
+                    console.log("coment", r.data)
+                    var commentsDepartament = r.data
+                    this.setState({ commentsDepartament });
+                })
+            });
+            
+        }
+        ).catch(error => {
+            console.log(error.response);
+        }
+        );
+    }
+
     render() {
         return (
 
@@ -323,11 +363,26 @@ class viewComments extends React.Component {
                         <div className='row'>
                             <div className='col-lg-12' >
                                 <div className='bs-component'>
+                                    <p className='title2'>Seus Comentarios</p>
                                     <CommentsTable comments={this.state.teste}
                                         delete={this.delete}
                                         edit={this.edit}
                                         answer={this.answer} 
                                         admin={this.state.isAdmin}
+                                        card= {this.card}/>
+                                </div>
+                            </div>
+                        </div>
+                        <div id='commentDepartament' className='row commentDepartament'>
+                            <div className='col-lg-12' >
+                                <div className='bs-component'>
+                                    <p className='title2'>Comentarios Do Departamento</p>
+                                    <CommentsTableDepartament comments={this.state.commentsDepartament}
+                                        delete={this.delete}
+                                        edit={this.edit}
+                                        answer={this.answer} 
+                                        admin={this.state.isAdmin}
+                                        nameDepartament={this.state.responsabledDepartament}
                                         card= {this.card}/>
                                 </div>
                             </div>
