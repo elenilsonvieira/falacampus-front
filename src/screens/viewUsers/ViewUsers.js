@@ -12,7 +12,15 @@ import UserApiService from '../../services/UserApiService';
 
 class ViewUsers extends React.Component {
 
+    getLoggedUser = () =>{
+        var value = localStorage.getItem("loggedUser");
+        var user = JSON.parse(value);
+        return user;
+        
+    }
+   
     state = {
+        userLoger: this.getLoggedUser(),
         name: '',
         id: '',
         email: '',
@@ -212,6 +220,7 @@ class ViewUsers extends React.Component {
                                 <div className='bs-component'>
                                     <UsersTable users={this.state.users}
                                         delete={this.delete}
+                                        usuario={this.state.userLoger}
                                         edit={this.edit} id="idEdit"/>
                                 </div>
                             </div>
