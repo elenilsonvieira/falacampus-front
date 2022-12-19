@@ -7,7 +7,9 @@ import FalaCampus from "../assets/img/Fala_campus-logo.png";
 import { AuthConsumer } from '../main/SessionProvider';
 
 function NavBar(props) {
-    
+
+
+       
     return (
        
         <nav className="navbar navbar-expand-lg navbar-light bg-nav">
@@ -26,15 +28,21 @@ function NavBar(props) {
                         <NavBarItem  render={props.isAuthenticated} href="/viewDepartaments" label="Departamentos" id="departments" />
                         <NavBarItem render={props.isAuthenticated} href="/viewUsers" label="Usuários" id="users" />
                         <NavBarItem render={props.isAuthenticated} href="/viewComments" label="Comentários" id="comments"/>
-                        <NavBarItem render={props.isAuthenticated} href="/ViewAnswer" label="Respostas" id="answers"/>
+                        <NavBarItem render={props.isAuthenticated} href="/viewCommentsHome" label="Respostas" id="answers"/>
                         <NavBarItem render={props.isAuthenticated} href="/login" onClick={props.logout} label="Sair" id="goOut
 " />
 
+
+              
                        
                         
                     </ul>
+                    
+                  
+                    
+                    
 
-                    {/* <p className='userLogger'>{JSON.parse(localStorage.getItem("loggedUser")).name}</p> */}
+                    <p className='userLogger'>{JSON.parse(localStorage.getItem("loggedUser")).name}</p>
                 </div>
             </div>
         </nav>

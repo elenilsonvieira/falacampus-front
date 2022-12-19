@@ -6,8 +6,18 @@ export class AuthenticationApiService extends ApiService {
     constructor(){
         super('');
         this.storageService = new StorageService();
-       
-       
+
+       this.aa()
+      
+    }
+
+    aa= () =>{
+        if(JSON.parse(localStorage.getItem("loggedUser")) == null){
+            let user ={
+                name:''
+            }
+             this.storageService.setItem(LOGGED_USER, user);
+        }
     }
 
     async login(username, password){
