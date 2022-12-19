@@ -251,8 +251,8 @@ class viewComments extends React.Component {
     //         );
     // }
 
-    findCommentDepartament = (id) => {
-        this.service2.find(`responsables/${id}`)        
+    findCommentDepartament = async (id) => {
+        await this.service2.find(`responsables/${id}`)        
         .then(response => {
             const responsabled = response.data;
          

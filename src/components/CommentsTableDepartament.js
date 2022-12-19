@@ -32,7 +32,7 @@ export default props => {
                 <td>{comment.departamentId.id}</td> */}
                 {/* <td>{comment.answerId.id}</td> */}
                 <td className="col-md-2">
-                    {props.admin &&(
+                    {true &&(
                         <button id='butonAnswer' type="button" title="Responder"
                         className={"btn btn-danger btn-space answer" + comment.id}
                         onClick={e => props.answer(comment.id)}>

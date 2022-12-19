@@ -21,6 +21,7 @@ class ViewUsers extends React.Component {
    
     state = {
         userLoger: this.getLoggedUser(),
+        isAdmin: this.getLoggedUser().roles[0].name,
         name: '',
         id: '',
         email: '',
@@ -38,7 +39,7 @@ class ViewUsers extends React.Component {
     }
     componentDidMount() {        
         this.find();
-        
+        console.log('admi', this.state.isAdmin)
     }
 
     // componentWillUnmount() {
@@ -221,6 +222,7 @@ class ViewUsers extends React.Component {
                                     <UsersTable users={this.state.users}
                                         delete={this.delete}
                                         usuario={this.state.userLoger}
+                                        admin={this.state.isAdmin}
                                         edit={this.edit} id="idEdit"/>
                                 </div>
                             </div>
