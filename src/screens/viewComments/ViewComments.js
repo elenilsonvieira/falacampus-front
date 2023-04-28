@@ -81,8 +81,6 @@ class viewComments extends React.Component {
         
         if(role === 'ADMIN'){
            this.state.isAdmin = true;
-            
-          
         }
        
     }
@@ -189,7 +187,8 @@ class viewComments extends React.Component {
     }
 
     find = () => {
-        this.service.findAll('')
+        const all = this.service.findAll('') 
+        console.log(all);
         var params = '?';
 
         if (this.state.id !== 0) {

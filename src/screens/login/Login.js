@@ -14,7 +14,14 @@ class Login extends React.Component {
         username: '',
         password: ''
     };
-
+    componentDidMount(){
+        if(localStorage.getItem("user")){
+            localStorage.removeItem("loggedUser");
+            localStorage.removeItem("user");
+            localStorage.removeItem("token");
+            window.location.reload();
+        }
+    }
 
     login = () => {
         this.context.login(
