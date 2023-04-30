@@ -10,10 +10,11 @@ import FormGroup from '../../components/FormGroup';
 import { showSuccessMessage, showErrorMessage } from '../../components/Toastr';
 import DepartamentsTable from '../../components/DepartamentsTable'
 import DepartamentApiService from '../../services/DepartamentApiService';
+let user =  null;
 
 
 class ViewDepartaments extends React.Component {
-
+   
     state = {
         name: '',
         id: '',
@@ -25,8 +26,9 @@ class ViewDepartaments extends React.Component {
     }
 
     componentDidMount() {
-        this.find();
+       this.find();
        this.viewListButton();
+       user = JSON.parse(localStorage.getItem("loggedUser")).roles[0]["name"];
  //       this.findAllDepartaments();
 
     }
@@ -131,6 +133,7 @@ class ViewDepartaments extends React.Component {
     }
 
     render() {
+        console.log(user);
         return (
 
             <div className="container">
@@ -172,7 +175,7 @@ class ViewDepartaments extends React.Component {
                         <div className='row'>                            
                             <div className='col-lg-12' >
                                 <div className='bs-component'>
-                                    <DepartamentsTable departaments={this.state.departaments}
+                                    <DepartamentsTable departaments={this.state.departaments} auth={user}
                                         delete={this.delete}
                                         edit={this.edit} />
                                 </div>

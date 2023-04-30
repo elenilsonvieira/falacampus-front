@@ -3,17 +3,11 @@ import './CreateComment.css';
 import '../../components/Style.css';
 import 'primeicons/primeicons.css';
 import { withRouter } from 'react-router-dom';
-
-
 import Card from '../../components/Card';
 import FormGroup from '../../components/FormGroup';
-import SelectDepartament from '../../components/SelectDepartament';
-import SelectUser from '../../components/SelectUser';
 import CommentApiService from '../../services/CommentApiService';
-import { showSuccessMessage, showErrorMessage } from '../../components/Toastr';
-
+import {showSuccessMessage, showErrorMessage} from '../../components/Toastr';
 import Global from './Global';
-
 import DepartamentApiService from '../../services/DepartamentApiService';
 
 class CreateComment extends React.Component {
@@ -68,7 +62,7 @@ class CreateComment extends React.Component {
         function autoComplete(inputValue) {
 
             const departaments = Global.departaments
-  
+            console.log(departaments)
             const p = departaments.filter((d) => d.name.toLowerCase().includes(inputValue.toLowerCase()));
     
           return p
@@ -119,7 +113,7 @@ class CreateComment extends React.Component {
         }
         ).catch(error => {
             console.log(error.response);
-            // showErrorMessage("O comentário não pode ser criado!")
+            showErrorMessage("O comentário não pode ser criado!")
         }
         );
 
@@ -177,14 +171,14 @@ class CreateComment extends React.Component {
                                                         </small>
                                                     </p>
                                                     <FormGroup label="Título: *" htmlFor="inputCommentTitle">
-                                                        <input type="text" className="form-control" id="inputCommentTitle"  minLength="5" maxlength="50"
+                                                        <input type="text" className="form-control" id="inputCommentTitle"  minLength="5"  maxLength= "50"
                                                         placeholder="Digite o título do comentário" 
                                                         value={this.state.title} 
                                                         onChange={(e) => { this.setState({ title: e.target.value }) }} />
                                                     </FormGroup>
                                                     <br />
                                                     <FormGroup label="Mensagem: *" htmlFor="MessageTextarea" className="form-label mt-4">
-                                                        <textarea type="text" className="form-control" id="MessageTextarea" rows="3" minLength="10" maxlength="255" 
+                                                        <textarea type="text" className="form-control" id="MessageTextarea" rows="3" minLength="10" maxLength="255" 
                                                         placeholder="Digite a sugestão, crítica ou elogio" 
                                                         value={this.state.message} 
                                                         onChange={(e) => { this.setState({ message: e.target.value }) }} />
@@ -193,7 +187,7 @@ class CreateComment extends React.Component {
                                                     <br />
 
                                                     <FormGroup label="Data: " htmlFor="inputCommentDate">
-                                                        <input disabled type="text" className="form-control" id="inputCommentDate"  minLength="5" maxlength="50"
+                                                        <input disabled type="text" className="form-control" id="inputCommentDate"  minLength="5" maxLength="50"
                                                         placeholder="Digite o título do comentário" 
                                                         value={this.state.creationDate} 
                                                         onChange={(e) => { this.setState({ title: e.target.value }) }} />
@@ -210,26 +204,17 @@ class CreateComment extends React.Component {
                                                         </select>
                                                     </FormGroup>
                                                     <br />
-                                                    {/* <FormGroup label="Id do Autor: *" htmlFor="inputAuthorId">
-                                                        <input type="number" className="form-control" id="inputAuthorId" 
-                                                        placeholder="Digite o id do autor" 
-                                                        value={this.state.authorId} 
-                                                        onChange={(e) => { this.setState({ authorId: e.target.value }) }} />
-                                                    </FormGroup>                                                     */}
                                                     <FormGroup label="Autor do Comentario:" htmlFor="inputCommentTitle">
                                                         <input disabled type="text" className="form-control" id="autoComment"  
                                                         
                                                         value={this.state.user["name"]}  />
                                                     </FormGroup>
-                                                    <br />
+                                                    <br/>
                                                     <FormGroup label="Nome do Departamento: *" htmlFor="input">
                                                         <input type="text" className="form-control" id="input" 
                                                         onChange={this.handleChange}
                                                         autoComplete="off"
-                                                        placeholder="Digite nome do departamento" 
-                                                        // value={this.state.departamentId} 
-                                                        // onChange={(e) => { this.setState({departamentId: e.target.value }) }} 
-                                                        />
+                                                        placeholder="Digite nome do departamento"/>
                                                     </FormGroup>
                                                     
                                                     <ul id="suggestions"></ul>
