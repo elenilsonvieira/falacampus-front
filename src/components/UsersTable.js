@@ -2,7 +2,17 @@ import React from 'react';
 import './Style.css';
 
 export default props => {
-
+    const buttonEdit = (admin,usuario,username,id) =>{
+        if(admin === "STUDENTS"){
+            return;
+        }
+        else if(username === usuario || admin === 'ADMIN'){
+            return(<button id="buttonEdit" type="button" title="Editar"
+            className={"btn btn-warning edit"+ id}
+            onClick={e => props.edit(id)}>
+            <i className="pi pi-pencil"></i></button>)
+        }
+    }
     const rows = props.users.map(user => {
         return (
             <tr key={user.id}>
@@ -11,33 +21,13 @@ export default props => {
                 <td>{user.email}</td>
                 <td>{user.username}</td>
                 <td className= {"roles" + user.id}>{user['roles']['0']['name']}</td>
-                {/* <td className="col-md-2">{user.departament.id}</td> */}
-                
                 <td className="col-md-2">
-                {(props.usuario.username === user.username || props.admin === 'ADMIN')
-                 &&(
-                        <button id="buttonEdit" type="button" title="Editar"
-                        className={"btn btn-warning edit"+ user.id}
-                        onClick={e => props.edit(user.id)}>
-                        <i className="pi pi-pencil"></i>
-                    </button>
-                    )}  
-
-                                       
-                                    
-                    
-                    {/* <button type="button" title="Excluir"
-                        className="btn btn-primary btn-delete"
-                        onClick={e => props.delete(user.id)}>
-                        <i className="pi pi-trash"></i>
-                    </button> */}
+                 {buttonEdit(props.admin, props.usuario.username,user.username,user.id)}
                 </td>
             </tr>
         )
     } )
-
     return (
-
         <table className="table table-hover">
             <thead>
                 <tr className="table-active">

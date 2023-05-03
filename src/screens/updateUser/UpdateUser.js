@@ -28,8 +28,7 @@ class UpdateUser extends React.Component {
         // departament: {
         //     departamentId: 0,
         //     name: ''
-        // }
-        
+        // } 
 
     }
     constructor() {
@@ -48,9 +47,6 @@ class UpdateUser extends React.Component {
        
     }
    
-    // componentWillUnmount(){select
-    //     this.clear();
-    // }
     showEditRole = () =>{
         var value =  localStorage.getItem("user");
         var user = JSON.parse(value)
@@ -85,7 +81,6 @@ class UpdateUser extends React.Component {
 
                 console.log("Dados up", user)
                 console.log("Papel  nome", user[0]['roles'][0]['name'])
-                // this.setState({ id:id, name:name, email:email, registration:registration, role:role, password:password, departament:departament });
 
                 this.setState({ id:id, name:name, email:email, username:username, rolesName:rolesName, password:password}); 
 
@@ -158,16 +153,6 @@ class UpdateUser extends React.Component {
 
     update = () => {
 
-      //  const errors = this.validate();
-
-        // if (errors.length > 0) {
-        //     errors.forEach((message, index) => {
-        //         showErrorMessage(message);
-        //     });
-        //     return false
-        // }
-
-        // await axios.put(`http://localhost:8080/api/user/${this.state.id}`,
         this.service.update(this.state.id,
             {
                 "name":this.state.name,
@@ -193,12 +178,9 @@ class UpdateUser extends React.Component {
     }
 
     cancel = () => {
-        this.service.delete('/');
-        //props.history.push('/');
+        this.props.history.push('/viewUsers');
     }
-    //=========
 
-   
     render() {
         return (
 

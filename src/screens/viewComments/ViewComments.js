@@ -2,20 +2,15 @@ import React from 'react';
 import './ViewComments.css';
 import '../../components/Style.css';
 import { withRouter } from 'react-router-dom';
-//import CommentsCard from '../../components/CommentsCard';
-
 import Card from '../../components/Card';
 import FormGroup from '../../components/FormGroup';
-
 import CommentsTable from '../../components/CommentsTable'
 import CommentApiService from '../../services/CommentApiService';
-import { showSuccessMessage, showErrorMessage } from '../../components/Toastr';
-
+import { showSuccessMessage, showWarningMessage } from '../../components/Toastr';
 import DepartamentApiService from '../../services/DepartamentApiService';
 import CommentsTableDepartament from '../../components/CommentsTableDepartament';
 
 class viewComments extends React.Component {
-
 
     state = {
         title: '',
@@ -81,8 +76,6 @@ class viewComments extends React.Component {
         
         if(role === 'ADMIN'){
            this.state.isAdmin = true;
-            
-          
         }
        
     }
@@ -95,8 +88,9 @@ class viewComments extends React.Component {
                 showSuccessMessage('Comentário excluído com sucesso!');
             }
             ).catch(error => {
+                showWarningMessage('Comentário não pode ser excluído!');
                 console.log(error.response);
-                showErrorMessage('Comentário não pode ser excluído!');
+                
             }
             );
     }
@@ -110,19 +104,16 @@ class viewComments extends React.Component {
         this.service.find(`?id=${commentId}`)
         .then(response =>{
             if(response.data["length"]===0){
-                showErrorMessage('Esse comentario não pode ser atualizado!');
+                showWarningMessage('Esse comentario não pode ser atualizado!');
             }else{
                 this.props.history.push(`/updateComment/${commentId}`)        
                
             }
-           
         })
-        
     }
 
     answer = (commentId) => {
         this.props.history.push(`/createAnswer/${commentId}`);
-        
     }
 
     createComment = () => {
@@ -165,38 +156,37 @@ class viewComments extends React.Component {
             params = `${params}creationDate=${this.state.creationDate}`;
         }
 
-        //axios.get(`http://localhost:8080/api/comment/${params}`)
         this.service.findAll(this.state.id)
-            .then(response => {
-                const comments = response.data;
-                this.setState({ comments });
-                var teste =[]
-                for (let i = 0; i < comments.length; i++) {
-                    if(comments[i]["authorId"] === id){
-                        teste.push(comments[i]);
-                    }
-                    
+        .then(response => {
+            const comments = response.data;
+            this.setState({ comments });
+            var teste =[]
+            for (let i = 0; i < comments.length; i++) {
+                if(comments[i]["authorId"] === id){
+                    teste.push(comments[i]);
                 }
-
-                this.setState({teste})
                 
-                console.log("dados",teste);
             }
-            ).catch(error => {
-                console.log(error.response);
-            }
-            );
+
+            this.setState({teste})
+            
+            console.log("dados",teste);
+        }
+        ).catch(error => {
+            console.log(error.response);
+        }
+        );
     }
 
     find = () => {
-        this.service.findAll('')
+        const all = this.service.findAll('') 
+        console.log(all);
         var params = '?';
 
         if (this.state.id !== 0) {
             if (params !== '?') {
                 params = `${params}&`;
             }
-
             params = `${params}id=${this.state.id}`;
         }
 
@@ -204,7 +194,6 @@ class viewComments extends React.Component {
             if (params !== '?') {
                 params = `${params}&`;
             }
-
             params = `${params}title=${this.state.title}`;
         }
 
@@ -212,7 +201,6 @@ class viewComments extends React.Component {
             if (params !== '?') {
                 params = `${params}&`;
             }
-
             params = `${params}message=${this.state.message}`;
         }
 
@@ -220,21 +208,19 @@ class viewComments extends React.Component {
             if (params !== '?') {
                 params = `${params}&`;
             }
-
             params = `${params}creationDate=${this.state.creationDate}`;
         }
 
-        //axios.get(`http://localhost:8080/api/comment/${params}`)
         this.service.findAll(this.state.id)
-            .then(response => {
-                const teste = response.data;
-                this.setState({ teste });
-                console.log("dados",teste);
-            }
-            ).catch(error => {
-                console.log(error.response);
-            }
-            );
+        .then(response => {
+            const teste = response.data;
+            this.setState({ teste });
+            console.log("dados",teste);
+        }
+        ).catch(error => {
+            console.log(error.response);
+        }
+        );
     }
 
     // findAll = () => {
@@ -255,7 +241,6 @@ class viewComments extends React.Component {
         await this.service2.find(`responsables/${id}`)        
         .then(response => {
             const responsabled = response.data;
-         
            
             if(responsabled.length !== 0){
                 document.getElementById('commentDepartament').classList.add('view')
@@ -278,10 +263,9 @@ class viewComments extends React.Component {
         }
         );
     }
-
+    
     render() {
         return (
-
             <div className="container">
                 <div className='row'>
                     <div className='col-md-12' style={this.styles.colMd12}>
@@ -289,64 +273,13 @@ class viewComments extends React.Component {
                             <Card title='Comentários'>
                                 <form>
                                     <fieldset>
-                                        {/* <FormGroup label="Id: *" htmlFor="inputId">
-                                            <input type="long" className="form-control" id="inputId" placeholder="Digite o Id do Comentário" value={this.state.id} onChange={(e) => { this.setState({ id: e.target.value }) }} />
-                                        </FormGroup>
-                                        <br /> */}
                                         <FormGroup label="Título:" htmlFor="inputTitle"><br />
                                             <input type="text" className="form-control" id="inputTitle" placeholder="Digite o Título do Comentário" value={this.state.title} onChange={(e) => { this.setState({ title: e.target.value }) }} />
-                                            {/* <small id="titleHelp" className="form-text text-muted">O título do comentário deve ter no mínimo 5 e no máximo 50 caracteres.</small> */}
                                         </FormGroup>
                                         <br />
-                                        {/* <FormGroup label="Mensagem: *" htmlFor="MessageTextarea" className="form-label mt-4">
-                                            <textarea type="text" className="form-control" id="MessageTextarea" rows="3" minLength="10" maxlength="255"
-                                                placeholder="Digite a sugestão, crítica ou elogio"
-                                                value={this.state.message}
-                                                onChange={(e) => { this.setState({ message: e.target.value }) }} />
-                                            <small id="messageHelp" className="form-text text-muted">Seja cordial ao escrever sua crítica, sugestão ou elogio.</small>
-                                        </FormGroup>
-                                        <br /> */}
-                                        {/* <FormGroup label="Data de Criação: *" htmlFor="inputCreationDate">
-                                            <input type="date" className="form-control" id="inputCreationDate" placeholder="Digite a Data de Criação do Comentário" value={this.state.creationDate} onChange={(e) => { this.setState({ creationDate: e.target.value }) }} />
-                                        </FormGroup>
-                                        <br /> */}
-                                        {/* <FormGroup label="Tipo de Comentário: *" htmlFor="selectCommentType" className="form-label mt-4">
-                                            <select className="form-select" id="selectCommentType" value={this.state.commentType} onChange={(e) => { this.setState({ commentType: e.target.value }) }}>
-                                                <option>Selecione uma opção</option>
-                                                <option>REVIEW</option>
-                                                <option>SUGGESTION</option>
-                                                <option>COMPLIMENT</option>
-                                            </select>
-                                        </FormGroup>                                        
-                                        <br />
-                                        <FormGroup label="Status do Comentário: *" htmlFor="selectStatusComment" className="form-label mt-4">
-                                            <select className="form-select" id="selectStatusComment" value={this.state.statusComment} onChange={(e) => { this.setState({ statusComment: e.target.value }) }}>
-                                                <option>Selecione uma opção</option>
-                                                <option>NOT_SOLVED</option>
-                                                <option>SOLVED</option>
-                                            </select>
-                                        </FormGroup>  
-                                        <br /> 
-                                         <FormGroup label="Id do Autor do Comentário: *" htmlFor="inputAuthorId">
-                                            <input type="long" className="form-control" id="inputAuthorId" placeholder="Digite o Id do Autor do Comentário" value={this.state.authorId} onChange={(e) => { this.setState({ authorId: e.target.value }) }} />
-                                        </FormGroup>
-                                        <br />
-                                        <FormGroup label="Id do Departamento: *" htmlFor="inputDepartamentId">
-                                            <input type="long" className="form-control" id="inputDepartamentId" placeholder="Digite o Id do Departamento" value={this.state.departamentId} onChange={(e) => { this.setState({ departamentId: e.target.value }) }} />
-                                        </FormGroup>
-                                        <br />      
-                                        <FormGroup label="Id da Resposta do Comentário: *" htmlFor="inputAnswerId">
-                                            <input type="long" className="form-control" id="inputDepartamentId" placeholder="Digite o Id da Resposta do Comentário" value={this.state.departamentId} onChange={(e) => { this.setState({ departamentId: e.target.value }) }} />
-                                        </FormGroup>
-                                        <br />  */}
                                         <button onClick={this.find} type="button" id="btn-search" className="btn btn-info">
                                             <i className="pi pi-search"></i> Pesquisar
                                         </button>
-                                        {/* <br />
-                                        <br />
-                                        <button onClick={this.findAll} type="button" className="btn btn-success">
-                                            <i className="pi pi-search"></i> Buscar Tudo
-                                        </button> */}
                                     </fieldset>
                                 </form>
                             </Card>
@@ -387,9 +320,6 @@ class viewComments extends React.Component {
                                 </div>
                             </div>
                         </div>
-
-                   
-                     
                     </div >
                 </div >
             </div >
