@@ -3,10 +3,7 @@ import './Style.css';
 
 export default props => {
     const buttonEdit = (admin,usuario,username,id) =>{
-        if(admin === "STUDENTS"){
-            return;
-        }
-        else if(username === usuario || admin === 'ADMIN'){
+        if(username === usuario || admin === 'ADMIN'){
             return(<button id="buttonEdit" type="button" title="Editar"
             className={"btn btn-warning edit"+ id}
             onClick={e => props.edit(id)}>

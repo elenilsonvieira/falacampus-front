@@ -2,13 +2,11 @@ import React from 'react';
 import './UpdateDepartament.css';
 import '../../components/Style.css';
 import { withRouter } from 'react-router-dom';
-//import axios from 'axios';
-
 import Card from '../../components/Card';
 import FormGroup from '../../components/FormGroup';
 import { showSuccessMessage, showErrorMessage } from '../../components/Toastr';
-
 import DepartamentApiService from '../../services/DepartamentApiService';
+import UserApiService from '../../services/UserApiService';
 
 class UpdateDepartament extends React.Component {
 
@@ -16,45 +14,74 @@ class UpdateDepartament extends React.Component {
         id: 0,
         name: '',
         id_responsavel: '',
-        responsibleUsers: ''
+        responsibleUsers: '', 
+        users: [] 
     }
     constructor() {
         super();
         this.service = new DepartamentApiService();
+        this.serviceUser = new UserApiService();
     }
     componentDidMount() {
         const params = this.props.match.params;       
         const id = params.id;
         this.findById(id);
         this.showEditRole();
+        this.findAllUsers();
     }
 
     showEditRole = () =>{
-        var value =  localStorage.getItem("user");
-        var user = JSON.parse(value)
-        var role = user['roles']['0']['name']
-
-        console.log("AA", user)
-        let a
-        if(role === 'ADMIN'){
-            a = document.getElementById("responsible")
-            a.classList.add('show')
-           console.log("Foi", role)
-        }       
-       
+        let a = document.getElementById("responsible")
+        a.classList.add('show')  
+    }
+    findAllUsers = () =>{
+        this.serviceUser.find("?id=&role=&departamentId=undefined")
+        .then(response => {
+            const users = response.data;
+            this.setState({users: users});
+        }
+        ).catch(error => {
+            console.log(error.response);
+        });
     }
 
-    findById = (id) => {
+    compareUsername = (username) =>{
+        const str = this.state.responsibleUsers.toString();
+        const match = str.match(/Username:\s*(\d+)/);
+        const user=  match && match[1]; // obtém o primeiro grupo de captura,
+        console.log( username === user); // imprime "202025020025"
+        return username === user
+    }
 
-        // axios.get(`http://localhost:8080/api/departament?id=${departamentId}`)
+   listUsers = () => {
+    if (!this.state.users) {
+        return <div>Carregando...</div>;
+    }
+    return(
+        
+        <select className="form-control" onChange={(event) => { this.setState({ id_responsavel: event.target.value })}}>
+            <option value="">Selecione o responsável</option>
+            {this.state.users.map((responsavel) => (
+               
+                <option key={responsavel.id} value={responsavel.id}>{responsavel.name}&nbsp;&nbsp;&nbsp;&nbsp;
+                {responsavel.roles[0].name} </option>
+
+            ))}
+            {
+             <option key="remover" value={null} onClick={() => this.setState({id_responsavel: "null"})}>Remover responsável</option>  
+             }
+        </select>
+         )
+    }
+
+
+    findById = (id) => {
         this.service.find(`?id=${id}`)
             .then(response => {
                 const departament = response.data;
                 const id = departament[0]['id'];
                 const name = departament[0]['name'];
                 const responsibleUsers = departament[0]['responsibleUsers']
-
-                console.log('Dados', departament[0]['responsibleUsers'])
                 this.setState({ id, name, responsibleUsers });
             }
             ).catch(error => {
@@ -63,40 +90,32 @@ class UpdateDepartament extends React.Component {
             );
     }
 
-    validate = () => {
-        const errors = [];
-
-        if (!this.state.name) {
-            errors.push('Campo Nome é obrigatório!');
-        // } else if(!this.state.name.match(/[A-z ]{2,100}$/)) {
-        //     errors.push('O Nome do Departamento deve ter no mínimo 2 e no máximo 100 caracteres!');
-        }
-
-        return errors;
-    };
-
     update = () => {
+        let user = this.state.users.find(responsavel => responsavel.id == this.state.id_responsavel);
+       
+        let departament1 =  {
+            id:this.state.id,
+            name: this.state.name,
+            responsibleUsers:null
+        }  
 
-        const errors = this.validate();
-
-        if (errors.length > 0) {
-            errors.forEach((message, index) => {
-                showErrorMessage(message);
-            });
-            return false
+        if(user != undefined){
+           
+            departament1 =  {
+            id:this.state.id,
+            name: this.state.name,
+            responsibleUsers:[user['id']]
+            }          
+            console.log("entrou")
         }
 
-        //await axios.put(`http://localhost:8080/api/departament/${this.state.id}`,
-        this.service.update(this.state.id,
-            {
-                name: this.state.name,
-                "responsibleUsers": [this.state.id_responsavel]
-            }
-        ).then(response => {
+       
+        console.log(departament1);
+        this.service.update(this.state.id, departament1)
+        .then(response => {
             console.log(response);
             showSuccessMessage('Departamento atualizado com sucesso!');
             this.props.history.push("/viewDepartaments");
-
         }
         ).catch(error => {
             console.log(error.response);
@@ -113,7 +132,6 @@ class UpdateDepartament extends React.Component {
 
     render() {
         return (
-
             <div className="container">
                 <div className='row'>
                     <div className='col-md-12'>
@@ -121,15 +139,9 @@ class UpdateDepartament extends React.Component {
                             <Card title='Atualização de Departamento'>
                                 <div className='row'>
                                     <div className='col-lg-12' >
-
                                         <div className='bs-component'>
                                             <form>
                                                 <fieldset>
-                                                    {/* <FormGroup label="Id: *" htmlFor="inputId">
-                                                        <input type="long" id="inputId" disabled={true} className="form-control"
-                                                            value={this.state.id} name="id" onChange={(e) => { this.setState({ id: e.target.value }) }} />
-                                                    </FormGroup>
-                                                    <br /> */}
                                                     <p>
                                                         <small id="messageHelp" className="form-text text-muted">
                                                             * O campo é obrigatório.
@@ -151,13 +163,8 @@ class UpdateDepartament extends React.Component {
                                                     <FormGroup>
                                                         <div id='responsible' className='inputRegistration'>
                                                             <label htmlFor="inputRegistration">Adicionar responsavel:*</label>
-
-                                                            <input type="number" id="inputRegistration" className="form-control" placeholder = "Digite o ID do responsável"                    
-                                                            value={this.state.username} name="registration" onChange={(e) => { this.setState({ id_responsavel: e.target.value }) }} />
-                                                            
-                                                        </div>
-                                                        
-                                                        
+                                                            {this.listUsers()}
+                                                        </div>     
                                                     </FormGroup>
                                                     <br />
                                                     <button onClick={this.update} type="button" id="button-update" className="btn btn-success">
@@ -166,15 +173,7 @@ class UpdateDepartament extends React.Component {
                                                     <button onClick={this.cancel} type="button" id="button-cancel" className="btn btn-danger btn-cancel">
                                                         <i className="pi pi-times"></i> Cancelar
                                                     </button>
-
                                                 </fieldset>
-                                                <div>
-                                                    {/* if(this.state.responsibleUsers != null){
-                                                        <ResponsavelTable responsavel = {this.state.responsibleUsers}/>
-                                                    } */}
-                                                    {/* <p>{this.state.responsibleUsers}</p> */}
-                                                    
-                                                </div>
                                             </form>
                                         </div>
                                     </div>

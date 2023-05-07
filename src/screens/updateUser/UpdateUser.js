@@ -81,17 +81,18 @@ class UpdateUser extends React.Component {
         "departamentId": 1,
         "roles":[{"name":this.state.rolesName}]
         }
-        console.log(user);
 
         this.service.update(this.state.id, user)
         .then(response => {
-            console.log(response);
             showSuccessMessage('Usuário atualizado com sucesso!');
             this.props.history.push("/viewUsers");
         }
         ).catch(error => {
-            console.log(error.response);
-            showErrorMessage('O usuário não pode ser atualizado!');
+            if(error.response.data === "cannot be changed, there is only one ADMIN"){
+                showErrorMessage('Não pode ser alterado, só existe um ADMIN!');
+            }else{
+                showErrorMessage('O usuário não pode ser atualizado!');
+            }
         }
         );
 

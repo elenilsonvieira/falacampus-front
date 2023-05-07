@@ -14,7 +14,11 @@ class Login extends React.Component {
         username: '',
         password: ''
     };
+   
     componentDidMount(){
+        const footer = document.querySelector('.footer');
+        footer.style.position = 'fixed';
+        
         if(localStorage.getItem("user")){
             localStorage.removeItem("loggedUser");
             localStorage.removeItem("user");
@@ -57,7 +61,6 @@ class Login extends React.Component {
 
     render() {
         return (
-
             <div className="container">
                 <div className='row'>
                     <div className='col-md-12'>
@@ -83,9 +86,7 @@ class Login extends React.Component {
                                                     <button onClick={this.login} type="button" id="button-login" className="btn btn-success btn-space">
                                                         <i className="pi pi-save"></i> Entrar
                                                     </button>
-                                                    {/* <button onClick={this.create} type="button" id="button-create" className="btn btn-danger btn-space">
-                                                        <i className="pi pi-times"></i> Cadastrar
-                                                    </button> */}
+                                                  
                                                 </fieldset>
                                             </form>
                                         </div>
@@ -101,5 +102,6 @@ class Login extends React.Component {
 
 
 }
+
 Login.contextType = AuthContext;
 export default withRouter(Login);

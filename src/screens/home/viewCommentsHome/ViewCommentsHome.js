@@ -1,18 +1,9 @@
 import React from 'react';
 import { withRouter } from 'react-router-dom';
 import '../viewCommentsHome/ViewCommentsHome.css'
-
-
 import AnswerApiService from '../../../services/AnswerApiService';
-
 import CommentApiService from '../../../services/CommentApiService';
-
-import CommentsTableHome from '../../../components/CommentsTableHome';
-
 import Card  from '../../../components/Card';
-
-import CommentsCard  from '../../../components/CommentsCard';
-
 import UserApiService from '../../../services/UserApiService';
 
 class ViewCommentsHome extends React.Component {
@@ -40,14 +31,12 @@ class ViewCommentsHome extends React.Component {
         this.service = new AnswerApiService();
         this.service2 = new CommentApiService();
         this.UserService = new UserApiService();
-        
     }
 
     componentDidMount() {
         this.find();   
-       
-        
-        
+        const footer = document.querySelector('.footer');
+        footer.style.position = 'relative';  
     }
 
     find = () => {
@@ -67,7 +56,7 @@ class ViewCommentsHome extends React.Component {
     }
 
    teste = async (dados) => {
-        var respostas = ""
+        var respostas = "";
         for (let i =  dados.length-1; i >= 0; i--) {
             
            
@@ -75,8 +64,6 @@ class ViewCommentsHome extends React.Component {
            const nomeAutorComentario = await this.findAuthor(dados[i]['authorId'])       
            const nomeAutorResposta = await this.findAuthorResposta(this.state.answerAuthor)
            
-
-
            respostas += `<div class="card text-white bg-success mb-3"; >`;
            respostas += `<div class="card-header" >${dados[i].title}</div>`
            respostas += `<div class="card-body" style = "font-size: 12px">`;         

@@ -2,8 +2,6 @@ import React from 'react';
 import './ViewDepartaments.css';
 import '../../components/Style.css';
 import { withRouter } from 'react-router-dom';
-//import axios from 'axios';
-
 import Card from '../../components/Card';
 import FormGroup from '../../components/FormGroup';
 
@@ -29,34 +27,15 @@ class ViewDepartaments extends React.Component {
        this.find();
        this.viewListButton();
        user = JSON.parse(localStorage.getItem("loggedUser")).roles[0]["name"];
- //       this.findAllDepartaments();
-
     }
 
     viewListButton = () =>{
-        var value =  localStorage.getItem("user");
-        var user = JSON.parse(value)
-        var role = user['roles']['0']['name']
-        console.log("AA", user)
-
-        if(role === 'ADMIN'){
+        const user =  JSON.parse(localStorage.getItem("loggedUser"))['roles']['0']['name'];
+        if(user === 'ADMIN'){
             let a = document.getElementById("idListar")
-            a.classList.add('mostrar')
-            console.log(a)
+            a.classList.add('mostrar')        
         }
        
-    }
-
-    delete = (departamentId) => {
-
-        this.service.delete(departamentId)
-            .then(response => {
-                this.find();
-            }
-            ).catch(error => {
-                console.log(error.response);
-            }
-            );
     }
 
     edit = (departamentId) => {
@@ -64,78 +43,34 @@ class ViewDepartaments extends React.Component {
         this.service.edit(departamentId)
     }
 
-    createDepartament = () => {
-        this.props.history.push(`/createDepartament`);
-    }
-
+  
     find = () => {        
-        var params = '?';
-
-        if (this.state.id !== 0) {
-            if (params !== '?') {
-                params = `${params}&`;
-            }
-
-            params = `${params}id=${this.state.id}`;
-        }
-
-        // if (this.state.id !== '') {
-        //     if (params !== '?') {
-        //         params = `${params}&`;
-        //     }
-
-        //     params = `${params}name=${this.state.name}`;
-        // }
-
-        //axios.get(`http://localhost:8080/api/departament/${params}`)
         this.service.get(this.state.id)
-            .then(response => {
-                const departaments = response.data;
-                this.setState({ departaments });
-                console.log(departaments);
-            }
-            ).catch(error => {
-                console.log(error.response);
-            }
-            );
+        .then(response => {
+            const departaments = response.data;
+            this.setState({ departaments });
+        }).catch(error => {
+            console.log(error.response);
+        });
     }
 
-    findAll = () => {
 
-        this.service.get('/all')
-            .then(response => {
-                const departaments = response.data;
-                this.setState({ departaments });
-                console.log(departaments);
-            }
-            ).catch(error => {
-                console.log(error.response);
-            }
-            );
-    }
     findApi = () => {
         this.service.get('/getDepartmentsApi')
         .then(response => {
             const departaments = response.data;
             this.setState({ departaments });
-            console.log(departaments);
             showSuccessMessage('Departamentos atualizados com sucesso!');           
             this.props.history.push("/viewDepartaments");
-        }
-        ).catch(error => {
+        })
+        .catch(error => {
             console.log(error.response);
             showErrorMessage('Erro ao atualizar departamentos.');
-
-        }
-        );
-        
-
+        }); 
     }
 
     render() {
-        console.log(user);
         return (
-
             <div className="container">
                 <div className='row'>
                     <div className='col-md-12'>
@@ -143,10 +78,6 @@ class ViewDepartaments extends React.Component {
                             <Card title='Departamentos'>
                                 <form>
                                     <fieldset>
-                                        {/* <FormGroup label='Id:'>
-                                            <input type="long" className="form-control" id="inputDepartamentId" placeholder="Digite o Id do Departamento" value={this.state.id} onChange={(e) => { this.setState({ id: e.target.value }) }} />
-                                        </FormGroup>
-                                        <br /> */}
                                         <FormGroup label='Nome:'>
                                             <input type="text" className="form-control" id="inputDepartamentName" placeholder="Digite o Nome do Departamento" value={this.state.name} onChange={(e) => { this.setState({ name: e.target.value }) }} />
                                         </FormGroup>
@@ -165,11 +96,7 @@ class ViewDepartaments extends React.Component {
                                     <i className="pi pi-plus"></i> Listar
                                 </button>
                             </div>
-                            {/* <div className="col-md-12">
-                                <button onClick={this.createDepartament} type="button" id="btn-cadastrar" className="btn btn-success btn-cadastrar">
-                                    <i className="pi pi-plus"></i> Cadastrar Novo Departamento
-                                </button>
-                            </div> */}
+                        
                         </div>
                         <br />
                         <div className='row'>                            
@@ -178,16 +105,13 @@ class ViewDepartaments extends React.Component {
                                     <DepartamentsTable departaments={this.state.departaments} auth={user}
                                         delete={this.delete}
                                         edit={this.edit} />
-                                </div>
-
-                                
+                                </div>   
                             </div>
                         </div>
                     </div >
                 </div >
             </div >
-        )
-    }
+    )}
 }
 
 export default withRouter(ViewDepartaments);
