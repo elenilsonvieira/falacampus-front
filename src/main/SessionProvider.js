@@ -34,8 +34,10 @@ export default class SessionProvider extends React.Component {
             username, 
             password 
         );
+        const token = this.service.getToken()
+        const isToken = token && token.includes("Cannot invoke");
 
-        if(user){
+        if(user && !isToken){
             this.start();
             return user;
         } else {

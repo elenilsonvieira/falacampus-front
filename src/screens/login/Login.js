@@ -7,6 +7,8 @@ import FormGroup from '../../components/FormGroup';
 import { showSuccessMessage, showErrorMessage } from '../../components/Toastr';
 import { withRouter } from 'react-router-dom';
 import { AuthContext } from '../../main/SessionProvider';
+import Loader from '../../components/Loader';
+
 
 class Login extends React.Component {
 
@@ -27,8 +29,10 @@ class Login extends React.Component {
         }
     }
 
-    login = () => {
-        this.context.login(
+    login = async() => {
+        this.setState({ loading: true });
+     
+       await this.context.login(
             this.state.username,
             this.state.password
 
@@ -36,13 +40,14 @@ class Login extends React.Component {
             {
                 if (user) {
 
-                    console.log("If",user.roles);
+                    console.log(user);
                     showSuccessMessage(`${user.name}, você está logado!`);
                     this.props.history.push('/viewCommentsHome');
 
                 } else {
                     console.log("Else");
                     showErrorMessage("Dados incorretos! Login inválido");
+                    this.setState({ loading: false });
                 }
 
             }
@@ -55,11 +60,12 @@ class Login extends React.Component {
         );
     }
 
-    create = () => {
-        this.props.history.push('/createUser');
-    }
-
     render() {
+        const { loading } = this.state;
+    
+        if (loading) {
+            return <Loader />;
+        }
         return (
             <div className="container">
                 <div className='row'>
@@ -86,7 +92,6 @@ class Login extends React.Component {
                                                     <button onClick={this.login} type="button" id="button-login" className="btn btn-success btn-space">
                                                         <i className="pi pi-save"></i> Entrar
                                                     </button>
-                                                  
                                                 </fieldset>
                                             </form>
                                         </div>

@@ -4,8 +4,8 @@ import '../../components/Style.css';
 import { withRouter } from 'react-router-dom';
 import Card from '../../components/Card';
 import FormGroup from '../../components/FormGroup';
-
-import { showSuccessMessage, showErrorMessage } from '../../components/Toastr';
+import Loader from '../../components/Loader';
+import {showErrorMessage, showWarningMessage } from '../../components/Toastr';
 import DepartamentsTable from '../../components/DepartamentsTable'
 import DepartamentApiService from '../../services/DepartamentApiService';
 let user =  null;
@@ -16,7 +16,8 @@ class ViewDepartaments extends React.Component {
     state = {
         name: '',
         id: '',
-        departaments: []
+        departaments: [],
+        loading: false
     }
     constructor() {
         super();
@@ -54,22 +55,29 @@ class ViewDepartaments extends React.Component {
         });
     }
 
+    findApi = async() => {
+        this.setState({ loading: true });
+        showWarningMessage('Atualizando Departamentos!'); 
 
-    findApi = () => {
-        this.service.get('/getDepartmentsApi')
-        .then(response => {
-            const departaments = response.data;
-            this.setState({ departaments });
-            showSuccessMessage('Departamentos atualizados com sucesso!');           
-            this.props.history.push("/viewDepartaments");
-        })
-        .catch(error => {
-            console.log(error.response);
-            showErrorMessage('Erro ao atualizar departamentos.');
-        }); 
+        await this.service.get('/getDepartmentsApi')
+            .then(response => {
+                window.location.reload();         
+            })
+            .catch(error => {
+                console.log(error.response);
+                showErrorMessage('Erro ao atualizar departamentos.');
+            })
+           
     }
-
+    
+    
     render() {
+        const { loading } = this.state;
+    
+        if (loading) {
+            return <Loader />;
+        }
+    
         return (
             <div className="container">
                 <div className='row'>
@@ -79,7 +87,7 @@ class ViewDepartaments extends React.Component {
                                 <form>
                                     <fieldset>
                                         <FormGroup label='Nome:'>
-                                            <input type="text" className="form-control" id="inputDepartamentName" placeholder="Digite o Nome do Departamento" value={this.state.name} onChange={(e) => { this.setState({ name: e.target.value }) }} />
+                                            <input type="text" className="form-control" id="inputDepartamentName" placeholder="Digite o Nome do Departamento" value={this.state.name} onChange={(e) => { this.setState({ name: e.target.value }); } } />
                                         </FormGroup>
                                         <br />
                                         <button onClick={this.find} type="button" id="btn-search" className="btn btn-info">
@@ -91,27 +99,25 @@ class ViewDepartaments extends React.Component {
                         </div>
                         <br />
                         <div className="row">
-                        <div className="col-md-12">
+                            <div className="col-md-12">
                                 <button onClick={this.findApi} type="button" id="idListar" className="btn btn-success btn-listar">
-                                    <i className="pi pi-plus"></i> Listar
+                                    <i className="pi pi-plus"></i> Atualizar
                                 </button>
                             </div>
-                        
                         </div>
                         <br />
-                        <div className='row'>                            
-                            <div className='col-lg-12' >
+                        <div className='row'>
+                            <div className='col-lg-12'>
                                 <div className='bs-component'>
-                                    <DepartamentsTable departaments={this.state.departaments} auth={user}
-                                        delete={this.delete}
-                                        edit={this.edit} />
-                                </div>   
+                                    <DepartamentsTable departaments={this.state.departaments} auth={user} delete={this.delete} edit={this.edit} />
+                                </div>
                             </div>
                         </div>
-                    </div >
-                </div >
-            </div >
-    )}
-}
+                    </div>
+                </div>
+            </div>
+        );
+    }
+}    
 
 export default withRouter(ViewDepartaments);

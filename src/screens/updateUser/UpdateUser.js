@@ -5,7 +5,7 @@ import { withRouter } from 'react-router-dom';
 import UserApiService from '../../services/UserApiService';
 import Card from '../../components/Card';
 import FormGroup from '../../components/FormGroup';
-import { showSuccessMessage, showErrorMessage } from '../../components/Toastr';
+import { showSuccessMessage, showErrorMessage, showWarningMessage } from '../../components/Toastr';
 
 
 class UpdateUser extends React.Component {
@@ -50,7 +50,6 @@ class UpdateUser extends React.Component {
                 console.log(error.message);
             }
             );
-            
     }
 
     setSelectedRole() {
@@ -88,15 +87,20 @@ class UpdateUser extends React.Component {
             this.props.history.push("/viewUsers");
         }
         ).catch(error => {
-            if(error.response.data === "cannot be changed, there is only one ADMIN"){
-                showErrorMessage('Não pode ser alterado, só existe um ADMIN!');
-            }else{
+            if(error.response.data === "Cannot be changed, there is only one ADMIN"){
+                showWarningMessage('Não pode ser alterado, só existe um ADMIN!');
+            }
+            else if(error.response.data === "User is not an Admin"){
+                showWarningMessage('Usuario não é ADMIN!');
+            }
+            else if(error.response.data === "User is already ADMIN"){
+                showWarningMessage('Usuario já é ADMIN!');
+            }
+            else{
                 showErrorMessage('O usuário não pode ser atualizado!');
             }
         }
         );
-
-        console.log('request finished');
     }
 
     cancel = () => {
@@ -143,13 +147,13 @@ class UpdateUser extends React.Component {
                                                         <label htmlFor="selectRole" className="form-label mt-4">Papel: *</label>
                                                         
                                                         <select className="form-select" id="selectRole" name="role" onChange={() =>{this.setSelectedRole()}}>
-                                                    
                                                             <option id='ADMIN' value="ADMIN">ADMINISTRADOR</option>
-                                                            <option id='STUDENTS'  value="STUDENTS" >ESTUDANTE</option>                                                         
-                                                            <option id='TECHNICIAN' value="TECHNICIAN">TÉCNICO</option>
-                                                            <option id='TEACHER' value="TEACHER">PROFESSOR</option>
-                                                            
+                                                            <option id='REMOVE' value="REMOVE">REMOVER ADMINISTRADOR</option>
+                                                            <option id='STUDENTS' value="STUDENTS" disabled>ESTUDANTE</option>
+                                                            <option id='TECHNICIAN' value="TECHNICIAN" disabled>TÉCNICO</option>
+                                                            <option id='TEACHER' value="TEACHER" disabled>PROFESSOR</option>
                                                         </select>
+
                                                     </div>
                                                     <br />
                                                     <br />

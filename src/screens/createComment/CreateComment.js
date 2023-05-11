@@ -111,7 +111,7 @@ class CreateComment extends React.Component {
     }
 
     cancel = () => {
-        this.props.history.push('/');
+        this.props.history.push('/viewComments');
     }
 
     findAllDepar = () => {

@@ -6,6 +6,7 @@ import 'primeicons/primeicons.css';
 import 'toastr/build/toastr.min.js';
 import 'toastr/build/toastr.css';
 
+
 import NavBar from './components/NavBar';
 import AppRoutes from './main/AppRoutes';
 import SessionProvider from './main/SessionProvider';

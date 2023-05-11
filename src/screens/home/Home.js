@@ -5,6 +5,15 @@ import img01 from "../../assets/img/img-01.png";
 import { withRouter } from 'react-router-dom';
 
 class Home extends React.Component {
+    componentDidMount(){        
+        if(localStorage.getItem("user")){
+            localStorage.removeItem("loggedUser");
+            localStorage.removeItem("user");
+            localStorage.removeItem("token");
+            window.location.reload();
+        }
+    }
+
    
     render() {
         return (
@@ -25,8 +34,7 @@ class Home extends React.Component {
                 <div className="home">
                 <div>
                     <div className="section-two">
-                    <center>
-                        <p className="post">
+                    <center className="post">
                         Projeto desenvolvido para a Disciplina de Desenvolvimento de
                         Aplicações Corporativas com o Professor Elenilson Vieira, no 5° Período do Curso de Análise e
                         Desenvolvimento de Sistemas do IFPB, Campus Monteiro.
@@ -42,11 +50,8 @@ class Home extends React.Component {
                             <li>Thallyta Medeiros</li>
                             <li>Nataly Lucena</li>
                             <li>Patrícia dos Santos</li>
-                            <li>Nataly Lucena</li>
-                            <li>Patrícia dos Santos</li>
                             <li>Rosenato Barreto</li>
                         </ul>
-                        </p>
                     </center>
                     </div>
                 </div>

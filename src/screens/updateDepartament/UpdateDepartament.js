@@ -7,6 +7,8 @@ import FormGroup from '../../components/FormGroup';
 import { showSuccessMessage, showErrorMessage } from '../../components/Toastr';
 import DepartamentApiService from '../../services/DepartamentApiService';
 import UserApiService from '../../services/UserApiService';
+import ReactSelect from 'react-select';
+
 
 class UpdateDepartament extends React.Component {
 
@@ -43,37 +45,28 @@ class UpdateDepartament extends React.Component {
         ).catch(error => {
             console.log(error.response);
         });
-    }
+    }   
 
-    compareUsername = (username) =>{
-        const str = this.state.responsibleUsers.toString();
-        const match = str.match(/Username:\s*(\d+)/);
-        const user=  match && match[1]; // obtém o primeiro grupo de captura,
-        console.log( username === user); // imprime "202025020025"
-        return username === user
-    }
-
-   listUsers = () => {
-    if (!this.state.users) {
-        return <div>Carregando...</div>;
-    }
-    return(
-        
-        <select className="form-control" onChange={(event) => { this.setState({ id_responsavel: event.target.value })}}>
-            <option value="">Selecione o responsável</option>
-            {this.state.users.map((responsavel) => (
-               
-                <option key={responsavel.id} value={responsavel.id}>{responsavel.name}&nbsp;&nbsp;&nbsp;&nbsp;
-                {responsavel.roles[0].name} </option>
-
-            ))}
-            {
-             <option key="remover" value={null} onClick={() => this.setState({id_responsavel: "null"})}>Remover responsável</option>  
-             }
-        </select>
-         )
-    }
-
+    listUsers = () => {
+      const options = this.state.users.map((responsavel) => ({
+        value: responsavel.id,
+        label: `${responsavel.name} - ${responsavel.roles[0].name}`,
+      }));
+    
+      options.unshift({ value: null, label: 'Remover responsável' });
+    
+      return (
+        <ReactSelect
+          options={options}
+          value={options.find((option) => option.value === this.state.id_responsavel)}
+          onChange={(option) => this.setState({ id_responsavel: option?.value })}
+          placeholder="Selecione o responsável"
+        />
+      );
+    };
+    
+    
+    
 
     findById = (id) => {
         this.service.find(`?id=${id}`)
@@ -109,11 +102,8 @@ class UpdateDepartament extends React.Component {
             console.log("entrou")
         }
 
-       
-        console.log(departament1);
         this.service.update(this.state.id, departament1)
         .then(response => {
-            console.log(response);
             showSuccessMessage('Departamento atualizado com sucesso!');
             this.props.history.push("/viewDepartaments");
         }
@@ -122,12 +112,10 @@ class UpdateDepartament extends React.Component {
             showErrorMessage('O Departamento não pode ser atualizado!');
         }
         );
-
-        console.log('request finished');
     }
 
     cancel = () => {
-        this.props.history.push('/');
+        this.props.history.push('/viewDepartaments');
     }
 
     render() {
