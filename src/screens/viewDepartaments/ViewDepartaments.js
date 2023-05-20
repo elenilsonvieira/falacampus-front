@@ -41,7 +41,6 @@ class ViewDepartaments extends React.Component {
 
     edit = (departamentId) => {
         this.props.history.push(`/updateDepartament/${departamentId}`);
-        this.service.edit(departamentId)
     }
 
   
@@ -56,8 +55,7 @@ class ViewDepartaments extends React.Component {
     }
 
     findApi = async() => {
-        this.setState({ loading: true });
-        showWarningMessage('Atualizando Departamentos!'); 
+        showWarningMessage('Atualizando Departamentos, Isso pode demorar um pouco!'); 
 
         await this.service.get('/getDepartmentsApi')
             .then(response => {

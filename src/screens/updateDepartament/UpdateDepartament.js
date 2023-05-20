@@ -4,7 +4,7 @@ import '../../components/Style.css';
 import { withRouter } from 'react-router-dom';
 import Card from '../../components/Card';
 import FormGroup from '../../components/FormGroup';
-import { showSuccessMessage, showErrorMessage } from '../../components/Toastr';
+import { showSuccessMessage, showErrorMessage, showWarningMessage } from '../../components/Toastr';
 import DepartamentApiService from '../../services/DepartamentApiService';
 import UserApiService from '../../services/UserApiService';
 import ReactSelect from 'react-select';
@@ -15,9 +15,11 @@ class UpdateDepartament extends React.Component {
     state = {
         id: 0,
         name: '',
-        id_responsavel: '',
-        responsibleUsers: '', 
-        users: [] 
+        id_responsaveis: [],
+        responsibleUsers: [], 
+        users: [],   
+        showDefaultValue: false,
+        selectKey: 0
     }
     constructor() {
         super();
@@ -36,37 +38,45 @@ class UpdateDepartament extends React.Component {
         let a = document.getElementById("responsible")
         a.classList.add('show')  
     }
-    findAllUsers = () =>{
-        this.serviceUser.find("?id=&role=&departamentId=undefined")
-        .then(response => {
-            const users = response.data;
-            this.setState({users: users});
-        }
-        ).catch(error => {
-            console.log(error.response);
-        });
-    }   
 
-    listUsers = () => {
-      const options = this.state.users.map((responsavel) => ({
-        value: responsavel.id,
-        label: `${responsavel.name} - ${responsavel.roles[0].name}`,
-      }));
-    
-      options.unshift({ value: null, label: 'Remover responsável' });
-    
-      return (
-        <ReactSelect
-          options={options}
-          value={options.find((option) => option.value === this.state.id_responsavel)}
-          onChange={(option) => this.setState({ id_responsavel: option?.value })}
-          placeholder="Selecione o responsável"
-        />
-      );
+    loadingResponsable = () => {
+        const responsableUsernames = this.state.responsibleUsers.map((user) => {
+          if (typeof user === 'string') {
+            const usernameMatch = user.match(/Username: (.*?)\s/);
+            return usernameMatch ? usernameMatch[1] : null;
+          }
+          return null;
+        });
+      
+        const filteredUsers = this.state.users.filter((user) =>
+          responsableUsernames.includes(user.username)
+        );
+      
+        const filteredUserIds = filteredUsers.map((user) => user.id);
+        this.setState({id_responsaveis: filteredUserIds})
+        console.log("LOADER AQUI ", filteredUserIds);
+      }
+      
+    compareIds = () => {
+        const ids = this.state.id_responsaveis.map((id) => id.toString());
+        const filteredUsers = this.state.users.filter((user) => ids.includes(user.id.toString()));
+        return filteredUsers;
     };
-    
-    
-    
+      
+    findAllUsers = async () => {
+        try {
+          const response = await this.serviceUser.find("?id=&role=&departamentId=undefined");
+          const users = response.data;
+          this.setState({ users: users });
+      
+        } catch (error) {
+          console.log(error.response);
+        }
+
+        await this.loadingResponsable(this.state.users);
+
+      }
+      
 
     findById = (id) => {
         this.service.find(`?id=${id}`)
@@ -76,28 +86,132 @@ class UpdateDepartament extends React.Component {
                 const name = departament[0]['name'];
                 const responsibleUsers = departament[0]['responsibleUsers']
                 this.setState({ id, name, responsibleUsers });
-            }
-            ).catch(error => {
+            })
+            .catch(error => {
                 console.log(error.response);
-            }
-            );
+            });
     }
 
-    update = () => {
-        let user = this.state.users.find(responsavel => responsavel.id == this.state.id_responsavel);
+   
+
+    addResponsavel = (id) => {
+        if( id!= undefined){
+            this.setState(prevState => ({
+                id_responsaveis: [...prevState.id_responsaveis, id]
+              }), () => {
+                showSuccessMessage("Reponsável adicionado")
+                console.log("ADD USER", this.state.id_responsaveis);
+            });
+        };
+    }
        
+      
+    removeResponsavel = (id) => {
+        if (id != undefined) {
+           
+          this.setState((prevState) => ({
+            id_responsaveis: prevState.id_responsaveis.filter((responsavelId) => responsavelId !== id)
+          }), () => {
+            showWarningMessage("Responsável removido")
+            console.log("REMOVER USER", this.state.id_responsaveis);
+          });
+        }
+      };
+      
+
+  
+    listResponsables = () => {
+        let repons = this.compareIds();
+        const options = repons.map((responsavel) => ({
+          value: responsavel.id,
+          label: `${responsavel.name} - ${responsavel.roles[0].name}`,
+        }));
+
+        let id;
+
+        return (
+          <>
+           <ReactSelect
+            id='camp_responsables'
+            className='ListResponables'
+            options={options}
+            value={
+                 options.find((option) => option.value === this.state.id_responsaveis) }
+            onChange={(option) => {id = option?.value}}
+            placeholder="Lista de responsáveis"
+            key={this.state.selectKey}
+            />
+            <button  onClick={() => {
+                this.removeResponsavel(id);
+                this.setState((prevState) => ({
+
+                  selectKey: prevState.selectKey + 1,
+                }));
+              }} type="button" className="btn btn-primary" id = "button-Remove">
+              Remover
+            </button>
+          </>
+        );
+      };
+      
+      listAllUsers = () => {
+        const filteredUsers = this.compareIds();
+        const options = this.state.users
+          .filter((user) => !filteredUsers.find((filteredUser) => filteredUser.id === user.id))
+          .map((responsavel) => ({
+            value: responsavel.id,
+            label: `${responsavel.name} - ${responsavel.roles[0].name}`,
+          }));
+      
+        let id;
+        return (
+          <>
+            <ReactSelect
+              id='camp_responsables'
+              options={options}
+              value={options.find((option) => option.value === this.state.id_responsaveis)}
+              onChange={(option) => {
+                id = option?.value;
+              }}
+              placeholder="Selecione o responsável"
+              key={this.state.selectKey} // Chave única para re-renderizar o componente
+            />
+      
+            <button
+              onClick={() => {
+                this.addResponsavel(id);
+                this.setState((prevState) => ({
+
+                  selectKey: prevState.selectKey + 1, // Atualiza a chave única do componente ReactSelect
+                }));
+              }}
+              type="button"
+              className="btn btn-warning"
+              id="button-Remove"
+            >
+              Adicionar
+            </button>
+          </>
+        );
+      };
+      
+      
+
+
+    update = () => {
+        this.compareIds();
         let departament1 =  {
             id:this.state.id,
             name: this.state.name,
             responsibleUsers:null
         }  
 
-        if(user != undefined){
+        if(this.state.id_responsaveis != undefined){
            
             departament1 =  {
             id:this.state.id,
             name: this.state.name,
-            responsibleUsers:[user['id']]
+            responsibleUsers:this.state.id_responsaveis
             }          
             console.log("entrou")
         }
@@ -143,15 +257,13 @@ class UpdateDepartament extends React.Component {
                                                     </FormGroup>
                                                     <br/>
                                                     <FormGroup label="Responsáveis:" htmlFor="inputResponsable">
-                                                        <input disabled type="text" id="inputResponsable" className="form-control"
-                                                            value={this.state.responsibleUsers} name="responsibleUsers" onChange={(e) => { this.setState({ responsibleUsers: e.target.value }) }} />
-                                                        
+                                                        {this.listResponsables()}
                                                     </FormGroup>
 
-                                                    <FormGroup>
-                                                        <div id='responsible' className='inputRegistration'>
+                                                    <FormGroup id= "listAllUsers">
+                                                        <div id='responsible' className='inputRegistration' >
                                                             <label htmlFor="inputRegistration">Adicionar responsavel:*</label>
-                                                            {this.listUsers()}
+                                                            {this.listAllUsers()}
                                                         </div>     
                                                     </FormGroup>
                                                     <br />

@@ -4,3 +4,12 @@
 .inputRegistration.show{
     display: block;
 }
+#button-Remove{
+    padding: 4px;
+}
+#camp_responsables{
+    padding-bottom:7px ;
+}
+#listAllUsers{
+    padding-top: 0%;
+}
