@@ -174,7 +174,7 @@ class UpdateDepartament extends React.Component {
                 id = option?.value;
               }}
               placeholder="Selecione o responsável"
-              key={this.state.selectKey} // Chave única para re-renderizar o componente
+              key={this.state.selectKey} 
             />
       
             <button
@@ -182,7 +182,7 @@ class UpdateDepartament extends React.Component {
                 this.addResponsavel(id);
                 this.setState((prevState) => ({
 
-                  selectKey: prevState.selectKey + 1, // Atualiza a chave única do componente ReactSelect
+                  selectKey: prevState.selectKey + 1, 
                 }));
               }}
               type="button"
