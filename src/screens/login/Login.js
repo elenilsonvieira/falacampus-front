@@ -37,25 +37,28 @@ class Login extends React.Component {
             this.state.password
 
         ).then(user =>
-            {
+            {  
                 if (user) {
-
                     console.log(user);
                     showSuccessMessage(`${user.name}, você está logado!`);
                     this.props.history.push('/viewCommentsHome');
 
-                } else {
-                    console.log("Else");
+                } else if(localStorage.getItem("user")) {
+                    console.log(user);
                     showErrorMessage("Dados incorretos! Login inválido");
+                    localStorage.clear();
                     this.setState({ loading: false });
+                  
+                } else{
+                    const u = user.data;
                 }
 
             }
         ).catch(error =>
             {
-                console.log("Catch");
+                this.setState({ loading: false });
+                showErrorMessage('Servidor Indisponivel', error);
                 console.log(error);
-                showErrorMessage('Erro! processando autenticação:', error);
             }
         );
     }
