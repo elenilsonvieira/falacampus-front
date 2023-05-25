@@ -36,31 +36,31 @@ class Login extends React.Component {
             this.state.username,
             this.state.password
 
-        ).then(user =>
-            {  
-                if (user) {
-                    console.log(user);
-                    showSuccessMessage(`${user.name}, você está logado!`);
-                    this.props.history.push('/viewCommentsHome');
-
-                } else if(localStorage.getItem("user")) {
-                    console.log(user);
-                    showErrorMessage("Dados incorretos! Login inválido");
-                    localStorage.clear();
-                    this.setState({ loading: false });
-                  
-                } else{
-                    const u = user.data;
+            ).then(user =>
+                {  
+                    if (user) {
+                        console.log(user);
+                        showSuccessMessage(`${user.name}, você está logado!`);
+                        this.props.history.push('/viewCommentsHome');
+    
+                    } else if(localStorage.getItem("loggedUser")) {
+                        console.log(user);
+                        showErrorMessage("Dados incorretos! Login inválido");
+                        this.setState({ loading: false });
+                        localStorage.clear();
+                      
+                    } else{
+                        const u = user.data;
+                    }
+    
                 }
-
-            }
-        ).catch(error =>
-            {
-                this.setState({ loading: false });
-                showErrorMessage('Servidor Indisponivel', error);
-                console.log(error);
-            }
-        );
+            ).catch(error =>
+                {
+                    this.setState({ loading: false });
+                    showErrorMessage('Servidor Indisponivel', error);
+                    console.log(error);
+                }
+            );
     }
 
     render() {
