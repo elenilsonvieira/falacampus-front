@@ -51,10 +51,11 @@ class viewComments extends React.Component {
        
     }
     componentDidMount() {
-        var value =  localStorage.getItem("user");
-        var user = JSON.parse(value)
-        var role = user['roles']['0']['name']
-        var id = user['id']
+         
+        
+        let user =  JSON.parse(localStorage.getItem("loggedUser"));
+        let role = user['roles']['0']['name']
+        let id = user['id']
 
         console.log("AA", id)
         if(role === 'ADMIN'){
@@ -65,7 +66,6 @@ class viewComments extends React.Component {
         }
                    
         this.viewListButton(role);
-
         this.findCommentDepartament(id);
 
         console.log('id uder', this.state.user.id)
@@ -83,21 +83,15 @@ class viewComments extends React.Component {
     delete = (commentId) => {
 
         this.service.delete(commentId)
-            .then(response => {
-                this.find();
-                showSuccessMessage('Comentário excluído com sucesso!');
-            }
-            ).catch(error => {
-                showWarningMessage('Comentário não pode ser excluído!');
-                console.log(error.response);
-                
-            }
-            );
-    }
-
-    card= (commentId) => {
-       
-    
+        .then(response => {
+            this.find();
+            showSuccessMessage('Comentário excluído com sucesso!');
+        }
+        ).catch(error => {
+            showWarningMessage('Comentário não pode ser excluído!');
+            console.log(error.response);
+            
+        });
     }
 
     edit = (commentId) => {
@@ -122,7 +116,7 @@ class viewComments extends React.Component {
 
     findAdmin = (id) => {
         this.service.findAll('')
-        var params = '?';
+        let params = '?';
 
         if (this.state.id !== 0) {
             if (params !== '?') {
@@ -160,10 +154,10 @@ class viewComments extends React.Component {
         .then(response => {
             const comments = response.data;
             this.setState({ comments });
-            var teste =[]
-            for (let i = 0; i < comments.length; i++) {
-                if(comments[i]["authorId"] === id){
-                    teste.push(comments[i]);
+            let teste =[]
+            for (const element of comments) {
+                if(element["authorId"] === id){
+                    teste.push(element);
                 }
                 
             }
@@ -181,7 +175,7 @@ class viewComments extends React.Component {
     find = () => {
         const all = this.service.findAll('') 
         console.log(all);
-        var params = '?';
+        let params = '?';
 
         if (this.state.id !== 0) {
             if (params !== '?') {
@@ -223,20 +217,6 @@ class viewComments extends React.Component {
         );
     }
 
-    // findAll = () => {
-    //     //axios.get(`http://localhost:8080/api/comment/all`)
-    //     this.service.find()
-    //         .then(response => {
-    //             const comments = response;
-    //             this.setState({ comments });
-    //             console.log(comments);
-    //         }
-    //         ).catch(error => {
-    //             console.log(error.response);
-    //         }
-    //         );
-    // }
-
     findCommentDepartament = async (id) => {
         await this.service2.find(`responsables/${id}`)        
         .then(response => {
@@ -252,16 +232,14 @@ class viewComments extends React.Component {
                 this.service.find(`comentDepartament/${element.id}`)
                 .then(r =>{
                     console.log("coment", r.data)
-                    var commentsDepartament = r.data
+                    let commentsDepartament = r.data
                     this.setState({ commentsDepartament });
                 })
-            });
-            
+            });  
         }
         ).catch(error => {
             console.log(error.response);
-        }
-        );
+        });
     }
     
     render() {

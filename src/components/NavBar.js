@@ -6,11 +6,19 @@ import FalaCampus from "../assets/img/Fala_campus-logo.png";
 import { AuthConsumer } from '../main/SessionProvider';
 
 function NavBar(props) {
+    const authenticator = () =>{
+        if(props.isAuthenticated){
+          return '/viewCommentsHome';
+        }
+        else{
+            return'/';
+        }
+    }
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-nav">
             <div className="container-fluid">
                
-                <div className="col-md-4"><a href="/" className="navbar-brand"><Logo imageSrc={FalaCampus} /></a></div>
+                <div className="col-md-4"><a href= {authenticator()} className="navbar-brand"><Logo imageSrc={FalaCampus} /></a></div>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" aria-controls="navbarColor02" aria-expanded="true" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
@@ -19,7 +27,7 @@ function NavBar(props) {
                     <ul className="navbar-nav me-auto nav-items">
                         
                         <NavBarItem render={!props.isAuthenticated} href="/login" label="Login" id="login" />
-                        <NavBarItem  render={props.isAuthenticated} href="/viewDepartaments" label="Departamentos" id="departments" />
+                        <NavBarItem render={props.isAuthenticated} href="/viewDepartaments" label="Departamentos" id="departments" />
                         <NavBarItem render={props.isAuthenticated} href="/viewUsers" label="Usuários" id="users" />
                         <NavBarItem render={props.isAuthenticated} href="/viewComments" label="Comentários" id="comments"/>
                         <NavBarItem render={props.isAuthenticated} href="/viewCommentsHome" label="Respostas" id="answers"/>

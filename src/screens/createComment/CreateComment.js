@@ -6,18 +6,13 @@ import { withRouter } from 'react-router-dom';
 import Card from '../../components/Card';
 import FormGroup from '../../components/FormGroup';
 import CommentApiService from '../../services/CommentApiService';
-import {showSuccessMessage, showErrorMessage} from '../../components/Toastr';
+import {showSuccessMessage, showErrorMessage, showWarningMessage} from '../../components/Toastr';
 import Global from './Global';
 import DepartamentApiService from '../../services/DepartamentApiService';
 
 class CreateComment extends React.Component {
-    
-
     getLoggedUser = () =>{
-        var value = localStorage.getItem("loggedUser");
-        var user = JSON.parse(value);
-        return user;
-        
+        return JSON.parse(localStorage.getItem("loggedUser"));
     }
     state = {
         user: this.getLoggedUser(),
@@ -30,6 +25,7 @@ class CreateComment extends React.Component {
         departaments:[        
         ]
     }
+
      constructor(){
         super();
         this.service = new CommentApiService();
@@ -39,10 +35,8 @@ class CreateComment extends React.Component {
 
     componentDidMount() {
         this.findAllDepar();
-        
     }
-
-    //=============================================
+   
     handleChange(){
     
         let inputField = document.getElementById('input');
@@ -85,26 +79,21 @@ class CreateComment extends React.Component {
     
 
     create = async () => {
-      console.log("c",  document.getElementById('input').value)
-
-      for (let i = 0; i < this.state.departaments.length; i++) {
-        if(this.state.departaments[i].name === document.getElementById('input').value){
-            console.log("d", this.state.departaments[i].id)
-            this.state.departamentId = this.state.departaments[i].id
+        for (const element of this.state.departaments) {
+            if(element.name === document.getElementById('input').value){
+                this.state.departamentId = element.id;
+            }
         }
         
-        
-      }
-        
-        this.service.create(
-            {
-                title: this.state.title,
-                message: this.state.message,
-                commentType: this.state.commentType,
-                authorId: this.state.user["id"],
-                departamentId: this.state.departamentId
-               
-            }
+         this.service.create(
+        {
+            title: this.state.title,
+            message: this.state.message,
+            commentType: this.state.commentType,
+            authorId: this.state.user["id"],
+            departamentId: this.state.departamentId
+            
+        }
         ).then(response => {
             console.log(response);
             showSuccessMessage('Comentário criado com sucesso!');
@@ -113,27 +102,16 @@ class CreateComment extends React.Component {
         }
         ).catch(error => {
             console.log(error.response);
-            showErrorMessage("O comentário não pode ser criado!")
-        }
-        );
-
-        console.log('request finished');
+            if(error.response.data ==="Responsible not exist!"){
+                showWarningMessage("No momento não existe responsavel pelo departamento! Tente mais tarde")
+            }else{
+                showErrorMessage("O comentário não pode ser criado, Verifique os Campus!");
+            }
+    });
     }
 
     cancel = () => {
-        this.props.history.push('/');
-    }
-
-    handleInputSelectDepartament = (e) => {
-        this.setState({departamentId: e.target.value}, () => {
-            console.log("Id do Departamento Destinatário: ", this.state.departamentId);
-        });
-    }
-
-    handleInputSelectUser = (e) => {
-        this.setState({authorId: e.target.value}, () => {
-            console.log("Id do Autor(Usuário): ", this.state.authorId);
-        });
+        this.props.history.push('/viewComments');
     }
 
     findAllDepar = () => {
@@ -143,13 +121,10 @@ class CreateComment extends React.Component {
             const departaments = response.data;
             this.setState({ departaments });
             Global.departaments = this.state.departaments
-           
-
         }
         ).catch(error => {
             console.log(error.response);
-        }
-        );
+        });
     }
 
     render() {
@@ -218,8 +193,7 @@ class CreateComment extends React.Component {
                                                     </FormGroup>
                                                     
                                                     <ul id="suggestions"></ul>
-                                                    
-                                                   
+                                
                                                     <br />
                                                     <br />
                                                     <button onClick={this.create} type="button" className="btn btn-success" id="button_salvar">

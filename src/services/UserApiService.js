@@ -17,6 +17,6 @@ export default class UserApiService extends ApiService{
         return this.get(`${params}`);
     }
     findAll(){
-        return this.getAll('/all');
+        return this.get('/all');
     }
 }

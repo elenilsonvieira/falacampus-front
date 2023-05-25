@@ -34,7 +34,7 @@ class ViewUsers extends React.Component {
         super();
         this.service = new UserApiService();
     }
-    componentDidMount() {        
+    componentDidMount() { 
         this.find();
         console.log('admi', this.state.isAdmin)
     }
@@ -108,7 +108,7 @@ class ViewUsers extends React.Component {
 
             params = `${params}departamentId=${this.state.departamentId}`;
         }
-
+        console.log(params);
         this.service.find(params)
             .then(response => {
                 const users = response.data;

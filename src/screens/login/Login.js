@@ -7,6 +7,8 @@ import FormGroup from '../../components/FormGroup';
 import { showSuccessMessage, showErrorMessage } from '../../components/Toastr';
 import { withRouter } from 'react-router-dom';
 import { AuthContext } from '../../main/SessionProvider';
+import Loader from '../../components/Loader';
+
 
 class Login extends React.Component {
 
@@ -14,7 +16,11 @@ class Login extends React.Component {
         username: '',
         password: ''
     };
+   
     componentDidMount(){
+        const footer = document.querySelector('.footer');
+        footer.style.position = 'fixed';
+        
         if(localStorage.getItem("user")){
             localStorage.removeItem("loggedUser");
             localStorage.removeItem("user");
@@ -23,41 +29,47 @@ class Login extends React.Component {
         }
     }
 
-    login = () => {
-        this.context.login(
+    login = async() => {
+        this.setState({ loading: true });
+     
+       await this.context.login(
             this.state.username,
             this.state.password
 
         ).then(user =>
-            {
+            {  
                 if (user) {
-
-                    console.log("If",user.roles);
+                    console.log(user);
                     showSuccessMessage(`${user.name}, você está logado!`);
                     this.props.history.push('/viewCommentsHome');
 
-                } else {
-                    console.log("Else");
+                } else if(localStorage.getItem("user")) {
+                    console.log(user);
                     showErrorMessage("Dados incorretos! Login inválido");
+                    localStorage.clear();
+                    this.setState({ loading: false });
+                  
+                } else{
+                    const u = user.data;
                 }
 
             }
         ).catch(error =>
             {
-                console.log("Catch");
+                this.setState({ loading: false });
+                showErrorMessage('Servidor Indisponivel', error);
                 console.log(error);
-                showErrorMessage('Erro! processando autenticação:', error);
             }
         );
     }
 
-    create = () => {
-        this.props.history.push('/createUser');
-    }
-
     render() {
+        const { loading } = this.state;
+    
+        if (loading) {
+            return <Loader />;
+        }
         return (
-
             <div className="container">
                 <div className='row'>
                     <div className='col-md-12'>
@@ -83,9 +95,6 @@ class Login extends React.Component {
                                                     <button onClick={this.login} type="button" id="button-login" className="btn btn-success btn-space">
                                                         <i className="pi pi-save"></i> Entrar
                                                     </button>
-                                                    {/* <button onClick={this.create} type="button" id="button-create" className="btn btn-danger btn-space">
-                                                        <i className="pi pi-times"></i> Cadastrar
-                                                    </button> */}
                                                 </fieldset>
                                             </form>
                                         </div>
@@ -101,5 +110,6 @@ class Login extends React.Component {
 
 
 }
+
 Login.contextType = AuthContext;
 export default withRouter(Login);

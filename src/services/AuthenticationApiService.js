@@ -49,8 +49,16 @@ export class AuthenticationApiService extends ApiService {
     
     // Checa se o token é válido
     isTokenValid(token){
-        return this.post('/isValidToken', token);
-    }
+        this.post('/isValidToken', token).then(response => {
+          return response;
+      }
+      ).catch(error => {
+          localStorage.clear();
+          window.open("/", '_self')
+          console.log(error.response);
+      }
+      )       
+  }
     
     //Remove os dados do usuário
     logout(){

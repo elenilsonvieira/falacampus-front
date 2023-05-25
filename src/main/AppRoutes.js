@@ -1,24 +1,14 @@
 import React from "react";
 import { Route, BrowserRouter, Switch, Redirect } from "react-router-dom";
-
 import Home from "../screens/home/Home";
 import Login from "../screens/login/Login";
-
-//TESTE
-//import Login from "../screens/createDepartament/CreateDepartament";
-
-//TESTE
-
 import CreateDepartament from "../screens/createDepartament/CreateDepartament";
 import ViewDepartaments from "../screens/viewDepartaments/ViewDepartaments";
 import UpdateDepartament from "../screens/updateDepartament/UpdateDepartament";
 import DeleteDepartament from "../screens/deleteDepartament/DeleteDepartament";
-
-import CreateUser from "../screens/createUser/CreateUser";
 import ViewUsers from "../screens/viewUsers/ViewUsers";
 import UpdateUser from "../screens/updateUser/UpdateUser";
 import DeleteUser from "../screens/deleteUser/DeleteUser";
-
 import CreateComment from "../screens/createComment/CreateComment";
 import ViewComments from "../screens/viewComments/ViewComments";
 import UpdateComment from "../screens/updateComment/UpdateComment";
@@ -53,30 +43,22 @@ function AppRoutes(props) {
             <Switch>
                 <Route component={Home} path="/" exact />
                 <Route component={Login} path="/login" />
-                <Route component={CreateUser} path="/createUser" />
-
 
                 <RestrictedRoute show={props.isAuthenticated} component={CreateDepartament} path="/createDepartament" /> 
                 <RestrictedRoute show={props.isAuthenticated} component={ViewDepartaments} path="/viewDepartaments" />
                 <RestrictedRoute show={props.isAuthenticated} component={UpdateDepartament} path="/updateDepartament/:id" />
                 <RestrictedRoute show={props.isAuthenticated} component={DeleteDepartament} path="/deleteDepartament" />
-
-                {/* <RestrictedRoute show={props.isAuthenticated} component={CreateUser} path="/createUser" /> */}
                 <RestrictedRoute show={props.isAuthenticated} component={ViewUsers} path="/viewUsers" />
                 <RestrictedRoute show={props.isAuthenticated} component={UpdateUser} path="/updateUser/:id" />
                 <RestrictedRoute show={props.isAuthenticated} component={DeleteUser} path="/deleteUser" />
-
                 <RestrictedRoute show={props.isAuthenticated} component={CreateComment} path="/createComment" />
                 <RestrictedRoute show={props.isAuthenticated} component={ViewComments} path="/viewComments" />
                 <RestrictedRoute show={props.isAuthenticated} component={UpdateComment} path="/updateComment/:id" />
                 <RestrictedRoute show={props.isAuthenticated} component={DeleteComment} path="/deleteComment" />
-
                 <RestrictedRoute show={props.isAuthenticated} component={CreateAnswer} path="/createAnswer/:id" />
                 <RestrictedRoute show={props.isAuthenticated} component={ViewAnswers} path="/viewAnswer" />
-
                 <RestrictedRoute show={props.isAuthenticated} component={ViewCommentsHome} path="/viewCommentsHome" />
-
-
+                <RestrictedRoute show={props.isAuthenticated} component={UpdateAnswer} path="/viewCommentsHome" />
             </Switch>
         </BrowserRouter>
     );
