@@ -51,25 +51,19 @@ class viewComments extends React.Component {
        
     }
     componentDidMount() {
-         
         
         let user =  JSON.parse(localStorage.getItem("loggedUser"));
         let role = user['roles']['0']['name']
         let id = user['id']
 
-        console.log("AA", id)
         if(role === 'ADMIN'){
             this.find();
         }else{
-            
             this.findAdmin(id);
         }
-                   
+                  
         this.viewListButton(role);
-        this.findCommentDepartament(id);
-
-        console.log('id uder', this.state.user.id)
-        
+        this.findCommentDepartament(id);        
     }
 
     viewListButton = (role) =>{    
@@ -86,6 +80,7 @@ class viewComments extends React.Component {
         .then(response => {
             this.find();
             showSuccessMessage('Comentário excluído com sucesso!');
+            window.location.reload();
         }
         ).catch(error => {
             showWarningMessage('Comentário não pode ser excluído!');
@@ -156,25 +151,19 @@ class viewComments extends React.Component {
             this.setState({ comments });
             let teste =[]
             for (const element of comments) {
-                if(element["authorId"] === id){
+                if(element.authorId === id){
                     teste.push(element);
-                }
-                
+                }         
             }
 
-            this.setState({teste})
-            
-            console.log("dados",teste);
-        }
-        ).catch(error => {
-            console.log(error.response);
-        }
-        );
+            this.setState({teste})})
+
+            .catch(error => {
+              console.log(error.response);
+        });
     }
 
     find = () => {
-        const all = this.service.findAll('') 
-        console.log(all);
         let params = '?';
 
         if (this.state.id !== 0) {
@@ -209,35 +198,32 @@ class viewComments extends React.Component {
         .then(response => {
             const teste = response.data;
             this.setState({ teste });
-            console.log("dados",teste);
-        }
-        ).catch(error => {
+        }).catch(error => {
             console.log(error.response);
-        }
-        );
+        });
     }
 
     findCommentDepartament = async (id) => {
         await this.service2.find(`responsables/${id}`)        
+        
         .then(response => {
             const responsabled = response.data;
-           
+            
             if(responsabled.length !== 0){
                 document.getElementById('commentDepartament').classList.add('view')
-
             }
+
             responsabled.forEach(element => {
-                console.log("responsabledComent",element.name)
-                this.state.responsabledDepartament = element.name
+            
+                this.state.responsabledDepartament = element.name;
+              
                 this.service.find(`comentDepartament/${element.id}`)
-                .then(r =>{
-                    console.log("coment", r.data)
-                    let commentsDepartament = r.data
+                .then(response =>{
+                    let commentsDepartament = response.data
                     this.setState({ commentsDepartament });
                 })
             });  
-        }
-        ).catch(error => {
+        }).catch(error => {
             console.log(error.response);
         });
     }

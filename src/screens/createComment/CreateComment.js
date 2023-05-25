@@ -38,7 +38,6 @@ class CreateComment extends React.Component {
     }
    
     handleChange(){
-    
         let inputField = document.getElementById('input');
         let ulField = document.getElementById('suggestions');
         inputField.addEventListener('input', changeAutoComplete);
@@ -54,11 +53,8 @@ class CreateComment extends React.Component {
         }
       
         function autoComplete(inputValue) {
-
             const departaments = Global.departaments
-            console.log(departaments)
             const p = departaments.filter((d) => d.name.toLowerCase().includes(inputValue.toLowerCase()));
-    
           return p
         }
       
@@ -73,8 +69,6 @@ class CreateComment extends React.Component {
           }
         }
       };
-
-    //===========================
 
     
 
@@ -95,7 +89,6 @@ class CreateComment extends React.Component {
             
         }
         ).then(response => {
-            console.log(response);
             showSuccessMessage('Comentário criado com sucesso!');
             this.props.history.push("/viewComments");
             

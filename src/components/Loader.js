@@ -6,7 +6,6 @@ const Loader = ({ request }) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      await request();
       setIsLoading(false);
     }
     fetchData();

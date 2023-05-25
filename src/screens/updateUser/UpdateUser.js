@@ -29,6 +29,14 @@ class UpdateUser extends React.Component {
         const id = params.id;
         this.findById(id);
     }
+    verify = () =>{
+        const erro = [];
+        if(!this.state.email.match(/^\S+@\S+\.\S+$/)){
+          erro.push("Informe email valido");
+        }
+        return erro;
+    }
+        
    
     findById = (id) => {
         this.service.find(`?id=${id}`)
@@ -72,6 +80,13 @@ class UpdateUser extends React.Component {
     }
 
     update = () => {
+        const erro = this.verify();
+        if(erro.length > 0){
+          erro.forEach((message) =>{
+            showErrorMessage(message);
+          });
+          return false;
+        }
        const user ={      
         "name":this.state.name,
         "email":this.state.email,
