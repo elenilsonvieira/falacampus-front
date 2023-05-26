@@ -42,7 +42,7 @@ class viewComments extends React.Component {
         isAdmin:'',
         teste:[],
         commentsDepartament:[],
-        responsabledDepartament: 'aaa'
+        departaments:[]
     }
     constructor() {
         super();
@@ -61,9 +61,9 @@ class viewComments extends React.Component {
         }else{
             this.findAdmin(id);
         }
-                  
         this.viewListButton(role);
-        this.findCommentDepartament(id);        
+        this.findCommentDepartament(id);    
+        this.findDepartaments(id);              
     }
 
     viewListButton = (role) =>{    
@@ -74,6 +74,16 @@ class viewComments extends React.Component {
        
     }
       
+    findDepartaments = async(id) => {        
+      await this.service2.get(`?${id}`)
+        .then(response => {
+            const departaments = response.data;
+            this.setState({departaments})
+        }).catch(error => {
+            console.log(error.response);
+        });
+    }
+
     filterComment = () =>{
         const filteredDepartaments = this.state.teste.filter(comment => {
             return comment.title.includes(this.state.find);
@@ -117,42 +127,7 @@ class viewComments extends React.Component {
     }
 
     findAdmin = async(id) => {
-        this.service.findAll('')
-        let params = '?';
-
-        if (this.state.id !== 0) {
-            if (params !== '?') {
-                params = `${params}&`;
-            }
-
-            params = `${params}id=${this.state.id}`;
-        }
-
-        if (this.state.title !== '') {
-            if (params !== '?') {
-                params = `${params}&`;
-            }
-
-            params = `${params}title=${this.state.title}`;
-        }
-
-        if (this.state.message !== '') {
-            if (params !== '?') {
-                params = `${params}&`;
-            }
-
-            params = `${params}message=${this.state.message}`;
-        }
-
-        if (this.state.creationDate !== Date) {
-            if (params !== '?') {
-                params = `${params}&`;
-            }
-
-            params = `${params}creationDate=${this.state.creationDate}`;
-        }
-
-       await this.service.findAll(this.state.id)
+       await this.service.findAll()
         .then(response => {
             const comments = response.data;
             this.setState({ comments });
@@ -162,46 +137,14 @@ class viewComments extends React.Component {
                     teste.push(element);
                 }         
             }
-
             this.setState({teste})})
-
             .catch(error => {
               console.log(error.response);
         });
     }
 
     find = async() => {
-        let params = '?';
-
-        if (this.state.id !== 0) {
-            if (params !== '?') {
-                params = `${params}&`;
-            }
-            params = `${params}id=${this.state.id}`;
-        }
-
-        if (this.state.title !== '') {
-            if (params !== '?') {
-                params = `${params}&`;
-            }
-            params = `${params}title=${this.state.title}`;
-        }
-
-        if (this.state.message !== '') {
-            if (params !== '?') {
-                params = `${params}&`;
-            }
-            params = `${params}message=${this.state.message}`;
-        }
-
-        if (this.state.creationDate !== Date) {
-            if (params !== '?') {
-                params = `${params}&`;
-            }
-            params = `${params}creationDate=${this.state.creationDate}`;
-        }
-
-       await this.service.findAll(this.state.id)
+       await this.service.findAll()
         .then(response => {
             const teste = response.data;
             this.setState({ teste });
@@ -211,32 +154,26 @@ class viewComments extends React.Component {
     }
 
     findCommentDepartament = async (id) => {
-        await this.service2.find(`responsables/${id}`)        
         
-        .then(response => {
-            console.log(response)
-            const responsabled = response.data;
-            
-            if(responsabled.length !== 0){
-                document.getElementById('commentDepartament').classList.add('view')
-            }
 
-            responsabled.forEach(element => {
-            
-                this.state.responsabledDepartament = element.name;
-                
-                this.service.find(`comentDepartament/${element.id}`)
-                
-                .then(response =>{
-                 
-                    let commentsDepartament = response.data
-                    this.setState({ commentsDepartament });
-                })
-            });  
-        }).catch(error => {
-            console.log(error.response);
-        });
-    }
+        try {
+          const response1 = await this.service2.find(`responsables/${id}`);
+          const responsabled = response1.data;
+      
+          if (responsabled.length !== 0) {
+            document.getElementById('commentDepartament').classList.add('view');
+          }
+      
+          for (const element of responsabled) {
+            const response2 = await this.service.find(`comentDepartament/${element.id}`);
+            const commentsDepartament = response2.data;
+            this.setState({ commentsDepartament });
+          }
+        } catch (error) {
+          console.log(error.response);
+        }
+      }
+      
     
     render() {
         return (
@@ -297,7 +234,7 @@ class viewComments extends React.Component {
                                         edit={this.edit}
                                         answer={this.answer} 
                                         admin={this.state.isAdmin}
-                                        nameDepartament={this.state.responsabledDepartament}
+                                        nameDepartament={this.state.departaments}
                                         card= {this.card}/>
                                 </div>
                             </div>

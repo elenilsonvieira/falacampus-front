@@ -7,12 +7,10 @@ export default class AnsweApiService extends ApiService{
     create(object){
         return this.post('',object);
     }
-     returned(id){
-         return this.put(`/${id}`);
-     }
-    // delete(id){
-    //     return super.delete(`/${id}`)
-    // }
+    returned(id, object){
+        return this.put(`/${id}`, object);
+    }
+   
     find(params){
         return this.get(`/${params}`);
     }

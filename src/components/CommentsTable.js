@@ -1,9 +1,9 @@
 import './Style.css';
 
 export default props => {
-
+    const user = JSON.parse(localStorage.getItem("loggedUser"));
     let isSolved = (status, comment) =>{
-        if(status == "SOLVED"){
+        if(status != "NOT_SOLVED"){
             return;
         }else {
      
@@ -26,7 +26,6 @@ export default props => {
     }
 
     let isAuth = (auth,comment, admin)=>{
-        const user = JSON.parse(localStorage.getItem("loggedUser"));
         if(user.id != auth && admin){
             return (
                 <button id='butonAnswer' type="button" title="Responder"
@@ -38,14 +37,11 @@ export default props => {
             )
         }
     }
-
-
    
     
     const rows = props.comments.map(comment => {
-
-        return (
-                
+        if(comment.authorId == user.id){
+            return (
             <tr key={comment.id} className={comment.statusComment}>
                 <td>{comment.title}</td>
                 <td>{comment.message}</td>
@@ -59,6 +55,10 @@ export default props => {
                 </td>
             </tr>
         )
+        }else{
+            return;
+        }
+         
     } )
 
     return (
