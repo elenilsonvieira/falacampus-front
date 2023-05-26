@@ -3,9 +3,9 @@ import './Loader.css';
 
 const Loader = ({ request }) => {
   const [isLoading, setIsLoading] = useState(true);
-
   useEffect(() => {
     const fetchData = async () => {
+      await test();
       setIsLoading(false);
     }
     fetchData();

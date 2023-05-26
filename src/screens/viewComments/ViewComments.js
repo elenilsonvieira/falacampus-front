@@ -13,7 +13,7 @@ import CommentsTableDepartament from '../../components/CommentsTableDepartament'
 class viewComments extends React.Component {
 
     state = {
-        title: '',
+        find: '',
         id: "",
         message: '',
         creationDate: Date,
@@ -73,10 +73,17 @@ class viewComments extends React.Component {
         }
        
     }
+      
+    filterComment = () =>{
+        const filteredDepartaments = this.state.teste.filter(comment => {
+            return comment.title.includes(this.state.find);
+        });
+        this.setState({teste: filteredDepartaments});
+    }
 
-    delete = (commentId) => {
+    delete = async(commentId) => {
 
-        this.service.delete(commentId)
+        await this.service.delete(commentId)
         .then(response => {
             this.find();
             showSuccessMessage('Comentário excluído com sucesso!');
@@ -89,8 +96,8 @@ class viewComments extends React.Component {
         });
     }
 
-    edit = (commentId) => {
-        this.service.find(`?id=${commentId}`)
+    edit = async(commentId) => {
+        await this.service.find(`?id=${commentId}`)
         .then(response =>{
             if(response.data["length"]===0){
                 showWarningMessage('Esse comentario não pode ser atualizado!');
@@ -109,7 +116,7 @@ class viewComments extends React.Component {
         this.props.history.push(`/createComment`);
     }
 
-    findAdmin = (id) => {
+    findAdmin = async(id) => {
         this.service.findAll('')
         let params = '?';
 
@@ -145,7 +152,7 @@ class viewComments extends React.Component {
             params = `${params}creationDate=${this.state.creationDate}`;
         }
 
-        this.service.findAll(this.state.id)
+       await this.service.findAll(this.state.id)
         .then(response => {
             const comments = response.data;
             this.setState({ comments });
@@ -163,7 +170,7 @@ class viewComments extends React.Component {
         });
     }
 
-    find = () => {
+    find = async() => {
         let params = '?';
 
         if (this.state.id !== 0) {
@@ -194,7 +201,7 @@ class viewComments extends React.Component {
             params = `${params}creationDate=${this.state.creationDate}`;
         }
 
-        this.service.findAll(this.state.id)
+       await this.service.findAll(this.state.id)
         .then(response => {
             const teste = response.data;
             this.setState({ teste });
@@ -207,6 +214,7 @@ class viewComments extends React.Component {
         await this.service2.find(`responsables/${id}`)        
         
         .then(response => {
+            console.log(response)
             const responsabled = response.data;
             
             if(responsabled.length !== 0){
@@ -216,9 +224,11 @@ class viewComments extends React.Component {
             responsabled.forEach(element => {
             
                 this.state.responsabledDepartament = element.name;
-              
+                
                 this.service.find(`comentDepartament/${element.id}`)
+                
                 .then(response =>{
+                 
                     let commentsDepartament = response.data
                     this.setState({ commentsDepartament });
                 })
@@ -238,10 +248,18 @@ class viewComments extends React.Component {
                                 <form>
                                     <fieldset>
                                         <FormGroup label="Título:" htmlFor="inputTitle"><br />
-                                            <input type="text" className="form-control" id="inputTitle" placeholder="Digite o Título do Comentário" value={this.state.title} onChange={(e) => { this.setState({ title: e.target.value }) }} />
+                                            <input type="text" className="form-control" id="inputTitle" placeholder="Digite o Título do Comentário" value={this.state.find} 
+                                              onChange={(e) => {
+                                                const value = e.target.value;
+                                                 this.setState({ find: e.target.value }, () => {
+                                                    if (value === "") {
+                                                        this.find();
+                                                    }
+                                                });
+                                                }} />
                                         </FormGroup>
                                         <br />
-                                        <button onClick={this.find} type="button" id="btn-search" className="btn btn-info">
+                                        <button onClick={this.filterComment} type="button" id="btn-search" className="btn btn-info">
                                             <i className="pi pi-search"></i> Pesquisar
                                         </button>
                                     </fieldset>

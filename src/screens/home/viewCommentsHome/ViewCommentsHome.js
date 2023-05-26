@@ -5,13 +5,11 @@ import AnswerApiService from '../../../services/AnswerApiService';
 import CommentApiService from '../../../services/CommentApiService';
 import Card  from '../../../components/Card';
 import UserApiService from '../../../services/UserApiService';
-
-
+import DepartamentApiService from '../../../services/DepartamentApiService';
 
 class ViewCommentsHome extends React.Component {
 
-    state = {  
-       
+    state = {    
         answer:'',
         answerAuthor: '',
         answerDate: '',
@@ -21,57 +19,100 @@ class ViewCommentsHome extends React.Component {
             message:''
         },   
         answers: [],
-        nameAutor:'',
-        nameCordenador:'',
-        users:[],
-
+        departaments: [],
+        users:[]
     }
 
     constructor() {
         super();
         this.service = new AnswerApiService();
         this.service2 = new CommentApiService();
-        this.UserService = new UserApiService();
+        this.service3 = new UserApiService()
+        this.service4 = new DepartamentApiService();
     }
-
+    findNameAuth = (id) =>{
+        const user =this.state.users.filter(item => item.id === id);
+        return user[0]["name"];
+    
+    }
+    findNameDapartament = (id) =>{
+        const dp =this.state.departaments.filter(item => item.id === id);
+        return dp[0]["name"];
+    }
     componentDidMount() {
-        this.find();   
+        this.findCommentSolved();   
         const footer = document.querySelector('.footer');
         footer.style.position = 'relative';  
     }
 
-    find = () => {
-
-        this.service2.get('/commentSolved')
-            .then(response => {
-                const answers = response.data;
-                this.setState({answers})
-                
-              
-                this.teste(answers);
-            }
-            ).catch(error => {
-                console.log(error.response);
-            }
-            );
+    findAllUsers = async() => {
+       await this.service3.find("?id=&role=&departamentId=undefined")
+        .then(response => {
+            const users = response.data;
+            this.setState({ users });
+        })
+        .catch(error => {
+            console.log(error.response);
+        });
+       
     }
 
-   teste = async (dados) => {
+    findAllDepartament = async() => {     
+       await this.service4.get(`?${this.state.users[0]["id"]}`)
+        .then(response => {
+            const departaments = response.data;
+            this.setState({ departaments });
+        }).catch(error => {
+            console.log(error.response);
+        });
+    }
+
+    findCommentSolved = async() => {
+     await this.service2.get('/commentSolved')
+        .then(response => {
+            const answers = response.data;
+            this.setState({answers})
+            this.loaderComments(answers);
+        }).catch(error => {
+            console.log(error.response);
+        });
+    }
+
+    findAnswerById = async (id) => {
+        await this.service.find(`all`)
+ 
+       .then(response => {
+         const comment = response.data;
+             
+         for (let i = comment.length-1; i >= 0; i--) {
+             if(comment[i].id === id){
+                  this.state.answer = comment[i].message
+                 this.state.answerDate = comment[i].creationDate
+             }
+         }})
+         .catch(error => {
+             console.log(error.response);
+         });
+     }
+
+   loaderComments = async (dados) => {
+       await this.findAllUsers();
+       await this.findAllDepartament();
+
         let respostas = "";
         for (let i =  dados.length-1; i >= 0; i--) {
      
-         await this.findAnswerById(dados[i].answerId);
-           
+           await this.findAnswerById(dados[i].answerId);
            respostas += `<div class="card text-white bg-success mb-3"; >`;
            respostas += `<div class="card-header" >${dados[i].title}</div>`
            respostas += `<div class="card-body" style = "font-size: 12px">`;         
-           respostas += `<p class="comments-autor" >${this.state.nameAutor}</p>`;
+           respostas += `<p class="comments-autor" >${this.findNameAuth(dados[i].authorId)}</p>`;
            respostas += ` <h4 class="card-text">${dados[i].message}</h4>`
            respostas +=`<p>${dados[i].creationDate}</p>`
            respostas += `</div>`
            respostas += `<div class="card bg-secondary mb-3"  style= "max-width: 75rem; margin-left: 2rem; color: #469408 ">`; 
            respostas += `<div class="card-body" style = "font-size: 12px">`; 
-           respostas += `<p class="answer-autor" >${this.state.nameCordenador}</p>`;
+           respostas += `<p class="answer-autor" >${this.findNameDapartament(dados[i].departamentId)}</p>`;
            respostas += `<h4 class="card-title answer" >${this.state.answer}</h4>`
            respostas +=`<p>${this.state.answerDate}</p>`
            respostas += `</div>`
@@ -79,34 +120,10 @@ class ViewCommentsHome extends React.Component {
            respostas += `</div>` 
             
         }
+
         let a = document.getElementById('teste')
-
-           a.innerHTML = respostas;
-    }
-
-    findAnswerById = async (id) => {
-       await this.service.find(`all`)
-
-            .then(response => {
-                 const comment = response.data;
-
-                for (let i = comment.length-1; i >= 0; i--) {
-                    if(comment[i].id === id){
-                        this.state.answer = comment[i].message
-                        this.state.answerAuthor = comment[i].authorId
-                        this.state.answerDate = comment[i].creationDate
-                    
-                    }
-                    
-                }
-            }
-
-            ).catch(error => {
-                console.log(error.response);
-            }
-            );
-    }
-   
+        a.innerHTML = respostas;
+   }
 
     render() {
         return (

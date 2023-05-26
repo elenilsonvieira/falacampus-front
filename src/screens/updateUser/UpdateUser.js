@@ -64,7 +64,6 @@ class UpdateUser extends React.Component {
         const selectElement = document.getElementById("selectRole");
         const selectedValue = selectElement.value;
         this.setState({rolesName: selectedValue}) ;
-        console.log(this.state.rolesName)
     }
 
     showPapel(role){
