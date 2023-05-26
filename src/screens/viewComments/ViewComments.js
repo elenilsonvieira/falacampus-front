@@ -156,10 +156,9 @@ class viewComments extends React.Component {
     findCommentDepartament = async (id) => {
         
 
-        try {
+      
           const response1 = await this.service2.find(`responsables/${id}`);
           const responsabled = response1.data;
-      
           if (responsabled.length !== 0) {
             document.getElementById('commentDepartament').classList.add('view');
           }
@@ -169,9 +168,7 @@ class viewComments extends React.Component {
             const commentsDepartament = response2.data;
             this.setState({ commentsDepartament });
           }
-        } catch (error) {
-          console.log(error.response);
-        }
+       
       }
       
     
