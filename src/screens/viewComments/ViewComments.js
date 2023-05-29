@@ -155,8 +155,6 @@ class viewComments extends React.Component {
 
     findCommentDepartament = async (id) => {
         
-
-      
           const response1 = await this.service2.find(`responsables/${id}`);
           const responsabled = response1.data;
           if (responsabled.length !== 0) {
@@ -166,9 +164,10 @@ class viewComments extends React.Component {
           for (const element of responsabled) {
             const response2 = await this.service.find(`comentDepartament/${element.id}`);
             const commentsDepartament = response2.data;
-            this.setState({ commentsDepartament });
+            this.setState({ 
+                commentsDepartament: [...this.state.commentsDepartament, ...commentsDepartament]
+              });
           }
-       
       }
       
     

@@ -55,13 +55,10 @@ class ViewDepartaments extends React.Component {
         });
     }
 
-    filterDepartments = async() =>{
-      
-            const de = this.state.departaments.filter(department =>
-            department.name.toLowerCase().includes(this.state.name.toLowerCase()));
-            this.setState({departaments: de});
-       
-        
+    filterDepartments = async() =>{  
+        const de = this.state.departaments.filter(department =>
+        department.name.toLowerCase().includes(this.state.name.toLowerCase()));
+        this.setState({departaments: de});
     }
 
    

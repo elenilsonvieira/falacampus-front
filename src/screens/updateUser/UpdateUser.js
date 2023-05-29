@@ -79,6 +79,7 @@ class UpdateUser extends React.Component {
     }
 
     update = () => {
+        
         const erro = this.verify();
         if(erro.length > 0){
           erro.forEach((message) =>{
@@ -86,6 +87,7 @@ class UpdateUser extends React.Component {
           });
           return false;
         }
+
        const user ={      
         "name":this.state.name,
         "email":this.state.email,
@@ -113,8 +115,7 @@ class UpdateUser extends React.Component {
             else{
                 showErrorMessage('O usuário não pode ser atualizado!');
             }
-        }
-        );
+        });
     }
 
     cancel = () => {

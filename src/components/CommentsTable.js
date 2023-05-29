@@ -8,7 +8,6 @@ export default props => {
         }else {
      
          return(
-           
                 <>
                 <button id="button_editar" type="button" title="Editar"
                     className={"btn btn-warning btn-space edit" + comment.id}
