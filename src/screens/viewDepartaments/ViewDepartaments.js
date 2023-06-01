@@ -19,6 +19,7 @@ class ViewDepartaments extends React.Component {
         departaments: [],
         loading: false
     }
+
     constructor() {
         super();
         this.service = new DepartamentApiService();
@@ -31,12 +32,12 @@ class ViewDepartaments extends React.Component {
     }
 
     viewListButton = () =>{
+
         const user =  JSON.parse(localStorage.getItem("loggedUser"))['roles']['0']['name'];
         if(user === 'ADMIN'){
             let a = document.getElementById("idListar")
             a.classList.add('mostrar')        
         }
-       
     }
 
     edit = (departamentId) => {
@@ -47,9 +48,10 @@ class ViewDepartaments extends React.Component {
     find = () => {        
         this.service.get(this.state.id)
         .then(response => {
+
             const departaments = response.data;
-            console.log(departaments)
             this.setState({ departaments });
+
         }).catch(error => {
             console.log(error.response);
         });
@@ -67,14 +69,13 @@ class ViewDepartaments extends React.Component {
         showWarningMessage('Atualizando Departamentos, Isso pode demorar um pouco!'); 
 
         await this.service.get('/getDepartmentsApi')
-            .then(response => {
-                window.location.reload();         
-            })
-            .catch(error => {
-                console.log(error.response);
-                showErrorMessage('Erro ao atualizar departamentos.');
-            })
-           
+        .then(response => {
+            window.location.reload();         
+        })
+        .catch(error => {
+            console.log(error.response);
+            showErrorMessage('Erro ao atualizar departamentos.');
+        })
     }
     
     
@@ -95,10 +96,8 @@ class ViewDepartaments extends React.Component {
                                     <fieldset>
                                         <FormGroup label='Nome:'>
                                             <input type="text" className="form-control"   id="inputDepartamentName"   placeholder="Digite o Nome do Departamento"
-                                                value={this.state.name} 
-                                                onChange={(e) => {
-                                                    const value = e.target.value;
-                                                    this.setState({ name: value }, () => {
+                                                value={this.state.name} onChange={(e) => {
+                                                    const value = e.target.value; this.setState({ name: value }, () => {
                                                     if (value === "") {
                                                         this.find();
                                                     }});

@@ -75,18 +75,21 @@ class viewComments extends React.Component {
     }
       
     findDepartaments = async(id) => {        
-      await this.service2.get(`?${id}`)
+        await this.service2.get(`?${id}`)
         .then(response => {
+
             const departaments = response.data;
-            this.setState({departaments})
+            this.setState({departaments});
+
         }).catch(error => {
             console.log(error.response);
         });
     }
 
     filterComment = () =>{
+
         const filteredDepartaments = this.state.teste.filter(comment => {
-            return comment.title.includes(this.state.find);
+            return comment.title.toLowerCase().includes(this.state.find.toLowerCase())
         });
         this.setState({teste: filteredDepartaments});
     }
@@ -95,6 +98,7 @@ class viewComments extends React.Component {
 
         await this.service.delete(commentId)
         .then(response => {
+
             this.find();
             showSuccessMessage('Comentário excluído com sucesso!');
             window.location.reload();
@@ -102,18 +106,18 @@ class viewComments extends React.Component {
         ).catch(error => {
             showWarningMessage('Comentário não pode ser excluído!');
             console.log(error.response);
-            
         });
     }
 
     edit = async(commentId) => {
-        await this.service.find(`?id=${commentId}`)
+         await this.service.find(`?id=${commentId}`)
         .then(response =>{
+
             if(response.data["length"]===0){
                 showWarningMessage('Esse comentario não pode ser atualizado!');
-            }else{
-                this.props.history.push(`/updateComment/${commentId}`)        
-               
+            }
+            else{
+                this.props.history.push(`/updateComment/${commentId}`);   
             }
         })
     }
@@ -127,8 +131,9 @@ class viewComments extends React.Component {
     }
 
     findAdmin = async(id) => {
-       await this.service.findAll()
+        await this.service.findAll()
         .then(response => {
+
             const comments = response.data;
             this.setState({ comments });
             let teste =[]
@@ -138,16 +143,19 @@ class viewComments extends React.Component {
                 }         
             }
             this.setState({teste})})
-            .catch(error => {
+
+        .catch(error => {
               console.log(error.response);
         });
     }
 
     find = async() => {
-       await this.service.findAll()
+         await this.service.findAll()
         .then(response => {
+
             const teste = response.data;
             this.setState({ teste });
+
         }).catch(error => {
             console.log(error.response);
         });
@@ -157,6 +165,7 @@ class viewComments extends React.Component {
         
           const response1 = await this.service2.find(`responsables/${id}`);
           const responsabled = response1.data;
+
           if (responsabled.length !== 0) {
             document.getElementById('commentDepartament').classList.add('view');
           }
@@ -164,12 +173,12 @@ class viewComments extends React.Component {
           for (const element of responsabled) {
             const response2 = await this.service.find(`comentDepartament/${element.id}`);
             const commentsDepartament = response2.data;
+          
             this.setState({ 
                 commentsDepartament: [...this.state.commentsDepartament, ...commentsDepartament]
               });
           }
       }
-      
     
     render() {
         return (
