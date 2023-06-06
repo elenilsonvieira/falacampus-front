@@ -43,7 +43,7 @@ class Login extends React.Component {
                 this.props.history.push('/viewCommentsHome');
 
             } else {
-
+                localStorage.clear();
                 if(msgs === null){
                     return user.data;
                 }
