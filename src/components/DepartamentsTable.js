@@ -22,11 +22,7 @@ export default props => {
                 <td>{departament.name}</td>
                 <td className="col-md-2">
                     {buttonEdit(departament.id)}
-                    {/* <button type="button" title="Excluir" id="button_excluir"
-                        className="btn btn-primary btn-delete"
-                        onClick={e => props.delete(departament.id)}>
-                        <i className="pi pi-trash"></i>
-                    </button> */}
+                
                 </td>
             </tr>
         )

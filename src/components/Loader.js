@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import './Loader.css';
+const test = async () => {}
 
 const Loader = ({ request }) => {
   const [isLoading, setIsLoading] = useState(true);
-
   useEffect(() => {
     const fetchData = async () => {
-      await request();
+      await test();
       setIsLoading(false);
     }
     fetchData();

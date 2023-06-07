@@ -32,35 +32,38 @@ class Login extends React.Component {
     login = async() => {
         this.setState({ loading: true });
      
-       await this.context.login(
-            this.state.username,
-            this.state.password
+       await this.context.login(this.state.username, this.state.password)
+       .then(user =>
+        {   
+            const msgs =  localStorage.getItem("token");
+            const msg = JSON.parse(msgs);
 
-            ).then(user =>
-                {  
-                    if (user) {
-                        console.log(user);
-                        showSuccessMessage(`${user.name}, você está logado!`);
-                        this.props.history.push('/viewCommentsHome');
-    
-                    } else if(localStorage.getItem("loggedUser")) {
-                        console.log(user);
-                        showErrorMessage("Dados incorretos! Login inválido");
-                        this.setState({ loading: false });
-                        localStorage.clear();
-                      
-                    } else{
-                        const u = user.data;
-                    }
-    
+            if (!msgs.includes("detail")) {
+                showSuccessMessage(`${user.name}, você está logado!`);
+                this.props.history.push('/viewCommentsHome');
+
+            } else {
+                localStorage.clear();
+                if(msgs === null){
+                    return user.data;
                 }
-            ).catch(error =>
-                {
-                    this.setState({ loading: false });
-                    showErrorMessage('Servidor Indisponivel', error);
-                    console.log(error);
-                }
-            );
+                
+                const inicio = msg.indexOf('":"') + 3; 
+                const fim = msg.lastIndexOf('"');
+                const detalhe = msg.substring(inicio, fim);
+                showErrorMessage(detalhe);                    
+                
+            }
+
+        })
+        .catch(error =>
+        {
+            showErrorMessage('Servidor Indisponivel', error);
+            console.log(error);
+        });
+                            
+        this.setState({ loading: false });
+
     }
 
     render() {

@@ -38,7 +38,6 @@ class CreateComment extends React.Component {
     }
    
     handleChange(){
-    
         let inputField = document.getElementById('input');
         let ulField = document.getElementById('suggestions');
         inputField.addEventListener('input', changeAutoComplete);
@@ -54,11 +53,8 @@ class CreateComment extends React.Component {
         }
       
         function autoComplete(inputValue) {
-
             const departaments = Global.departaments
-            console.log(departaments)
             const p = departaments.filter((d) => d.name.toLowerCase().includes(inputValue.toLowerCase()));
-    
           return p
         }
       
@@ -74,8 +70,6 @@ class CreateComment extends React.Component {
         }
       };
 
-    //===========================
-
     
 
     create = async () => {
@@ -84,9 +78,8 @@ class CreateComment extends React.Component {
                 this.state.departamentId = element.id;
             }
         }
-        
-         this.service.create(
-        {
+
+        const comment = {
             title: this.state.title,
             message: this.state.message,
             commentType: this.state.commentType,
@@ -94,20 +87,20 @@ class CreateComment extends React.Component {
             departamentId: this.state.departamentId
             
         }
-        ).then(response => {
-            console.log(response);
+        
+        this.service.create(comment)
+        .then(response => {
             showSuccessMessage('Comentário criado com sucesso!');
-            this.props.history.push("/viewComments");
-            
-        }
-        ).catch(error => {
+            this.props.history.push("/viewComments");   
+        })
+        .catch(error => {
             console.log(error.response);
             if(error.response.data ==="Responsible not exist!"){
                 showWarningMessage("No momento não existe responsavel pelo departamento! Tente mais tarde")
             }else{
                 showErrorMessage("O comentário não pode ser criado, Verifique os Campus!");
             }
-    });
+        });
     }
 
     cancel = () => {
@@ -115,7 +108,6 @@ class CreateComment extends React.Component {
     }
 
     findAllDepar = () => {
-
         this.serviceDepartaments.get('')
         .then(response => {
             const departaments = response.data;

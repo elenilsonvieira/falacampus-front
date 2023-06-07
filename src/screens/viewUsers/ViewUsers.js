@@ -10,10 +10,7 @@ import UserApiService from '../../services/UserApiService';
 class ViewUsers extends React.Component {
 
     getLoggedUser = () =>{
-        var value = localStorage.getItem("loggedUser");
-        var user = JSON.parse(value);
-        return user;
-        
+        return JSON.parse(localStorage.getItem("loggedUser"));
     }
    
     state = {
@@ -36,7 +33,6 @@ class ViewUsers extends React.Component {
     }
     componentDidMount() { 
         this.find();
-        console.log('admi', this.state.isAdmin)
     }
 
     delete = (userId) => {
@@ -54,12 +50,10 @@ class ViewUsers extends React.Component {
         this.props.history.push(`/updateUser/${userId}`);
     }
 
-    createUser = () => {
-        this.props.history.push(`/createUser`);
-    }
+   
 
-    find = () => {
-        var params = '?';
+    find () {
+        let params = '?';
 
         if (this.state.id !== 0) {
             if (params !== '?') {
@@ -108,12 +102,10 @@ class ViewUsers extends React.Component {
 
             params = `${params}departamentId=${this.state.departamentId}`;
         }
-        console.log(params);
         this.service.find(params)
             .then(response => {
                 const users = response.data;
-                this.setState({ users });
-                console.log(users);
+              this.setState({ users });
             }
             ).catch(error => {
                 console.log(error.response);

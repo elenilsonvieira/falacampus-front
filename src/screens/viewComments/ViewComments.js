@@ -13,7 +13,7 @@ import CommentsTableDepartament from '../../components/CommentsTableDepartament'
 class viewComments extends React.Component {
 
     state = {
-        title: '',
+        find: '',
         id: "",
         message: '',
         creationDate: Date,
@@ -42,7 +42,7 @@ class viewComments extends React.Component {
         isAdmin:'',
         teste:[],
         commentsDepartament:[],
-        responsabledDepartament: 'aaa'
+        departaments:[]
     }
     constructor() {
         super();
@@ -51,25 +51,19 @@ class viewComments extends React.Component {
        
     }
     componentDidMount() {
-         
         
         let user =  JSON.parse(localStorage.getItem("loggedUser"));
         let role = user['roles']['0']['name']
         let id = user['id']
 
-        console.log("AA", id)
         if(role === 'ADMIN'){
             this.find();
         }else{
-            
             this.findAdmin(id);
         }
-                   
         this.viewListButton(role);
-        this.findCommentDepartament(id);
-
-        console.log('id uder', this.state.user.id)
-        
+        this.findCommentDepartament(id);    
+        this.findDepartaments(id);              
     }
 
     viewListButton = (role) =>{    
@@ -79,29 +73,51 @@ class viewComments extends React.Component {
         }
        
     }
-
-    delete = (commentId) => {
-
-        this.service.delete(commentId)
+      
+    findDepartaments = async(id) => {        
+        await this.service2.get(`?${id}`)
         .then(response => {
+
+            const departaments = response.data;
+            this.setState({departaments});
+
+        }).catch(error => {
+            console.log(error.response);
+        });
+    }
+
+    filterComment = () =>{
+
+        const filteredDepartaments = this.state.teste.filter(comment => {
+            return comment.title.toLowerCase().includes(this.state.find.toLowerCase())
+        });
+        this.setState({teste: filteredDepartaments});
+    }
+
+    delete = async(commentId) => {
+
+        await this.service.delete(commentId)
+        .then(response => {
+
             this.find();
             showSuccessMessage('Comentário excluído com sucesso!');
+            window.location.reload();
         }
         ).catch(error => {
             showWarningMessage('Comentário não pode ser excluído!');
             console.log(error.response);
-            
         });
     }
 
-    edit = (commentId) => {
-        this.service.find(`?id=${commentId}`)
+    edit = async(commentId) => {
+         await this.service.find(`?id=${commentId}`)
         .then(response =>{
+
             if(response.data["length"]===0){
                 showWarningMessage('Esse comentario não pode ser atualizado!');
-            }else{
-                this.props.history.push(`/updateComment/${commentId}`)        
-               
+            }
+            else{
+                this.props.history.push(`/updateComment/${commentId}`);   
             }
         })
     }
@@ -114,133 +130,55 @@ class viewComments extends React.Component {
         this.props.history.push(`/createComment`);
     }
 
-    findAdmin = (id) => {
-        this.service.findAll('')
-        let params = '?';
-
-        if (this.state.id !== 0) {
-            if (params !== '?') {
-                params = `${params}&`;
-            }
-
-            params = `${params}id=${this.state.id}`;
-        }
-
-        if (this.state.title !== '') {
-            if (params !== '?') {
-                params = `${params}&`;
-            }
-
-            params = `${params}title=${this.state.title}`;
-        }
-
-        if (this.state.message !== '') {
-            if (params !== '?') {
-                params = `${params}&`;
-            }
-
-            params = `${params}message=${this.state.message}`;
-        }
-
-        if (this.state.creationDate !== Date) {
-            if (params !== '?') {
-                params = `${params}&`;
-            }
-
-            params = `${params}creationDate=${this.state.creationDate}`;
-        }
-
-        this.service.findAll(this.state.id)
+    findAdmin = async(id) => {
+        await this.service.findAll()
         .then(response => {
+
             const comments = response.data;
             this.setState({ comments });
             let teste =[]
             for (const element of comments) {
-                if(element["authorId"] === id){
+                if(element.authorId === id){
                     teste.push(element);
-                }
-                
+                }         
             }
+            this.setState({teste})})
 
-            this.setState({teste})
-            
-            console.log("dados",teste);
-        }
-        ).catch(error => {
-            console.log(error.response);
-        }
-        );
+        .catch(error => {
+              console.log(error.response);
+        });
     }
 
-    find = () => {
-        const all = this.service.findAll('') 
-        console.log(all);
-        let params = '?';
-
-        if (this.state.id !== 0) {
-            if (params !== '?') {
-                params = `${params}&`;
-            }
-            params = `${params}id=${this.state.id}`;
-        }
-
-        if (this.state.title !== '') {
-            if (params !== '?') {
-                params = `${params}&`;
-            }
-            params = `${params}title=${this.state.title}`;
-        }
-
-        if (this.state.message !== '') {
-            if (params !== '?') {
-                params = `${params}&`;
-            }
-            params = `${params}message=${this.state.message}`;
-        }
-
-        if (this.state.creationDate !== Date) {
-            if (params !== '?') {
-                params = `${params}&`;
-            }
-            params = `${params}creationDate=${this.state.creationDate}`;
-        }
-
-        this.service.findAll(this.state.id)
+    find = async() => {
+         await this.service.findAll()
         .then(response => {
+
             const teste = response.data;
             this.setState({ teste });
-            console.log("dados",teste);
-        }
-        ).catch(error => {
-            console.log(error.response);
-        }
-        );
-    }
 
-    findCommentDepartament = async (id) => {
-        await this.service2.find(`responsables/${id}`)        
-        .then(response => {
-            const responsabled = response.data;
-           
-            if(responsabled.length !== 0){
-                document.getElementById('commentDepartament').classList.add('view')
-
-            }
-            responsabled.forEach(element => {
-                console.log("responsabledComent",element.name)
-                this.state.responsabledDepartament = element.name
-                this.service.find(`comentDepartament/${element.id}`)
-                .then(r =>{
-                    console.log("coment", r.data)
-                    let commentsDepartament = r.data
-                    this.setState({ commentsDepartament });
-                })
-            });  
-        }
-        ).catch(error => {
+        }).catch(error => {
             console.log(error.response);
         });
     }
+
+    findCommentDepartament = async (id) => {
+        
+          const response1 = await this.service2.find(`responsables/${id}`);
+          const responsabled = response1.data;
+
+          if (responsabled.length !== 0) {
+            document.getElementById('commentDepartament').classList.add('view');
+          }
+      
+          for (const element of responsabled) {
+            const response2 = await this.service.find(`comentDepartament/${element.id}`);
+            const commentsDepartament = response2.data;
+          
+            this.setState({ 
+                commentsDepartament: [...this.state.commentsDepartament, ...commentsDepartament]
+              });
+          }
+      }
     
     render() {
         return (
@@ -252,10 +190,18 @@ class viewComments extends React.Component {
                                 <form>
                                     <fieldset>
                                         <FormGroup label="Título:" htmlFor="inputTitle"><br />
-                                            <input type="text" className="form-control" id="inputTitle" placeholder="Digite o Título do Comentário" value={this.state.title} onChange={(e) => { this.setState({ title: e.target.value }) }} />
+                                            <input type="text" className="form-control" id="inputTitle" placeholder="Digite o Título do Comentário" value={this.state.find} 
+                                              onChange={(e) => {
+                                                const value = e.target.value;
+                                                 this.setState({ find: e.target.value }, () => {
+                                                    if (value === "") {
+                                                        this.find();
+                                                    }
+                                                });
+                                                }} />
                                         </FormGroup>
                                         <br />
-                                        <button onClick={this.find} type="button" id="btn-search" className="btn btn-info">
+                                        <button onClick={this.filterComment} type="button" id="btn-search" className="btn btn-info">
                                             <i className="pi pi-search"></i> Pesquisar
                                         </button>
                                     </fieldset>
@@ -293,7 +239,7 @@ class viewComments extends React.Component {
                                         edit={this.edit}
                                         answer={this.answer} 
                                         admin={this.state.isAdmin}
-                                        nameDepartament={this.state.responsabledDepartament}
+                                        nameDepartament={this.state.departaments}
                                         card= {this.card}/>
                                 </div>
                             </div>

@@ -29,6 +29,14 @@ class UpdateUser extends React.Component {
         const id = params.id;
         this.findById(id);
     }
+    verify = () =>{
+        const erro = [];
+        if(!this.state.email.match(/^\S+@\S+\.\S+$/)){
+          erro.push("Informe email valido");
+        }
+        return erro;
+    }
+        
    
     findById = (id) => {
         this.service.find(`?id=${id}`)
@@ -56,7 +64,6 @@ class UpdateUser extends React.Component {
         const selectElement = document.getElementById("selectRole");
         const selectedValue = selectElement.value;
         this.setState({rolesName: selectedValue}) ;
-        console.log(this.state.rolesName)
     }
 
     showPapel(role){
@@ -72,6 +79,15 @@ class UpdateUser extends React.Component {
     }
 
     update = () => {
+        
+        const erro = this.verify();
+        if(erro.length > 0){
+          erro.forEach((message) =>{
+            showErrorMessage(message);
+          });
+          return false;
+        }
+
        const user ={      
         "name":this.state.name,
         "email":this.state.email,
@@ -99,8 +115,7 @@ class UpdateUser extends React.Component {
             else{
                 showErrorMessage('O usuário não pode ser atualizado!');
             }
-        }
-        );
+        });
     }
 
     cancel = () => {

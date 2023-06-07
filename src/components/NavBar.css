@@ -1,56 +1,92 @@
-.bg-nav{
-    background-color: rgb(243, 255, 243);
-    display: flex;
-    justify-content: space-between;
-    align-items: relative;
-    border-color: rgba(8, 78, 0, 0.281);
+.bg-nav {
+  background-color: rgb(243, 255, 243);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-color: rgba(8, 78, 0, 0.281);
 }
 
 .dropdown-item {
-    display: flex;
-    flex-direction: row;
-    
+  display: flex;
+  flex-direction: row;
 }
 
 .menu-item-display {
-    position: relative;
-  display: -ms-flexbox;
+  position: relative;
   display: flex;
-  -ms-flex-wrap: wrap;
   flex-wrap: wrap;
-  -ms-flex-align: right;
-  align-items: right;
-  -ms-flex-pack: justify;
+  align-items: center;
   justify-content: space-between;
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
-    
 }
 
 .bg-nav > .nav-items > a {
-    color: #ffffff;
-    font-size: 56px;
-    font-weight: 400;
-    text-decoration: none;
-    margin: 10px;
-    position: relative;
-    opacity: 0.9;
-  }
-
+  color: #ffffff;
+  font-size: 56px;
+  font-weight: 400;
+  text-decoration: none;
+  margin: 10px;
+  position: relative;
+  opacity: 0.9;
+}
 
 /* ============ desktop view ============ */
 @media all and (min-width: 992px) {
-	.navbar .nav-item .dropdown-menu{ display: none; }
-	.navbar .nav-item:hover .nav-link{ display: block; }
-	.navbar .nav-item:hover .dropdown-menu{ display: block; }
-	.navbar .nav-item .dropdown-menu{ margin-top: 0; }
-}	
-/* ============ desktop view .end// ============ */
+  .navbar .nav-item .dropdown-menu {
+    display: none;
+  }
+  .navbar .nav-item:hover .nav-link {
+    display: block;
+  }
+  .navbar .nav-item:hover .dropdown-menu {
+    display: block;
+  }
+  .navbar .nav-item .dropdown-menu {
+    margin-top: 0;
+  }
+  
+  #navbarColor02 {
+    display: flex;
+    padding-left: 10%;
+    justify-content: center;
+    align-items: center;
+  }
+}
 
-.userLogger{
+/* ============ mobile view ============ */
+
+@media all and (max-width: 991px) {
+  #navbarColor02 {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .menu-buttons {
+    order: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .userLogger {
+    order: 1;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+}
+
+/* ============ desktop/mobile view .end// ============ */
+
+.userLogger {
   margin-right: 20px;
-  margin-top: 10px;
   background-color: rgb(240, 240, 240);
   padding: 10px;
   border-radius: 10px;
+}
+
+.menu-buttons {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

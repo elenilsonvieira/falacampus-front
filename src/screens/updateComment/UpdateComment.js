@@ -2,7 +2,6 @@ import React from 'react';
 import './UpdateComment.css';
 import '../../components/Style.css';
 import { withRouter } from 'react-router-dom';
-//import axios from 'axios';
 import Card from '../../components/Card';
 import FormGroup from '../../components/FormGroup';
 import { showSuccessMessage, showErrorMessage } from '../../components/Toastr';
@@ -50,7 +49,6 @@ class UpdateComment extends React.Component {
     // }
 
     findById = (id) => {
-        //axios.get(`http://localhost:8080/api/comment?id=${commentId}`)
         this.service.find(`?id=${id}`)
 
             .then(response => {
@@ -74,54 +72,22 @@ class UpdateComment extends React.Component {
             );
     }
 
-    // validate = () => {
-    //     const errors = [];
-
-    //     if (!this.state.title) {
-    //         errors.push('Campo Título é obrigatório!');
-    //     } else if(!this.state.title.match(/[A-z 0-9]{5,50}$/)) {
-    //         errors.push('O Título do Comentário deve ter no mínimo 5 e no máximo 50 caracteres!');
-    //     }
-
-    //     if (!this.state.message) {
-    //         errors.push('Campo Mensagem é obrigatório!');
-    //     } else if(!this.state.message .match(/[A-z 0-9]{10,255}$/)) {
-    //         errors.push('A mensagem do Comentário deve ter no mínimo 10 e no máximo 255 caracteres!');
-    //     }
-
-    //     if (!this.state.commentType) {
-    //         errors.push('É obrigatório informar o Tipo de Comentário!');
-    //     }
-
-    //     return errors;
-    // };
-
     update = () => {
-
-        // const errors = this.validate();
-
-        // if (errors.length > 0) {
-        //     errors.forEach((message, index) => {
-        //         showErrorMessage(message);
-        //     });
-        //     return false
-        // }
-
-        //await axios.put(`http://localhost:8080/api/comment/${this.state.id}`,
-        this.service.update(this.state.id,
-            {
-                title: this.state.title,
-                message: this.state.message,
-                commentType: this.state.commentType,
-                //  user: this.state.user.id,
-                //  departamentId: this.state.departament.id
-                "authorId": 1,
-	            "departamentId":2
-            }
-        ).then(response => {
+       const up =  {
+        id:this.state.id,
+        title: this.state.title,
+        message: this.state.message,
+        commentType: this.state.commentType,
+        "authorId": JSON.parse(localStorage.getItem("loggedUser")).id,
+        "departamentId":2
+        }; 
+    
+        this.service.update(this.state.id, up)
+        .then(response => {
             console.log(response);
             showSuccessMessage('Comentário atualizado com sucesso!');
             this.props.history.push('/viewComments');
+            
         }
         ).catch(error => {
             console.log(error.response);
@@ -133,7 +99,7 @@ class UpdateComment extends React.Component {
     }
 
     cancel = () => {
-        this.props.history.push('/');
+        this.props.history.push('/viewComments');
     }
 
     render() {

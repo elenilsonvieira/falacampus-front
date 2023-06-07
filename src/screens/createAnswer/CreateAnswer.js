@@ -34,7 +34,6 @@ class CreateAnswer extends React.Component {
     constructor() {
         super();
         this.service = new AnswerApiService();
-
         this.service2 = new CommentApiService();
     }
 
@@ -42,22 +41,12 @@ class CreateAnswer extends React.Component {
     componentDidMount() {
         const params = this.props.match.params;
         const id = params.id;
-        console.log("comentário",this.user)
         this.state.commentId = id;
         this.findById(id);
-        
 
     }
-
-    // componentWillUnmount() {
-    //     this.clear();
-    // }
-
-
-  
     
     findById = (id) => {
-        //axios.get(`http://localhost:8080/api/comment?id=${commentId}`)
         this.service2.find(`?id=${id}`)
 
             .then(response => {
@@ -77,8 +66,8 @@ class CreateAnswer extends React.Component {
 
             ).catch(error => {
                 console.log(error.response);
-            }
-            );
+            });
+          
     }
 
     validate = () => {
@@ -89,7 +78,6 @@ class CreateAnswer extends React.Component {
         } else if(!this.state.answer.match(/[A-z 0-9]{10,255}$/)) {
             errors.push('A Mensagem da Resposta deve ter no mínimo 10 e no máximo 255 caracteres!');
         }
-
         if (!this.state.commentId) {
             errors.push('É obrigatório informar o Comentário que será respondido!');
         }
@@ -114,11 +102,11 @@ class CreateAnswer extends React.Component {
         }
 
         this.service.create(
-            {
-                message: this.state.answer,
-                commentId: this.state.commentId,
-                authorId: this.state.authorId
-            }
+        {
+            message: this.state.answer,
+            commentId: parseInt(this.state.commentId),
+            authorId: this.state.authorId
+        }
         ).then(response => {
             console.log(response);
             showSuccessMessage('Comentário respondido!');
@@ -134,13 +122,24 @@ class CreateAnswer extends React.Component {
         console.log('request finished');
     }
 
-    returned = () => {
+    returned = async() => {
         const params = this.props.match.params;
         const id = params.id;
 
-        this.service.returned(id);
+        await this.service.returned(id, {
+            message: this.state.answer,
+            commentId: parseInt(this.state.commentId)
+        }).then(
+            response => {
+                console.log(response.data)
+                showSuccessMessage('Comentário retornado!');
+                this.props.history.push("/viewComments");
+            }
+        ).catch(
+            error => {console.log(error)}
+        );
 
-        this.props.history.push("/viewComments");
+       
     }
 
     cancel = () => {

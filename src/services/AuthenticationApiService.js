@@ -6,9 +6,7 @@ export class AuthenticationApiService extends ApiService {
     constructor(){
         super('');
         this.storageService = new StorageService();
-
-       this.aa()
-      
+        this.aa(); 
     }
 
     aa= () =>{
