@@ -28,8 +28,26 @@ class Login extends React.Component {
             window.location.reload();
         }
     }
+    verify = () =>{
+        const erro = [];
+    
+        if(!this.state.username){
+          erro.push("Campo matricula é obrigatorio");
+        }
+        if(!this.state.password  || this.state.password.trim() === ''){
+            erro.push("Campo senha é obrigatorio");
+          }
+        return erro;
+      }
 
     login = async() => {
+        const erro = this.verify();
+        if(erro.length > 0){
+          erro.forEach((message) =>{
+            showErrorMessage(message);
+          });
+          return false;
+        } 
         this.setState({ loading: true });
      
        await this.context.login(this.state.username, this.state.password)
@@ -37,6 +55,9 @@ class Login extends React.Component {
         {   
             const msgs =  localStorage.getItem("token");
             const msg = JSON.parse(msgs);
+          
+            console.log(localStorage.getItem("token"));
+            console.log(user);
 
             if (!msgs.includes("detail")) {
                 showSuccessMessage(`${user.name}, você está logado!`);
