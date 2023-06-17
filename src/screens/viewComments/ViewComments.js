@@ -63,8 +63,37 @@ class viewComments extends React.Component {
         }
         this.viewListButton(role);
         this.findCommentDepartament(id);    
-        this.findDepartaments(id);              
+        this.findDepartaments(id);        
+    
     }
+
+     ordenarLista = () => {
+        const sortedList = [...this.state.teste];
+        const sortedList2 = [...this.state.commentsDepartament];
+        
+        sortedList.sort((a, b) => {
+          if (a.statusComment === "NOT_SOLVED" && b.statusComment !== "NOT_SOLVED") {
+            return -1;
+          } else if (a.statusComment !== "NOT_SOLVED" && b.statusComment === "NOT_SOLVED") {
+            return 1;
+          } else {
+            return 0;
+          }
+        });
+        this.setState({teste: sortedList})
+
+        sortedList2.sort((a, b) => {
+            if (a.statusComment === "NOT_SOLVED" && b.statusComment !== "NOT_SOLVED") {
+              return -1;
+            } else if (a.statusComment !== "NOT_SOLVED" && b.statusComment === "NOT_SOLVED") {
+              return 1;
+            } else {
+              return 0;
+            }
+          });
+        this.setState({commentsDepartament: sortedList2})
+            
+     }
 
     viewListButton = (role) =>{    
         
@@ -147,6 +176,8 @@ class viewComments extends React.Component {
         .catch(error => {
               console.log(error.response);
         });
+
+       
     }
 
     find = async() => {
@@ -159,6 +190,7 @@ class viewComments extends React.Component {
         }).catch(error => {
             console.log(error.response);
         });
+        this.ordenarLista();
     }
 
     findCommentDepartament = async (id) => {
@@ -173,7 +205,7 @@ class viewComments extends React.Component {
           for (const element of responsabled) {
             const response2 = await this.service.find(`comentDepartament/${element.id}`);
             const commentsDepartament = response2.data;
-          
+            
             this.setState({ 
                 commentsDepartament: [...this.state.commentsDepartament, ...commentsDepartament]
               });

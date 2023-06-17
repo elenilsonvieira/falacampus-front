@@ -5,6 +5,9 @@ export default props => {
     let isSolved = (status, comment) =>{
         if(status != "NOT_SOLVED"){
             return;
+        }
+        if(status != "NOT_SOLVED"){
+            return;
         }else {
      
          return(
@@ -39,7 +42,7 @@ export default props => {
    
     
     const rows = props.comments.map(comment => {
-        if(comment.authorId == user.id){
+        if(comment.authorId == user.id ){
             return (
             <tr key={comment.id} className={comment.statusComment}>
                 <td>{comment.title}</td>
