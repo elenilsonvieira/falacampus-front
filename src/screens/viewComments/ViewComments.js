@@ -210,6 +210,7 @@ class viewComments extends React.Component {
                 commentsDepartament: [...this.state.commentsDepartament, ...commentsDepartament]
               });
           }
+          this.ordenarLista();
       }
     
     render() {

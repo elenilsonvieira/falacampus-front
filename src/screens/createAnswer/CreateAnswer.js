@@ -17,17 +17,13 @@ import { showSuccessMessage, showErrorMessage } from '../../components/Toastr';
 import AnswerApiService from '../../services/AnswerApiService';
 class CreateAnswer extends React.Component {
 
-    getLoggedUser = () =>{
-        var value = localStorage.getItem("loggedUser");
-        var user = JSON.parse(value);
-        return user;
-    }
+   
 
     state = {
-        user: this.getLoggedUser().name,
+        user: "",
         message: '',
         commentId: '',
-        authorId: this.getLoggedUser().id,
+        authorId:"",
         answer: ''
     }
 
@@ -36,38 +32,40 @@ class CreateAnswer extends React.Component {
         this.service = new AnswerApiService();
         this.service2 = new CommentApiService();
     }
+    nameUser = () =>{
+        return this.state.user;
+    }
 
+    getLoggedUser = () =>{
+        return  JSON.parse(localStorage.getItem("loggedUser"));
+    }
 
     componentDidMount() {
         const params = this.props.match.params;
         const id = params.id;
         this.state.commentId = id;
         this.findById(id);
-
+        this.setState({ user: this.getLoggedUser().name, authorId: this.getLoggedUser().id});
     }
-    
+
     findById = (id) => {
         this.service2.find(`?id=${id}`)
+        .then(response => {
+            const comment = response.data;
+            const id = comment[0].id;
+            const title = comment[0].title;
+            const message = comment[0].message;
+            const commentType = comment[0].commentType;
+            const user = comment[0].user;
+            const departament = comment[0].departament;
 
-            .then(response => {
-                const comment = response.data;
-                const id = comment[0].id;
-                const title = comment[0].title;
-                const message = comment[0].message;
-                const commentType = comment[0].commentType;
-                const user = comment[0].user;
-                const departament = comment[0].departament;
-
-                console.log("comment",comment)
-
-                this.setState({ id:id, title:title, message:message, commentType:commentType, user:user, departament:departament});
-                
-            }
-
-            ).catch(error => {
-                console.log(error.response);
-            });
-          
+            console.log("comment",comment)
+            this.setState({ id:id, title:title, message:message, commentType:commentType, user:user, departament:departament});
+            
+        })
+        .catch(error => {
+            console.log(error.response);
+        });
     }
 
     validate = () => {
@@ -115,9 +113,7 @@ class CreateAnswer extends React.Component {
         }
         ).catch(error => {
             console.log(error.response);
-            // showErrorMessage("O comentário não pode ser respondido!")
-        }
-        );
+        });
 
         console.log('request finished');
     }
@@ -172,24 +168,28 @@ class CreateAnswer extends React.Component {
                                                     <FormGroup label="Comentario: *" htmlFor="MessageTextarea">
                                                         <textarea type="text" 
                                                         disabled
-                                                        className="form-control" id="MessageTextarea" rows="3" minLength="10" maxlength="255"
+                                                        className="form-control" id="MessageTextarea" rows="3" minLength="10" maxLength="255"
                                                             placeholder="Incluir resposta"
                                                             value={this.state.message}
                                                             onChange={(e) => { this.setState({ message: e.target.value }) }} />
                                                     </FormGroup>
                                                     <br />
                                                     <FormGroup label="Resposta: *" htmlFor="AnswerTextarea">
-                                                        <textarea type="text" className="form-control" id="AnswerTextarea" rows="3" minLength="10" maxlength="255"
+                                                        <textarea type="text" className="form-control" id="AnswerTextarea" rows="3" minLength="5" maxLength="255"
                                                             placeholder="Incluir resposta"
                                                             value={this.state.answer}
                                                             onChange={(e) => { this.setState({ answer: e.target.value }) }} />
                                                     </FormGroup>
                                                     <br />
                                                     <FormGroup label="Autor da Resposta:" htmlFor="inputCommentTitle">
-                                                        <input disabled
-                                                        value={this.state.user}
-                                                        type="text" className="form-control" id="autoComment"  
-                                                         />
+                                                    <input
+                                                        disabled
+                                                        
+                                                        value={this.nameUser()}
+                                                        type="text"
+                                                        className="form-control"
+                                                        id="autoComment"
+                                                        />
                                                     </FormGroup>  
                                                     
                                                     <br />

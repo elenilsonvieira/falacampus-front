@@ -25,7 +25,7 @@ export class AuthenticationApiService extends ApiService {
         };
 
         try{   
-            const response = await this.post('/login', loginDTO);
+        const response = await this.post('/login', loginDTO);
 
            const user = response.data.user;
            

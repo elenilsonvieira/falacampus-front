@@ -50,20 +50,20 @@ class Login extends React.Component {
         } 
         this.setState({ loading: true });
      
-       await this.context.login(this.state.username, this.state.password)
+        await this.context.login(this.state.username, this.state.password)
        .then(user =>
         {   
+          
             const msgs =  localStorage.getItem("token");
             const msg = JSON.parse(msgs);
-          
-            console.log(localStorage.getItem("token"));
-            console.log(user);
+        
 
             if (!msgs.includes("detail")) {
                 showSuccessMessage(`${user.name}, você está logado!`);
                 this.props.history.push('/viewCommentsHome');
 
             } else {
+
                 localStorage.clear();
                 if(msgs === null){
                     return user.data;
@@ -75,12 +75,18 @@ class Login extends React.Component {
                 showErrorMessage(detalhe);                    
                 
             }
+           
 
         })
         .catch(error =>
         {
-            showErrorMessage('Servidor Indisponivel', error);
-            console.log(error);
+            if(!localStorage.getItem("erro")){
+                showErrorMessage("Número de Matrícula incorreto");     
+            } else{
+                showErrorMessage('Servidor Indisponivel', error);
+                console.log(error);
+            }
+            
         });
                             
         this.setState({ loading: false });

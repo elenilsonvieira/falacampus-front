@@ -58,13 +58,13 @@ class ViewDepartaments extends React.Component {
         }).catch(error => {
             console.log(error.response);
         });
+        this.order();
     }
 
     filterDepartments = async() =>{  
         const de = this.state.departaments.filter(department =>
         department.name.toLowerCase().includes(this.state.name.toLowerCase()));
         this.setState({departaments: de});
-        this.order();
     }
 
    
