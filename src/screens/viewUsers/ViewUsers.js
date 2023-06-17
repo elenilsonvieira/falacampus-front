@@ -33,6 +33,12 @@ class ViewUsers extends React.Component {
     }
     componentDidMount() { 
         this.find();
+        
+    }
+
+    order = () =>{
+        const ord = this.state.users.sort((a, b) => a.id - b.id);
+        this.setState({users: ord});
     }
 
     delete = (userId) => {
@@ -105,12 +111,14 @@ class ViewUsers extends React.Component {
         this.service.find(params)
             .then(response => {
                 const users = response.data;
-              this.setState({ users });
+                this.setState({users});
+                this.order();
             }
             ).catch(error => {
                 console.log(error.response);
             }
             );
+        
     }
 
     findAll = () => {
