@@ -9,6 +9,7 @@ import CommentApiService from '../../services/CommentApiService';
 import {showSuccessMessage, showErrorMessage, showWarningMessage} from '../../components/Toastr';
 import Global from './Global';
 import DepartamentApiService from '../../services/DepartamentApiService';
+import { error } from 'toastr';
 
 class CreateComment extends React.Component {
     getLoggedUser = () =>{
@@ -87,18 +88,29 @@ class CreateComment extends React.Component {
             departamentId: this.state.departamentId
             
         }
-        
+
         this.service.create(comment)
+        
         .then(response => {
             showSuccessMessage('Comentário criado com sucesso!');
             this.props.history.push("/viewComments");   
         })
         .catch(error => {
             console.log(error.response);
+
+            console.log("CommentType" + comment.commentType);
+
+
             if(error.response.data ==="Responsible not exist!"){
-                showWarningMessage("No momento não existe responsavel pelo departamento! Tente mais tarde")
+                showErrorMessage("No momento não existe responsavel pelo departamento! Tente mais tarde")
+            }else if(comment.title.length < 5 || comment.title.length > 50){
+                showErrorMessage('Titulo Incorreto!');
+            }else if(comment.message.length < 5 || comment.title.length > 255){
+                showErrorMessage('Comentário incorreto!');
+            }else if(comment.commentType.length < 1 || comment.commentType.length > 11 ){
+                showErrorMessage("Tipo de comentario incorreto")
             }else{
-                showErrorMessage("O comentário não pode ser criado, Verifique os Campus!");
+                showErrorMessage('Departamento incorreto!');
             }
         });
     }
