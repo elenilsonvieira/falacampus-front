@@ -80,7 +80,7 @@ class Login extends React.Component {
         })
         .catch(error =>
         {
-            if(!localStorage.getItem("erro")){
+            if(localStorage.getItem("error") === "Request failed with status code 400"){
                 showErrorMessage("Número de Matrícula incorreto");     
             } else{
                 showErrorMessage('Servidor Indisponivel', error);

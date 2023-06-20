@@ -3,27 +3,24 @@ import './CreateAnswer.css';
 import '../../components/Style.css';
 import 'primeicons/primeicons.css';
 import { withRouter } from 'react-router-dom';
-//import axios from 'axios';
-
 import Card from '../../components/Card';
 import FormGroup from '../../components/FormGroup';
-import SelectComment from '../../components/SelectComment';
-import SelectUser from '../../components/SelectUser';
-
 import CommentApiService from '../../services/CommentApiService';
-
-
 import { showSuccessMessage, showErrorMessage } from '../../components/Toastr';
 import AnswerApiService from '../../services/AnswerApiService';
 class CreateAnswer extends React.Component {
 
-   
+   getLoggedUser = () =>{
+        var value = localStorage.getItem("loggedUser");
+        var user = JSON.parse(value);
+        return user;
+    }
 
     state = {
-        user: "",
+        user: this.getLoggedUser().name,
         message: '',
         commentId: '',
-        authorId:"",
+        authorId: this.getLoggedUser().id,
         answer: ''
     }
 
@@ -32,20 +29,18 @@ class CreateAnswer extends React.Component {
         this.service = new AnswerApiService();
         this.service2 = new CommentApiService();
     }
+
     nameUser = () =>{
         return this.state.user;
     }
 
-    getLoggedUser = () =>{
-        return  JSON.parse(localStorage.getItem("loggedUser"));
-    }
+    
 
     componentDidMount() {
         const params = this.props.match.params;
         const id = params.id;
         this.state.commentId = id;
         this.findById(id);
-        this.setState({ user: this.getLoggedUser().name, authorId: this.getLoggedUser().id});
     }
 
     findById = (id) => {
@@ -73,8 +68,8 @@ class CreateAnswer extends React.Component {
 
         if (!this.state.answer) {
             errors.push('Campo Mensagem é obrigatório!');
-        } else if(!this.state.answer.match(/[A-z 0-9]{10,255}$/)) {
-            errors.push('A Mensagem da Resposta deve ter no mínimo 10 e no máximo 255 caracteres!');
+        } else if(this.state.answer.length < 5 ||this.state.answer.length > 255){
+            showErrorMessage('A Mensagem  deve ter no mínimo 5 e no máximo 255 caracteres!');
         }
         if (!this.state.commentId) {
             errors.push('É obrigatório informar o Comentário que será respondido!');
@@ -93,7 +88,7 @@ class CreateAnswer extends React.Component {
         const errors = this.validate();
 
         if (errors.length > 0) {
-            errors.forEach((message, index) => {
+            errors.forEach((message,index) => {
                 showErrorMessage(message);
             });
             return false
@@ -113,9 +108,10 @@ class CreateAnswer extends React.Component {
         }
         ).catch(error => {
             console.log(error.response);
+            
         });
 
-        console.log('request finished');
+        
     }
 
     returned = async() => {

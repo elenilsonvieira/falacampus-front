@@ -100,17 +100,16 @@ class CreateComment extends React.Component {
 
             console.log("CommentType" + comment.commentType);
 
-
             if(error.response.data ==="Responsible not exist!"){
                 showErrorMessage("No momento não existe responsavel pelo departamento! Tente mais tarde")
             }else if(comment.title.length < 5 || comment.title.length > 50){
-                showErrorMessage('Titulo Incorreto!');
+                showErrorMessage('O titulo deve ter no mínimo 5 e no máximo 50 caracteres!');
             }else if(comment.message.length < 5 || comment.title.length > 255){
-                showErrorMessage('Comentário incorreto!');
+                showErrorMessage('A Mensagem da Resposta deve ter no mínimo 5 e no máximo 255 caracteres!');
             }else if(comment.commentType.length < 1 || comment.commentType.length > 11 ){
-                showErrorMessage("Tipo de comentario incorreto")
+                showErrorMessage("Tipo de comentario não selecionado")
             }else{
-                showErrorMessage('Departamento incorreto!');
+                showErrorMessage('Departamento não encontrado!');
             }
         });
     }
