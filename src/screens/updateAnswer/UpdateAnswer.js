@@ -31,21 +31,14 @@ class UpdateAnswer extends React.Component {
         
         const params = this.props.match.params;
         const id = params.id;
-        // const message =params.message;
-        // const comment = params.comment;
-        // const  creationDate =params.creationDate;
-        // const author =params.author;
         
       
         this.findById(id);
     }
 
-    // componentWillUnmount(){
-    //     this.clear();
-    // }
+
 
     findById = () => {
-        //axios.get(`http://localhost:8080/api/answer?id=${answerId}`)
         this.service.find.id
             .then(response => {
                 const answer = response.data[0];
@@ -67,7 +60,6 @@ class UpdateAnswer extends React.Component {
     }
 
     update =  () => {
-        //await axios.put(`http://localhost:8080/api/answer/${this.state.id}`,
         this.service.update(this.id,
             {
                
@@ -79,14 +71,12 @@ class UpdateAnswer extends React.Component {
             }
         ).then(response => {
             console.log(response);
-            // this.find();
         }
         ).catch(error => {
             console.log(error.response);
         }
         );
 
-        console.log('request finished');
     }
 
     cancel = () => {

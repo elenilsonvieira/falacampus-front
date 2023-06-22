@@ -27,10 +27,19 @@ export default class ApiService{
         }        
     }
 
-    post(url, params){
+    post(url, params) {
         url = this.buildUrl(url);
-        return httpClient.post(url, params);
-    }
+      
+        return httpClient.post(url, params)
+          .then(response => {
+             return response;
+          })
+          .catch(error => {
+            localStorage.setItem("error", error.message);
+            throw error;
+          });
+      }
+      
 
     put(url, params){
         url = this.buildUrl(url);

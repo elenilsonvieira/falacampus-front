@@ -3,21 +3,14 @@ import './CreateAnswer.css';
 import '../../components/Style.css';
 import 'primeicons/primeicons.css';
 import { withRouter } from 'react-router-dom';
-//import axios from 'axios';
-
 import Card from '../../components/Card';
 import FormGroup from '../../components/FormGroup';
-import SelectComment from '../../components/SelectComment';
-import SelectUser from '../../components/SelectUser';
-
 import CommentApiService from '../../services/CommentApiService';
-
-
 import { showSuccessMessage, showErrorMessage } from '../../components/Toastr';
 import AnswerApiService from '../../services/AnswerApiService';
 class CreateAnswer extends React.Component {
 
-    getLoggedUser = () =>{
+   getLoggedUser = () =>{
         var value = localStorage.getItem("loggedUser");
         var user = JSON.parse(value);
         return user;
@@ -37,37 +30,37 @@ class CreateAnswer extends React.Component {
         this.service2 = new CommentApiService();
     }
 
+    nameUser = () =>{
+        return this.state.user;
+    }
+
+    
 
     componentDidMount() {
         const params = this.props.match.params;
         const id = params.id;
         this.state.commentId = id;
         this.findById(id);
-
     }
-    
+
     findById = (id) => {
         this.service2.find(`?id=${id}`)
+        .then(response => {
+            const comment = response.data;
+            const id = comment[0].id;
+            const title = comment[0].title;
+            const message = comment[0].message;
+            const commentType = comment[0].commentType;
+            const user = comment[0].user;
+            const departament = comment[0].departament;
 
-            .then(response => {
-                const comment = response.data;
-                const id = comment[0].id;
-                const title = comment[0].title;
-                const message = comment[0].message;
-                const commentType = comment[0].commentType;
-                const user = comment[0].user;
-                const departament = comment[0].departament;
-
-                console.log("comment",comment)
-
-                this.setState({ id:id, title:title, message:message, commentType:commentType, user:user, departament:departament});
-                
-            }
-
-            ).catch(error => {
-                console.log(error.response);
-            });
-          
+            console.log("comment",comment)
+            this.setState({ id:id, title:title, message:message, commentType:commentType, user:user, departament:departament});
+            
+        })
+        .catch(error => {
+            console.log(error.response);
+        });
     }
 
     validate = () => {
@@ -75,8 +68,8 @@ class CreateAnswer extends React.Component {
 
         if (!this.state.answer) {
             errors.push('Campo Mensagem é obrigatório!');
-        } else if(!this.state.answer.match(/[A-z 0-9]{10,255}$/)) {
-            errors.push('A Mensagem da Resposta deve ter no mínimo 10 e no máximo 255 caracteres!');
+        } else if(this.state.answer.length < 5 ||this.state.answer.length > 255){
+            showErrorMessage('A Mensagem  deve ter no mínimo 5 e no máximo 255 caracteres!');
         }
         if (!this.state.commentId) {
             errors.push('É obrigatório informar o Comentário que será respondido!');
@@ -95,7 +88,7 @@ class CreateAnswer extends React.Component {
         const errors = this.validate();
 
         if (errors.length > 0) {
-            errors.forEach((message, index) => {
+            errors.forEach((message,index) => {
                 showErrorMessage(message);
             });
             return false
@@ -115,11 +108,10 @@ class CreateAnswer extends React.Component {
         }
         ).catch(error => {
             console.log(error.response);
-            // showErrorMessage("O comentário não pode ser respondido!")
-        }
-        );
+            
+        });
 
-        console.log('request finished');
+        
     }
 
     returned = async() => {
@@ -172,24 +164,28 @@ class CreateAnswer extends React.Component {
                                                     <FormGroup label="Comentario: *" htmlFor="MessageTextarea">
                                                         <textarea type="text" 
                                                         disabled
-                                                        className="form-control" id="MessageTextarea" rows="3" minLength="10" maxlength="255"
+                                                        className="form-control" id="MessageTextarea" rows="3" minLength="10" maxLength="255"
                                                             placeholder="Incluir resposta"
                                                             value={this.state.message}
                                                             onChange={(e) => { this.setState({ message: e.target.value }) }} />
                                                     </FormGroup>
                                                     <br />
                                                     <FormGroup label="Resposta: *" htmlFor="AnswerTextarea">
-                                                        <textarea type="text" className="form-control" id="AnswerTextarea" rows="3" minLength="10" maxlength="255"
+                                                        <textarea type="text" className="form-control" id="AnswerTextarea" rows="3" minLength="5" maxLength="255"
                                                             placeholder="Incluir resposta"
                                                             value={this.state.answer}
                                                             onChange={(e) => { this.setState({ answer: e.target.value }) }} />
                                                     </FormGroup>
                                                     <br />
                                                     <FormGroup label="Autor da Resposta:" htmlFor="inputCommentTitle">
-                                                        <input disabled
-                                                        value={this.state.user}
-                                                        type="text" className="form-control" id="autoComment"  
-                                                         />
+                                                    <input
+                                                        disabled
+                                                        
+                                                        value={this.nameUser()}
+                                                        type="text"
+                                                        className="form-control"
+                                                        id="autoComment"
+                                                        />
                                                     </FormGroup>  
                                                     
                                                     <br />

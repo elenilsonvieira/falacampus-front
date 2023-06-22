@@ -34,6 +34,7 @@ export default class SessionProvider extends React.Component {
             username, 
             password 
         );
+       
         const token = this.service.getToken()
         const isToken = token && token.includes("detail");
 

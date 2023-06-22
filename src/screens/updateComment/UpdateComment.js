@@ -91,7 +91,14 @@ class UpdateComment extends React.Component {
         }
         ).catch(error => {
             console.log(error.response);
-            showErrorMessage('O comentário não pode ser atualizado!');
+
+            if(this.state.title.length < 5 || this.state.title.length > 50){
+                showErrorMessage('O titulo deve ter no mínimo 5 e no máximo 50 caracteres!');
+            }else if(this.state.message.length < 5 ||this.state.title.length > 255){
+                showErrorMessage('A Mensagem  deve ter no mínimo 5 e no máximo 255 caracteres!');
+            }else{
+                showErrorMessage("Tipo de comentario não selecionado")
+            }
         }
         );
 

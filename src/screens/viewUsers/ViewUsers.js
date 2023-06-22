@@ -25,7 +25,8 @@ class ViewUsers extends React.Component {
             departamentId: 0,
             name: ''
         },
-        users: []
+        users: [], 
+        find: ""
     }
     constructor() {
         super();
@@ -33,6 +34,12 @@ class ViewUsers extends React.Component {
     }
     componentDidMount() { 
         this.find();
+        
+    }
+
+    order = () =>{
+        const ord = this.state.users.sort((a, b) => a.id - b.id);
+        this.setState({users: ord});
     }
 
     delete = (userId) => {
@@ -51,80 +58,26 @@ class ViewUsers extends React.Component {
     }
 
    
-
     find () {
-        let params = '?';
-
-        if (this.state.id !== 0) {
-            if (params !== '?') {
-                params = `${params}&`;
-            }
-
-            params = `${params}id=${this.state.id}`;
-        }
-
-        if (this.state.name !== '') {
-            if (params !== '?') {
-                params = `${params}&`;
-            }
-
-            params = `${params}name=${this.state.name}`;
-        }
-
-        if (this.state.email !== '') {
-            if (params !== '?') {
-                params = `${params}&`;
-            }
-
-            params = `${params}email=${this.state.email}`;
-        }
-
-        if (this.state.username !== '') {
-            if (params !== '?') {
-                params = `${params}&`;
-            }
-
-            params = `${params}username=${this.state.username}`;
-        }
-
-        if (this.state.role.name !== '') {
-            if (params !== '?') {
-                params = `${params}&`;
-            }
-
-            params = `${params}role=${this.state.role}`;
-        }
-
-        if (this.state.departament.id !== 0) {
-            if (params !== '?') {
-                params = `${params}&`;
-            }
-
-            params = `${params}departamentId=${this.state.departamentId}`;
-        }
-        this.service.find(params)
+        this.service.find("?id=&role=&departamentId=undefined")
             .then(response => {
                 const users = response.data;
-              this.setState({ users });
-            }
-            ).catch(error => {
+                this.setState({users});
+                this.order();
+            })
+            .catch(error => {
                 console.log(error.response);
-            }
-            );
+            });
     }
 
-    findAll = () => {
-        this.service.findAll()
-            .then(response => {
-                const users = response.data;
-                this.setState({ users });
-                console.log(users);
-            }
-            ).catch(error => {
-                console.log(error.response);
-            }
-            );
+    findByUser = () => {
+        const filteredUser = this.state.users.filter(user => {
+            return user.name.toLowerCase().includes(this.state.find.toLowerCase())
+        });
+        this.setState({users: filteredUser});
     }
+
+   
 
     render() {
         return (
@@ -137,11 +90,26 @@ class ViewUsers extends React.Component {
                                 <form>
                                     <fieldset>
                                         <FormGroup label="Nome:" htmlFor="inputUserName">
-                                            <input type="text" className="form-control" id="inputUserName" placeholder="Digite o Nome do Usuário" value={this.state.name} onChange={(e) => { this.setState({ name: e.target.value }) }} />
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            id="inputUserName"
+                                            placeholder="Digite o Nome do Usuário"
+                                            value={this.state.find}
+                                            onChange={(e) => {
+                                                const value = e.target.value;
+                                                this.setState({ find: value }, () => {
+                                                if (value === "") {
+                                                    this.find();
+                                                }
+                                                });
+                                            }}
+                                            />
+
                                         </FormGroup>
 
                                         <br />
-                                        <button onClick={this.find} type="button" id='idPesquisar' className="btn btn-info">
+                                        <button onClick={this.findByUser} type="button" id='idPesquisar' className="btn btn-info">
 
                                             <i className="pi pi-search"></i> Pesquisar
                                         </button>

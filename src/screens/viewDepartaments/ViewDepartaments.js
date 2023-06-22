@@ -39,7 +39,10 @@ class ViewDepartaments extends React.Component {
             a.classList.add('mostrar')        
         }
     }
-
+    order = () =>{
+        const ord = this.state.departaments.sort((a, b) => a.id - b.id);
+        this.setState({departaments: ord});
+    }
     edit = (departamentId) => {
         this.props.history.push(`/updateDepartament/${departamentId}`);
     }
@@ -55,6 +58,7 @@ class ViewDepartaments extends React.Component {
         }).catch(error => {
             console.log(error.response);
         });
+        this.order();
     }
 
     filterDepartments = async() =>{  
